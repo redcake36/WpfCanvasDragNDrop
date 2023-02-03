@@ -22,12 +22,13 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class LogicElement : UserControl
     {
-        public LogicElement(int h,int w,Brush b) { 
+        public LogicElement(int h,int w,string t,Brush b) { 
             InitializeComponent();
             DataContext = this;
             height= h;
-            width= w;   
-            color= b;
+            width= w;
+            text = t;
+            color = b;
         }
         public int height
         {
@@ -35,7 +36,12 @@ namespace CanvasDragNDrop
             set { SetValue(heightProperty, value); }
         }
         public static readonly DependencyProperty heightProperty = DependencyProperty.Register("height", typeof(int), typeof(LogicElement), new PropertyMetadata(null));
-        //public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(DisplayTile), new PropertyMetadata(null));
+        public string text
+        {
+            get { return (string)GetValue(textProperty); }
+            set { SetValue(textProperty, value); }
+        }
+        public static readonly DependencyProperty textProperty = DependencyProperty.Register("text", typeof(string), typeof(LogicElement), new PropertyMetadata(null));
 
         public int width
         {

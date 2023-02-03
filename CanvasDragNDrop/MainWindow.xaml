@@ -43,7 +43,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Click="Button_Click">spawn</Button>
-            <Button Height="50" Width="100" Grid.Column="1" Grid.Row="0" Click="Button_Pen_Click">PEN</Button>
+            <Button Height="30" Width="100" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0" Click="Button_Pen_Click">PEN</Button>
             <Canvas 
                 Grid.Column="1"
                 Grid.Row="1"
@@ -52,12 +52,13 @@
                 AllowDrop="True" 
                 Background="LightSkyBlue" 
                 Drop="Canvas_Drop"
+                DragOver="canvas_DragOver"
                 MouseLeftButtonDown="canvas_MouseLeftButtonDown"
                 MouseRightButtonDown="canvas_MouseRightButtonDown"
                 MouseLeftButtonUp="canvas_MouseLeftButtonUp"
                 MouseMove="canvas_MouseMove">
-                <local:LogicElement height="100" width="100" color="YellowGreen"></local:LogicElement>
-                <local:LogicElement height="50" width="100" color="Pink"></local:LogicElement>
+                <local:LogicElement height="100" width="100" text ="asd" color="YellowGreen"></local:LogicElement>
+                <local:LogicElement height="50" width="100"  text ="asad" color="Pink"></local:LogicElement>
             </Canvas>
             <!--для проверки пересечения-->
             <!--<Rectangle x:Name="redr" Fill="red" Height="100" Width="100"></Rectangle>

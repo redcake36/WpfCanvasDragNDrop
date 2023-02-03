@@ -21,12 +21,10 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class MainWindow : Window
     {
-        Line l = new Line();
-        bool canDrow = false;
+        bool canDrowLine = false;
         bool startDrow = false;
-        bool activeLine = false;
-        bool path = false;
-        Line? curL = null;
+        bool linePathStarted = false;
+        Line? currentLine = null;
         Point? prewPoint = null;
         public static bool state = true;
 
@@ -38,13 +36,13 @@ namespace CanvasDragNDrop
         private void Button_Pen_Click(object sender, RoutedEventArgs e)
         {
             
-            canDrow = !canDrow;
+            canDrowLine = !canDrowLine;
             state = !state;
-            if (canDrow)
+            if (canDrowLine)
             {
                 Mouse.OverrideCursor = Cursors.Pen;
             }
-            else { Mouse.OverrideCursor = null; }
+            else { EndLineDrawMode(); }
 
             // для проверки пересечения
             //Rectangle r = new Rectangle();
@@ -85,57 +83,56 @@ namespace CanvasDragNDrop
             if (startDrow)
             {
 
-                if (curL is null)
+                if (currentLine is null)
                 {
 
                     Trace.WriteLine("newLine");
-                    curL = new Line();
-                    curL.Stroke = System.Windows.Media.Brushes.Red;
+                    currentLine = new Line();
+                    currentLine.Stroke = System.Windows.Media.Brushes.Red;
 
-                    if (path && prewPoint is not null)
+                    if (linePathStarted && prewPoint is not null)
                     {
-                        curL.X1 = prewPoint.Value.X;
-                        curL.Y1 = prewPoint.Value.Y;
+                        currentLine.X1 = prewPoint.Value.X;
+                        currentLine.Y1 = prewPoint.Value.Y;
                     }
                     else
                     {
-                        curL.X1 = e.GetPosition(canvas).X;
-                        curL.Y1 = e.GetPosition(canvas).Y;
+                        currentLine.X1 = e.GetPosition(canvas).X;
+                        currentLine.Y1 = e.GetPosition(canvas).Y;
                     }
-                    curL.X2 = e.GetPosition(canvas).X;
-                    curL.Y2 = e.GetPosition(canvas).Y;
+                    currentLine.X2 = e.GetPosition(canvas).X;
+                    currentLine.Y2 = e.GetPosition(canvas).Y;
 
-                    curL.StrokeThickness = 3;
-                    canvas.Children.Add(curL);
+                    currentLine.StrokeThickness = 3;
+                    canvas.Children.Add(currentLine);
                 }
                 Trace.WriteLine(e.GetPosition(canvas).X.ToString(), e.GetPosition(canvas).Y.ToString());
-                if (Math.Abs(curL.X1 - e.GetPosition(canvas).X) > Math.Abs(curL.Y1 - e.GetPosition(canvas).Y))
+                if (Math.Abs(currentLine.X1 - e.GetPosition(canvas).X) > Math.Abs(currentLine.Y1 - e.GetPosition(canvas).Y))
                 {
-                    curL.X2 = e.GetPosition(canvas).X;
-                    curL.Y2 = curL.Y1;
+                    currentLine.X2 = e.GetPosition(canvas).X;
+                    currentLine.Y2 = currentLine.Y1;
                 }
                 else
                 {
-                    curL.X2 = curL.X1;
-                    curL.Y2 = e.GetPosition(canvas).Y;
+                    currentLine.X2 = currentLine.X1;
+                    currentLine.Y2 = e.GetPosition(canvas).Y;
                 }
-                prewPoint = new Point(curL.X2, curL.Y2);
+                prewPoint = new Point(currentLine.X2, currentLine.Y2);
 
             }
         }
 
         private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (canDrow)
+            if (canDrowLine)
             {
                 if (startDrow)
                 {
-                    path = true;
-                    //startDrow= false;
+                    linePathStarted = true;
                     Trace.WriteLine("startDrow= false;");
-                    curL.Stroke = System.Windows.Media.Brushes.Black;
-                    curL = null;
-                    Trace.WriteLine("curL = null; ");
+                    currentLine.Stroke = System.Windows.Media.Brushes.Black;
+                    currentLine = null;
+                    Trace.WriteLine("currentLine = null; ");
                 }
                 else
                 {
@@ -145,14 +142,21 @@ namespace CanvasDragNDrop
             }
 
         }
-        private void canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        void EndLineDrawMode()
         {
-            path = false;
+            linePathStarted = false;
             prewPoint = null;
             startDrow = false;
-            canvas.Children.Remove(curL);
-            curL = null;
+            canvas.Children.Remove(currentLine);
+            currentLine = null;
+
+            canDrowLine = false;
+            state = true;
             Mouse.OverrideCursor = null;
+        }
+        private void canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            EndLineDrawMode();
         }
 
         private void canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -161,7 +165,23 @@ namespace CanvasDragNDrop
             // activeLine = true;
             Trace.WriteLine("activeLine = true;");
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Random r = new Random();
+            canvas.Children.Add(new LogicElement(
+                100,
+                100,
+                "rect",
+                new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255)))));
+        }
         private void Canvas_Drop(object sender, DragEventArgs e)
+        {
+            var obj = e.Data.GetData(typeof(LogicElement)) as LogicElement;
+            if (obj != null)
+                Canvas.SetZIndex(obj, 0);
+        }
+
+        private void canvas_DragOver(object sender, DragEventArgs e)
         {
             Point dropPoint = e.GetPosition(canvas);
 
@@ -170,16 +190,8 @@ namespace CanvasDragNDrop
             {
                 Canvas.SetLeft(obj, dropPoint.X);
                 Canvas.SetTop(obj, dropPoint.Y);
+                Canvas.SetZIndex(obj,1);
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Random r = new Random();
-            canvas.Children.Add(new LogicElement(
-                100,
-                100,
-                new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255)))));
         }
 
         //private void RectObj_MouseMove(object sender, MouseEventArgs e)

@@ -7,16 +7,21 @@
              mc:Ignorable="d" 
               >
     <Canvas>
+
         <Rectangle
             Fill="{Binding color}"
             Height="{Binding height}" 
             Width="{Binding width}">
         </Rectangle>
-        <TextBlock 
-            Text="{Binding color}" 
+        <Border BorderThickness="1" BorderBrush="Black" 
+            Height="{Binding height}" 
+            Width="{Binding width}">
+            <TextBlock 
+            Text="{Binding text}" 
             VerticalAlignment="Center" 
             HorizontalAlignment="Center">
-        </TextBlock>
+            </TextBlock>
+        </Border>
     </Canvas>
 
 </UserControl>
