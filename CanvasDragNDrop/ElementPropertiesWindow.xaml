@@ -1,0 +1,14 @@
+﻿<Window x:Class="CanvasDragNDrop.ElementPropertiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CanvasDragNDrop"
+        mc:Ignorable="d"
+        Title="ElementPropertiesWindow" Height="220" Width="300">
+    <Canvas x:Name="elementPropertiesWindowCanvas">
+        <ListBox x:Name="elementPropertiesWindowList">
+            
+        </ListBox>
+    </Canvas>
+</Window>

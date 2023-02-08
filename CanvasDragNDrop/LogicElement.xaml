@@ -6,13 +6,15 @@
              xmlns:local="clr-namespace:CanvasDragNDrop"
              mc:Ignorable="d" 
               >
-    <Canvas>
+    <Canvas
+        MouseDown="Canvas_MouseDown">
 
         <Rectangle
             Fill="{Binding color}"
             Height="{Binding height}" 
             Width="{Binding width}">
         </Rectangle>
+        
         <Border BorderThickness="1" BorderBrush="Black" 
             Height="{Binding height}" 
             Width="{Binding width}">

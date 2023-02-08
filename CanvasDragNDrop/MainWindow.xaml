@@ -44,6 +44,9 @@
             </Grid.RowDefinitions>
             <Button Grid.Column="0" Grid.Row="0" Click="Button_Click">spawn</Button>
             <Button Height="30" Width="100" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0" Click="Button_Pen_Click">PEN</Button>
+            <ListBox  x:Name="elementList" Grid.Column="0" Grid.Row="1" Height="300">
+                <TextBlock>Elements:</TextBlock>
+            </ListBox>
             <Canvas 
                 Grid.Column="1"
                 Grid.Row="1"

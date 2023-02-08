@@ -173,6 +173,7 @@ namespace CanvasDragNDrop
                 100,
                 "rect",
                 new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255)))));
+            elementList.Items.Add((new ListBoxItem()).Content="rect");
         }
         private void Canvas_Drop(object sender, DragEventArgs e)
         {
