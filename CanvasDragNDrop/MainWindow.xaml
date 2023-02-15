@@ -60,8 +60,8 @@
                 MouseRightButtonDown="canvas_MouseRightButtonDown"
                 MouseLeftButtonUp="canvas_MouseLeftButtonUp"
                 MouseMove="canvas_MouseMove">
-                <local:LogicElement height="100" width="100" text ="asd" color="YellowGreen"></local:LogicElement>
-                <local:LogicElement height="50" width="100"  text ="asad" color="Pink"></local:LogicElement>
+                <!--<local:LogicElement height="100" width="100" text ="asd" color="YellowGreen"></local:LogicElement>-->
+                <!--<local:LogicElement height="50" width="100"  text ="asad" color="Pink"></local:LogicElement>-->
             </Canvas>
             <!--для проверки пересечения-->
             <!--<Rectangle x:Name="redr" Fill="red" Height="100" Width="100"></Rectangle>

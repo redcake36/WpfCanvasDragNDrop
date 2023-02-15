@@ -80,12 +80,21 @@ namespace CanvasDragNDrop
             if (e.ClickCount == 2)
             {
                 ElementPropertiesWindow propertiesWindow = new ElementPropertiesWindow();
-                propertiesWindow.AddListText("color: " + this.color.ToString());
-                propertiesWindow.AddListText("text: " + this.text);
-                propertiesWindow.AddListText("width: " + this.width.ToString());
-                propertiesWindow.AddListText("height: " + this.height.ToString());
-                propertiesWindow.Show();
-
+                //propertiesWindow.AddListText("color: " + this.color.ToString());
+                //propertiesWindow.AddListText("text: " + this.text);
+                //propertiesWindow.AddListText("width: " + this.width.ToString());
+                //propertiesWindow.AddListText("height: " + this.height.ToString());
+                propertiesWindow.brush = this.color;
+                propertiesWindow.width = this.width;
+                propertiesWindow.height = this.height;
+                propertiesWindow.name = this.text;
+                if (propertiesWindow.ShowDialog() == true)
+                {
+                    this.color = propertiesWindow.brush;
+                    this.width = propertiesWindow.width;
+                    this.height = propertiesWindow.height;
+                    this.text = propertiesWindow.name;
+                }
             }
         }
     }

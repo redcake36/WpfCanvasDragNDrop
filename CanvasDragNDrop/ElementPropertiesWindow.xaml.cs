@@ -20,17 +20,43 @@ namespace CanvasDragNDrop
     public partial class ElementPropertiesWindow : Window
     {
         Canvas canvas;
+
+        public Brush brush
+        {
+            get { return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorBox.Text)); }
+            set { colorBox.Text = value.ToString(); }
+        }
+        public String name
+        {
+            get { return nameBox.Text; }
+            set { nameBox.Text = value; }
+        }
+        public int height
+        {
+            get { return Int32.Parse( heightBox.Text); }
+            set { heightBox.Text = value.ToString();}
+        }
+        public int width
+        {
+            get { return Int32.Parse(widthBox.Text); }
+            set { widthBox.Text = value.ToString();}
+        }
         public ElementPropertiesWindow()
         {
             InitializeComponent();
-            canvas = elementPropertiesWindowCanvas;
+            //canvas = elementPropertiesWindowCanvas;
         }
         public void AddCanvasText(string s)
         {
             canvas.Children.Add(new TextBlock { Text = s });
         }
         public void AddListText(string s) {
-            elementPropertiesWindowList.Items.Add((new ListBoxItem { }).Content = s);
+            //elementPropertiesWindowList.Items.Add((new ListBoxItem { }).Content = s);
+        }
+
+        private void AcceptClick(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
         }
     }
 }

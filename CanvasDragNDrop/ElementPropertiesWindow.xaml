@@ -6,9 +6,31 @@
         xmlns:local="clr-namespace:CanvasDragNDrop"
         mc:Ignorable="d"
         Title="ElementPropertiesWindow" Height="220" Width="300">
-    <Canvas x:Name="elementPropertiesWindowCanvas">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0">Color</TextBlock>
+        <TextBox Name="colorBox"  Grid.Row="0" Grid.Column="1"></TextBox>
+        <TextBlock Grid.Row="1" Grid.Column="0">Name</TextBlock>
+        <TextBox Name="nameBox" Grid.Row="1" Grid.Column="1"></TextBox>
+        <TextBlock Grid.Row="2" Grid.Column="0">Height</TextBlock>
+        <TextBox Name="heightBox" Grid.Row="2" Grid.Column="1"></TextBox>
+        <TextBlock Grid.Row="3" Grid.Column="0">Width</TextBlock>
+        <TextBox Name="widthBox" Grid.Row="3" Grid.Column="1"></TextBox>
+        <Button Click="AcceptClick" Grid.Row="4" Grid.Column="1">Ok</Button>
+    </Grid>
+    <!--<Canvas x:Name="elementPropertiesWindowCanvas">
         <ListBox x:Name="elementPropertiesWindowList">
             
         </ListBox>
-    </Canvas>
+    </Canvas>-->
 </Window>
