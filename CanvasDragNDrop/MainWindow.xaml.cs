@@ -32,7 +32,11 @@ namespace CanvasDragNDrop
 		public MainWindow()
 		{
 			InitializeComponent();
-		}
+            //elementList.Items.Add((new ListBoxItem()).Content = "Паровой котел");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Дымовая труба");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Паровая турбина");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Конденсатор");
+        }
 
 		private void Button_Pen_Click(object sender, RoutedEventArgs e)
 		{
@@ -173,11 +177,12 @@ namespace CanvasDragNDrop
 				100,
 				100,
 				"rect",
-				new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255))));
+				new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255))),
+				30.0);
 
             userControls.Add(le);
 			canvas.Children.Add(le);
-			elementList.Items.Add((new ListBoxItem()).Content="rect");
+			//elementList.Items.Add((new ListBoxItem()).Content="rect");
 		}
 		private void Canvas_Drop(object sender, DragEventArgs e)
 		{

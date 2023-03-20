@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CanvasDragNDrop"
         mc:Ignorable="d"
-        Title="ElementPropertiesWindow" Height="220" Width="300">
+        Title="Свойства блока" Height="220" Width="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -17,16 +17,20 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0">Color</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0">Цвет</TextBlock>
         <TextBox Name="colorBox"  Grid.Row="0" Grid.Column="1"></TextBox>
-        <TextBlock Grid.Row="1" Grid.Column="0">Name</TextBlock>
-        <TextBox Name="nameBox" Grid.Row="1" Grid.Column="1"></TextBox>
-        <TextBlock Grid.Row="2" Grid.Column="0">Height</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0">Имя</TextBlock>
+        <TextBox Name="titleBox" Grid.Row="1" Grid.Column="1"></TextBox>
+        <TextBlock Grid.Row="2" Grid.Column="0">Высота</TextBlock>
         <TextBox Name="heightBox" Grid.Row="2" Grid.Column="1"></TextBox>
-        <TextBlock Grid.Row="3" Grid.Column="0">Width</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="0">Ширина</TextBlock>
         <TextBox Name="widthBox" Grid.Row="3" Grid.Column="1"></TextBox>
-        <Button Click="AcceptClick" Grid.Row="4" Grid.Column="1">Ok</Button>
+        <TextBlock Grid.Row="5" Grid.Column="0">Температура</TextBlock>
+        <TextBox Name="temperatureBox" Grid.Row="5" Grid.Column="1"></TextBox>
+        <Button Click="AcceptClick" Grid.Row="6" Grid.Column="1">Ok</Button>
     </Grid>
     <!--<Canvas x:Name="elementPropertiesWindowCanvas">
         <ListBox x:Name="elementPropertiesWindowList">

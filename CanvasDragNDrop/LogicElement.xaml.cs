@@ -22,14 +22,16 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class LogicElement : UserControl
     {
-        public LogicElement(int h, int w, string t, Brush b)
+        public LogicElement(int h, int w, string t, Brush b, double tmp)
         {
             InitializeComponent();
             DataContext = this;
             height = h;
             width = w;
-            text = t;
+            title = t;
             color = b;
+            temperature = tmp;
+            //description
         }
         public int height
         {
@@ -37,12 +39,12 @@ namespace CanvasDragNDrop
             set { SetValue(heightProperty, value); }
         }
         public static readonly DependencyProperty heightProperty = DependencyProperty.Register("height", typeof(int), typeof(LogicElement), new PropertyMetadata(null));
-        public string text
+        public string title
         {
-            get { return (string)GetValue(textProperty); }
-            set { SetValue(textProperty, value); }
+            get { return (string)GetValue(titleProperty); }
+            set { SetValue(titleProperty, value); }
         }
-        public static readonly DependencyProperty textProperty = DependencyProperty.Register("text", typeof(string), typeof(LogicElement), new PropertyMetadata(null));
+        public static readonly DependencyProperty titleProperty = DependencyProperty.Register("title", typeof(string), typeof(LogicElement), new PropertyMetadata(null));
 
         public int width
         {
@@ -58,6 +60,12 @@ namespace CanvasDragNDrop
 
         }
         public static readonly DependencyProperty colorProperty = DependencyProperty.Register("color", typeof(Brush), typeof(LogicElement), new PropertyMetadata(null));
+        public double temperature
+        {
+            get { return (double)GetValue(temperatureProperty); }
+            set { SetValue(temperatureProperty, value); }
+        }
+        public static readonly DependencyProperty temperatureProperty = DependencyProperty.Register("temperature", typeof(double), typeof(LogicElement), new PropertyMetadata(null));
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -87,13 +95,15 @@ namespace CanvasDragNDrop
                 propertiesWindow.brush = this.color;
                 propertiesWindow.width = this.width;
                 propertiesWindow.height = this.height;
-                propertiesWindow.name = this.text;
+                propertiesWindow.title = this.title;
+                propertiesWindow.temperature = this.temperature;
                 if (propertiesWindow.ShowDialog() == true)
                 {
                     this.color = propertiesWindow.brush;
                     this.width = propertiesWindow.width;
                     this.height = propertiesWindow.height;
-                    this.text = propertiesWindow.name;
+                    this.title = propertiesWindow.title;
+                    this.temperature = propertiesWindow.temperature;
                 }
             }
         }

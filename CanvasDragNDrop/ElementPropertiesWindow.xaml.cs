@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,10 +27,10 @@ namespace CanvasDragNDrop
             get { return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorBox.Text)); }
             set { colorBox.Text = value.ToString(); }
         }
-        public String name
+        public String title
         {
-            get { return nameBox.Text; }
-            set { nameBox.Text = value; }
+            get { return titleBox.Text; }
+            set { titleBox.Text = value; }
         }
         public int height
         {
@@ -40,6 +41,11 @@ namespace CanvasDragNDrop
         {
             get { return Int32.Parse(widthBox.Text); }
             set { widthBox.Text = value.ToString();}
+        }
+        public double temperature
+        {
+            get { return GetDouble(temperatureBox.Text); }
+            set { temperatureBox.Text = value.ToString(); }
         }
         public ElementPropertiesWindow()
         {
@@ -57,6 +63,22 @@ namespace CanvasDragNDrop
         private void AcceptClick(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
+        }
+        public static double GetDouble(string value, double defaultValue = 0.0)
+        {
+            double result;
+
+            //Try parsing in the current culture
+            if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out result) &&
+                //Then try in US english
+                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result) &&
+                //Then in neutral language
+                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+            {
+                result = defaultValue;
+            }
+
+            return result;
         }
     }
 }

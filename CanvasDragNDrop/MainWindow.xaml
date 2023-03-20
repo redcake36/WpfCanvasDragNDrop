@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CanvasDragNDrop"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Проектирование" 
         Height="450" 
         Width="800">
-    <Border BorderBrush="Red" BorderThickness="3">
+    <Border BorderBrush="Red" BorderThickness="0">
         <!--<Canvas 
             x:Name="canvas"
             AllowDrop="True"
@@ -35,17 +35,17 @@
         </Canvas>-->
         <Grid ShowGridLines="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"></ColumnDefinition>
+                <ColumnDefinition Width="140"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Button Grid.Column="0" Grid.Row="0" Click="Button_Click">spawn</Button>
-            <Button Height="30" Width="100" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0" Click="Button_Pen_Click">PEN</Button>
-            <ListBox  x:Name="elementList" Grid.Column="0" Grid.Row="1" Height="300">
-                <TextBlock>Elements:</TextBlock>
+            <Button Grid.Column="0" Grid.Row="0" Click="Button_Click">Добавить блок</Button>
+            <Button Height="30" Width="151" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="0" Click="Button_Pen_Click">Построить соединение</Button>
+            <ListBox  x:Name="elementList" Grid.Column="0" Grid.Row="1" Height="384" VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold" Height="20" Width="120" TextAlignment="Center"><Run Text="Список объектов:"/></TextBlock>
             </ListBox>
             <Canvas 
                 Grid.Column="1"
@@ -53,7 +53,7 @@
                 Height="300" Width="600"
                 x:Name="canvas"
                 AllowDrop="True" 
-                Background="LightSkyBlue" 
+                Background="White" 
                 Drop="Canvas_Drop"
                 DragOver="canvas_DragOver"
                 MouseLeftButtonDown="canvas_MouseLeftButtonDown"

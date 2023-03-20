@@ -19,7 +19,7 @@
             Height="{Binding height}" 
             Width="{Binding width}">
             <TextBlock 
-            Text="{Binding text}" 
+            Text="{Binding title}" 
             VerticalAlignment="Center" 
             HorizontalAlignment="Center">
             </TextBlock>
