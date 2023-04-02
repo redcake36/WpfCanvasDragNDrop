@@ -7,14 +7,15 @@
              mc:Ignorable="d" 
               >
     <Canvas
-        MouseDown="Canvas_MouseDown">
+        MouseDown="Canvas_MouseDown"
+        x:Name="LogicElementCanvas">
 
         <Rectangle
             Fill="{Binding color}"
             Height="{Binding height}" 
             Width="{Binding width}">
         </Rectangle>
-        
+
         <Border BorderThickness="1" BorderBrush="Black" 
             Height="{Binding height}" 
             Width="{Binding width}">
@@ -24,6 +25,7 @@
             HorizontalAlignment="Center">
             </TextBlock>
         </Border>
+        <!--<local:FlowPoint brush="Red"></local:FlowPoint>-->
     </Canvas>
 
 </UserControl>

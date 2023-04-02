@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,13 +27,46 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
             DataContext = this;
+            thisElementNumber = elementNumber++;
             height = h;
             width = w;
-            title = t;
+            title = t + this.thisElementNumber.ToString();
             color = b;
             temperature = tmp;
+            SpawnFlowPoints();
+
             //description
         }
+        void SpawnFlowPoints()
+        {
+            for (int i = 0; i < inputFlowPointsCount; i++)
+            {
+                InFlowPoint infp = new InFlowPoint(Brushes.Magenta, "in", i);
+                LogicElementCanvas.Children.Add(infp);
+                Canvas.SetLeft(infp, -infp.edgeLength / 2);
+                Canvas.SetTop(infp, this.height - (this.height * (i + 1)) / (inputFlowPointsCount + 1)
+                    - infp.edgeLength / 2);
+                inFlowPoints.Add(infp);
+            }
+
+            for (int i = 0; i < outputFlowPointsCount; i++)
+            {
+                OutFlowPoint outfp = new OutFlowPoint(Brushes.Cyan, "out", i);
+                LogicElementCanvas.Children.Add(outfp);
+                Canvas.SetLeft(outfp, this.width - outfp.edgeLength / 2);
+                Canvas.SetTop(outfp, this.height - (this.height * (i + 1)) / (outputFlowPointsCount + 1)
+                    - outfp.edgeLength / 2);
+                outFlowPoints.Add(outfp);
+            }
+
+            Trace.WriteLine(this.height / 2);
+        }
+        public List<FlowPoint> inFlowPoints = new List<FlowPoint>();
+        public List<FlowPoint> outFlowPoints = new List<FlowPoint>();
+        public static int elementNumber = 0;
+        public int thisElementNumber;
+        public int inputFlowPointsCount = 2;
+        public int outputFlowPointsCount = 3;
         public int height
         {
             get { return (int)GetValue(heightProperty); }
@@ -82,9 +116,20 @@ namespace CanvasDragNDrop
             InitializeComponent();
             DataContext = this;
         }
-
+        public void ChangePosition(Point p)
+        {
+            foreach (FlowPoint flowPoint in inFlowPoints)
+            {
+                flowPoint.ChangePosition(this.height, this.width, p, inputFlowPointsCount);
+            }
+            foreach (FlowPoint flowPoint in outFlowPoints)
+            {
+                flowPoint.ChangePosition(this.height, this.width, p, outputFlowPointsCount);
+            }
+        }
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            Trace.WriteLine(e.Source + e.OriginalSource.ToString());
             if (e.ClickCount == 2)
             {
                 ElementPropertiesWindow propertiesWindow = new ElementPropertiesWindow();

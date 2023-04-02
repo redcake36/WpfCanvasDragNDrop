@@ -53,14 +53,18 @@
                 Height="300" Width="600"
                 x:Name="canvas"
                 AllowDrop="True" 
-                Background="White" 
+                Background="LightGray" 
                 Drop="Canvas_Drop"
                 DragOver="canvas_DragOver"
                 MouseLeftButtonDown="canvas_MouseLeftButtonDown"
                 MouseRightButtonDown="canvas_MouseRightButtonDown"
                 MouseLeftButtonUp="canvas_MouseLeftButtonUp"
                 MouseMove="canvas_MouseMove">
-                <!--<local:LogicElement height="100" width="100" text ="asd" color="YellowGreen"></local:LogicElement>-->
+                <!--<local:LogicElement height="100" width="100" title ="Паровой котел" color="White" temperature="30.0"></local:LogicElement>
+                <local:LogicElement height="100" width="100" title ="Дымовая труба" color="White" temperature="30.0"></local:LogicElement>
+                <local:LogicElement height="100" width="100" title ="Паровая турбина" color="White" temperature="30.0"></local:LogicElement>
+                <local:LogicElement height="100" width="100" title ="Конденсатор" color="White" temperature="30.0"></local:LogicElement>-->
+                
                 <!--<local:LogicElement height="50" width="100"  text ="asad" color="Pink"></local:LogicElement>-->
             </Canvas>
             <!--для проверки пересечения-->
