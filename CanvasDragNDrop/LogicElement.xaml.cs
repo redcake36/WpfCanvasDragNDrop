@@ -44,7 +44,7 @@ namespace CanvasDragNDrop
                 InFlowPoint infp = new InFlowPoint(Brushes.Magenta, "in", i);
                 LogicElementCanvas.Children.Add(infp);
                 Canvas.SetLeft(infp, -infp.edgeLength / 2);
-                Canvas.SetTop(infp, this.height - (this.height * (i + 1)) / (inputFlowPointsCount + 1)
+                Canvas.SetTop(infp, (this.height * (i + 1)) / (inputFlowPointsCount + 1)
                     - infp.edgeLength / 2);
                 inFlowPoints.Add(infp);
             }
@@ -54,7 +54,7 @@ namespace CanvasDragNDrop
                 OutFlowPoint outfp = new OutFlowPoint(Brushes.Cyan, "out", i);
                 LogicElementCanvas.Children.Add(outfp);
                 Canvas.SetLeft(outfp, this.width - outfp.edgeLength / 2);
-                Canvas.SetTop(outfp, this.height - (this.height * (i + 1)) / (outputFlowPointsCount + 1)
+                Canvas.SetTop(outfp, (this.height * (i + 1)) / (outputFlowPointsCount + 1)
                     - outfp.edgeLength / 2);
                 outFlowPoints.Add(outfp);
             }
@@ -65,8 +65,8 @@ namespace CanvasDragNDrop
         public List<FlowPoint> outFlowPoints = new List<FlowPoint>();
         public static int elementNumber = 0;
         public int thisElementNumber;
-        public int inputFlowPointsCount = 2;
-        public int outputFlowPointsCount = 3;
+        public int inputFlowPointsCount = 3;
+        public int outputFlowPointsCount = 4;
         public int height
         {
             get { return (int)GetValue(heightProperty); }

@@ -22,9 +22,11 @@ namespace CanvasDragNDrop
     {
         public OutFlowPoint() : base()
         {
+            InitializeComponent();
         }
         public OutFlowPoint(Brush br, string type, int index) : base(br, type, index)
         {
+            InitializeComponent();
         }
 
         public override void ChangePosition(int parentHeight, int parentWidth, Point p, float countPointsOnEdge)
@@ -36,7 +38,7 @@ namespace CanvasDragNDrop
             foreach (Line ln in connectedLines)
             {
                 ln.X1 = parentWidth + p.X;
-                ln.Y1 = (index + 1) * (parentHeight / countPointsOnEdge - edgeLength / 2) + p.Y;
+                ln.Y1 = parentHeight * (index + 1) / (countPointsOnEdge + 1) + p.Y;
             }
         }
     }

@@ -137,7 +137,7 @@ namespace CanvasDragNDrop
             //LogicalTreeHelper.GetParent( e.OriginalSource as DependencyObject)
             Trace.WriteLine(e.Source + " !!! " + e.GetPosition(e.Source as UIElement)
                 + e.OriginalSource.ToString() + " !!! " + dp);
-            if (canDrowLine && dp.GetType() == typeof(FlowPoint))
+            if (canDrowLine && typeof(FlowPoint).IsAssignableFrom(dp.GetType()))
             {
                 Trace.WriteLine((dp as FlowPoint).pointName);
                 if (startDrow && (dp as FlowPoint).type == "in")

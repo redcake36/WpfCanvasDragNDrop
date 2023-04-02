@@ -22,12 +22,10 @@ namespace CanvasDragNDrop
     {
         public FlowPoint()
         {
-            InitializeComponent();
             DataContext = this;
         }
         public FlowPoint(Brush br, string type, int index)
         {
-            InitializeComponent();
             DataContext = this;
             this.brush = br;
             this.pointName = type + index.ToString();
@@ -44,19 +42,6 @@ namespace CanvasDragNDrop
             if (connectedLines.Count == 0)
             {
                 return;
-            }
-            foreach (Line ln in connectedLines)
-            {
-                if (type == "out")
-                {
-                    ln.X1 = parentWidth + p.X;
-                    ln.Y1 = (index + 1) * (parentHeight / countPointsOnEdge - edgeLength / 2) + p.Y;
-                }
-                else if (true)
-                {
-                    ln.X2 = p.X;
-                    ln.Y2 = (index + 1) * (parentHeight / countPointsOnEdge - edgeLength / 2) + p.Y;
-                }
             }
         }
 
