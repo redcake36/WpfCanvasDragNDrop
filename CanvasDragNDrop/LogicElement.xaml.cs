@@ -23,19 +23,49 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class LogicElement : UserControl
     {
-        public LogicElement(int h, int w, string t, Brush b, double tmp)
+        public LogicElement()
         {
             InitializeComponent();
             DataContext = this;
+        }
+        public LogicElement(int h, int w, string t, Brush b, double tmp, int inFPC, int oFPC)
+        {
             thisElementNumber = elementNumber++;
             height = h;
             width = w;
             title = t + this.thisElementNumber.ToString();
             color = b;
             temperature = tmp;
+            inputFlowPointsCount = inFPC;
+            outputFlowPointsCount = oFPC;
+        }
+        public LogicElement(int h, int w, string t, string b, double tmp, int inFPC, int oFPC)
+        {
+            thisElementNumber = elementNumber++;
+            height = h;
+            width = w;
+            title = t + this.thisElementNumber.ToString();
+            color = new BrushConverter().ConvertFromString(b) as Brush;
+            temperature = tmp;
+            inputFlowPointsCount = inFPC;
+            outputFlowPointsCount = oFPC;
+        }
+        public LogicElement(LogicElement le)
+        {
+            thisElementNumber = elementNumber++;
+            height = le.height;
+            width = le.width;
+            title = le.title;
+            color = le.color;
+            temperature = le.temperature;
+            inputFlowPointsCount = le.inputFlowPointsCount;
+            outputFlowPointsCount = le.outputFlowPointsCount;
+        }
+        public void Initialize()
+        {
+            InitializeComponent();
+            DataContext = this;
             SpawnFlowPoints();
-
-            //description
         }
         void SpawnFlowPoints()
         {
@@ -111,11 +141,7 @@ namespace CanvasDragNDrop
             }
         }
 
-        public LogicElement()
-        {
-            InitializeComponent();
-            DataContext = this;
-        }
+        
         public void ChangePosition(Point p)
         {
             foreach (FlowPoint flowPoint in inFlowPoints)

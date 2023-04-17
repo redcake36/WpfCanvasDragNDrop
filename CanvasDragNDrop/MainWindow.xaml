@@ -7,32 +7,65 @@
         mc:Ignorable="d"
         Title="Проектирование" 
         Height="450" 
-        Width="800">
+        Width="1000">
+    <Window.Resources>
+        <Style x:Key="Comboboxbutton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Background" Value="#FFEFD6F3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="PreviewMouseDown">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                            Duration="0:0:0.100" To="2,2,0,0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="PreviewMouseUp">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                            Duration="0:0:0.100" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Cmbbtn" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Background" Value="#FFEFD6F3"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="#FF4D4D4D"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFECC0F8"/>
+                                <Setter Property="Foreground" Value="#FF2E2E2E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Border BorderBrush="Red" BorderThickness="0">
-        <!--<Canvas 
-            x:Name="canvas"
-            AllowDrop="True"
-            Background="White"
-            Drop="Canvas_Drop">
-            <Rectangle 
-                x:Name="redRectangle"
-                Canvas.Left="50" 
-                Canvas.Top="50" 
-                Width="50" 
-                Height="50" 
-                Fill="red"
-                MouseMove="RectObj_MouseMove">
-            </Rectangle>
-            <Rectangle 
-                x:Name="blueRectangle"
-                Canvas.Left="150" 
-                Canvas.Top="50" 
-                Width="50" 
-                Height="50" 
-                Fill="Blue"
-                MouseMove="RectObj_MouseMove">
-            </Rectangle>
-        </Canvas>-->
         <Grid ShowGridLines="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="140"></ColumnDefinition>
@@ -60,16 +93,11 @@
                 MouseRightButtonDown="canvas_MouseRightButtonDown"
                 MouseLeftButtonUp="canvas_MouseLeftButtonUp"
                 MouseMove="canvas_MouseMove">
-                <!--<local:LogicElement height="100" width="100" title ="Паровой котел" color="White" temperature="30.0"></local:LogicElement>
-                <local:LogicElement height="100" width="100" title ="Дымовая труба" color="White" temperature="30.0"></local:LogicElement>
-                <local:LogicElement height="100" width="100" title ="Паровая турбина" color="White" temperature="30.0"></local:LogicElement>
-                <local:LogicElement height="100" width="100" title ="Конденсатор" color="White" temperature="30.0"></local:LogicElement>-->
-                
-                <!--<local:LogicElement height="50" width="100"  text ="asad" color="Pink"></local:LogicElement>-->
             </Canvas>
-            <!--для проверки пересечения-->
-            <!--<Rectangle x:Name="redr" Fill="red" Height="100" Width="100"></Rectangle>
-            <Rectangle x:Name="br" Fill="Black" Height="50" Width="50"></Rectangle>-->
+            <Button Grid.Column="1" Grid.Row="0" Click="Button_Click_1" Content="Источник" Margin="151,0,369,0"/>
+            <Button Grid.Column="1" Grid.Row="0" Click="Button_Click_2" Content="Дисплей" Margin="291,0,229,0"/>
+            <Button Grid.Column="1" Grid.Row="0" Click="Button_Click_3" Content="Рассчет" Margin="431,0,89,0"/>
+
         </Grid>
     </Border>
 </Window>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,29 +14,87 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using Newtonsoft.Json;
+using System.Security.Principal;
+using System.Windows.Ink;
+using System.Net;
 
 namespace CanvasDragNDrop
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
         bool canDrowLine = false;
         bool startDrow = false;
         bool linePathStarted = false;
         Line? currentLine = null;
         Point? prewPoint = null;
         public static bool state = true;
-        public List<UserControl> userControls = new List<UserControl>();
 
+        public List<LogicElement> LogicElements = new List<LogicElement>();
+
+        public List<UserControl> userControls = new List<UserControl>();
+        public string Get(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+        void DrowGrid()
+        {
+            for (int i = 10; i < canvas.Width; i += 10)
+            {
+                CustomLine customLine = new CustomLine(i, 0, i, canvas.Height);
+                //Line l = new Line();
+                //l.X1 = i;
+                //l.Y1 = 0;
+                //l.X2 = i;
+                //l.Y2 = canvas.Height;
+                //l.StrokeThickness = 1;
+                //l.Stroke = Brushes.Gray;
+                canvas.Children.Add(customLine.GetLine());
+            }
+            for (int i = 10; i < canvas.Height; i += 10)
+            {
+                Line l = new Line();
+                l.X1 = 0;
+                l.Y1 = i;
+                l.X2 = canvas.Width;
+                l.Y2 = i;
+                l.StrokeThickness = 1;
+                l.Stroke = Brushes.Gray;
+                canvas.Children.Add(l);
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
-            elementList.Items.Add((new ListBoxItem()).Content = "Паровой котел");
-            elementList.Items.Add((new ListBoxItem()).Content = "Дымовая труба");
-            elementList.Items.Add((new ListBoxItem()).Content = "Паровая турбина");
-            elementList.Items.Add((new ListBoxItem()).Content = "Конденсатор");
+            DrowGrid();
+            Trace.WriteLine(Get("https://3f50-95-220-40-200.ngrok-free.app/get_models"));
+
+            string json = File.ReadAllText(rootFolder + @"element.json");
+            Trace.WriteLine(json);
+            LogicElements = JsonConvert.DeserializeObject<List<LogicElement>>(json);
+            foreach (var item in LogicElements)
+            {
+                Trace.WriteLine(item.title);
+            }
+
+            //elementList.Items.Add((new ListBoxItem()).Content = "Паровой котел");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Дымовая труба");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Паровая турбина");
+            //elementList.Items.Add((new ListBoxItem()).Content = "Конденсатор");
         }
 
         private void Button_Pen_Click(object sender, RoutedEventArgs e)
@@ -150,7 +209,7 @@ namespace CanvasDragNDrop
                     Trace.WriteLine("currentLine = null; ");
                     startDrow = false;
                 }
-                else if((dp as FlowPoint).type == "out")
+                else if ((dp as FlowPoint).type == "out")
                 {
                     currentLine = new Line();
                     currentLine.Stroke = System.Windows.Media.Brushes.Red;
@@ -192,17 +251,31 @@ namespace CanvasDragNDrop
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Random r = new Random();
-            LogicElement le = new LogicElement(
-                100,
-                100,
-                "rect",
-                Brushes.White,
-                30.0);
+            //Random r = new Random();
+            //LogicElement le = new LogicElement(
+            //    100,
+            //    100,
+            //    "rect",
+            //    "white",
+            //    30.0,
+            //    3, 3);
 
-            userControls.Add(le);
-            canvas.Children.Add(le);
+            //LogicElement? le = JsonConvert.DeserializeObject<LogicElement>(json);
+            LogicElement le = new LogicElement(LogicElements[0]);
+            AddElement(le);
+            Trace.WriteLine(le.title);
             //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+        }
+        private void AddElement(LogicElement le)
+        {
+            userControls.Add(le);
+            le.Initialize();
+            canvas.Children.Add(le);
+            elementList.Items.Add((new ListBoxItem()).Content = le.title);
+        }
+        private void UpdateUi()
+        {
+
         }
         private void Canvas_Drop(object sender, DragEventArgs e)
         {
@@ -218,11 +291,30 @@ namespace CanvasDragNDrop
             var obj = e.Data.GetData(typeof(LogicElement)) as LogicElement;
             if (obj != null)
             {
-                Canvas.SetLeft(obj, dropPoint.X);
-                Canvas.SetTop(obj, dropPoint.Y);
-                obj.ChangePosition(dropPoint);
+                int localX = ((int)Math.Round(dropPoint.X / 10.0)) * 10;
+                int localY = ((int)Math.Round(dropPoint.Y / 10.0)) * 10;
+                Canvas.SetLeft(obj, localX);
+                Canvas.SetTop(obj, localY);
+                obj.ChangePosition(new Point(localX, localY));
                 Canvas.SetZIndex(obj, 1);
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            LogicElement le = new LogicElement(LogicElements[1]);
+            AddElement(le);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            LogicElement le = new LogicElement(LogicElements[2]);
+            AddElement(le);
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
         }
 
         //private void RectObj_MouseMove(object sender, MouseEventArgs e)
