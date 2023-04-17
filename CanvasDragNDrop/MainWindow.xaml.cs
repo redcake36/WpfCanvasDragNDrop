@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System.Security.Principal;
 using System.Windows.Ink;
 using System.Net;
+using System.Windows.Markup;
 
 namespace CanvasDragNDrop
 {
@@ -37,6 +38,7 @@ namespace CanvasDragNDrop
         public static bool state = true;
 
         public List<LogicElement> LogicElements = new List<LogicElement>();
+        public List<MashaDBClass> mashaDBClasses = new List<MashaDBClass>();
 
         public List<UserControl> userControls = new List<UserControl>();
         public string Get(string uri)
@@ -77,19 +79,48 @@ namespace CanvasDragNDrop
                 canvas.Children.Add(l);
             }
         }
+        void GetFromServerElemList()
+        {
+            var samplelist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MashaDBClass>>
+                (Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
+            foreach (var item in samplelist)
+            {
+                MashaDBClass m = new MashaDBClass();
+                byte[] bytes = Encoding.Default.GetBytes(item.description);
+                var desc = Encoding.UTF8.GetString(bytes);
+                m.description = desc;
+                bytes = Encoding.Default.GetBytes(item.title);
+                var ttl = Encoding.UTF8.GetString(bytes);
+                m.title = ttl;
+                m.id = item.id;
+                mashaDBClasses.Add(m);
+            }
+            foreach (var item in mashaDBClasses)
+            {
+                LogicElement l = new LogicElement(item);
+                LogicElements.Add(l);
+                Button btn = new Button();
+                btn.Style = Resources["Cmbbtn"] as Style; 
+                btn.Content = item.title;
+                btn.Click += new RoutedEventHandler(Button_Click);
+                UIElementList.Children.Add(btn);
+            }
+            
+        }
         public MainWindow()
         {
             InitializeComponent();
             DrowGrid();
-            Trace.WriteLine(Get("https://3f50-95-220-40-200.ngrok-free.app/get_models"));
-
-            string json = File.ReadAllText(rootFolder + @"element.json");
-            Trace.WriteLine(json);
-            LogicElements = JsonConvert.DeserializeObject<List<LogicElement>>(json);
-            foreach (var item in LogicElements)
-            {
-                Trace.WriteLine(item.title);
-            }
+            //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
+            GetFromServerElemList();
+            // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
+            //// string json = File.ReadAllText(rootFolder + @"element.json");
+            // Trace.WriteLine(json);
+            // mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
+            // foreach (var item in mashaDBClasses)
+            // {
+            //     Trace.WriteLine(item.title);
+            // }
 
             //elementList.Items.Add((new ListBoxItem()).Content = "Паровой котел");
             //elementList.Items.Add((new ListBoxItem()).Content = "Дымовая труба");
@@ -261,8 +292,29 @@ namespace CanvasDragNDrop
             //    3, 3);
 
             //LogicElement? le = JsonConvert.DeserializeObject<LogicElement>(json);
+            DependencyObject dp = LogicalTreeHelper.GetParent(sender as DependencyObject);
+            Trace.WriteLine(e.Source + " !!! " 
+                + e.OriginalSource.ToString() + " !!! " + dp);
+            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
+            AddElement((dp as StackPanel).Children.IndexOf(e.Source as Button));
+
+            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+        }
+        private void AddElement(int elemId)
+        {
+            LogicElement le = new LogicElement(LogicElements[elemId]);
+            userControls.Add(le);
+            le.Initialize();
+            canvas.Children.Add(le);
+            Trace.WriteLine(le.title);
+            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+        }
+        private void AddElement()
+        {
             LogicElement le = new LogicElement(LogicElements[0]);
-            AddElement(le);
+            userControls.Add(le);
+            le.Initialize();
+            canvas.Children.Add(le);
             Trace.WriteLine(le.title);
             //elementList.Items.Add((new ListBoxItem()).Content = le.title);
         }
@@ -271,7 +323,8 @@ namespace CanvasDragNDrop
             userControls.Add(le);
             le.Initialize();
             canvas.Children.Add(le);
-            elementList.Items.Add((new ListBoxItem()).Content = le.title);
+            Trace.WriteLine(le.title);
+            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
         }
         private void UpdateUi()
         {
@@ -335,5 +388,37 @@ namespace CanvasDragNDrop
 
         //    Trace.WriteLine(sender);
         //}
+        private void Button_ClickProekt(object sender, RoutedEventArgs e)
+        {
+            if (Proektgrid.Visibility == Visibility.Hidden)
+                Proektgrid.Visibility = Visibility.Visible;
+            else
+                Proektgrid.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_ClickInstrument(object sender, RoutedEventArgs e)
+        {
+            if (Instrumentgrid.Visibility == Visibility.Hidden)
+                Instrumentgrid.Visibility = Visibility.Visible;
+            else
+                Instrumentgrid.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_ClickPolzovatel(object sender, RoutedEventArgs e)
+        {
+            if (Polzovatelgrid.Visibility == Visibility.Hidden)
+                Polzovatelgrid.Visibility = Visibility.Visible;
+            else
+                Polzovatelgrid.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+
+            if (Elementsgrid.Visibility == Visibility.Hidden)
+                Elementsgrid.Visibility = Visibility.Visible;
+            else
+                Elementsgrid.Visibility = Visibility.Hidden;
+        }
     }
 }

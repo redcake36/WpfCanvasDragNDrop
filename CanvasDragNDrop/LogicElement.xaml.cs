@@ -61,6 +61,17 @@ namespace CanvasDragNDrop
             inputFlowPointsCount = le.inputFlowPointsCount;
             outputFlowPointsCount = le.outputFlowPointsCount;
         }
+        public LogicElement(MashaDBClass c)
+        {
+            thisElementNumber = elementNumber++;
+            height = 100;
+            width = 100;
+            title = c.title;
+            color = Brushes.White;
+            temperature = 10.0;
+            inputFlowPointsCount = 1;
+            outputFlowPointsCount = 1;
+        }
         public void Initialize()
         {
             InitializeComponent();
