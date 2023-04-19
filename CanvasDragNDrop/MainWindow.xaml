@@ -131,7 +131,7 @@
                 <Separator></Separator>
                 <Button Style="{StaticResource Comboboxbutton}" Click="Button_Click_4">
                     <StackPanel Orientation="Horizontal" Margin="0,0,40,0">
-                        <TextBlock  Margin="10,0,-20,0">Добавить элемент на рабочую область</TextBlock>
+                        <TextBlock  Margin="10,0,-20,0">Добавить блок на рабочую область</TextBlock>
                         <Image Height="14" Width="14" Margin="40,5,0,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
@@ -279,8 +279,8 @@
                         <ColumnDefinition Width="159*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Создать модель элемента"/>
+                        <Button Style="{StaticResource Cmbbtn}" Click="Button_Click_5">
+                            <TextBlock Text="Создать модель блока"/>
                         </Button>
                         <Button Style="{StaticResource Cmbbtn}" Click="Button_Pen_Click">
                             <TextBlock Text="Добавить поток" />

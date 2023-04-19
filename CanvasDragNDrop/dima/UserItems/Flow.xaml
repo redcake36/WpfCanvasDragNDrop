@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="CanvasDragNDrop.UserItems.Flow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CanvasDragNDrop.UserItems"
+             mc:Ignorable="d" d:DesignWidth="800">
+    <StackPanel Background="#FFE4E4E4">
+        <WrapPanel Margin="5,5,5,5">
+            <Label Content="Тип среды" VerticalAlignment="Center"/>
+            <ComboBox Width="120">
+                <Label>Газ</Label>
+                <Label>Жидкость</Label>
+                <Label>Плазма</Label>
+            </ComboBox>
+        </WrapPanel>
+        <WrapPanel Margin="5,5,5,5">
+            <Label Content="Индекс потока" VerticalAlignment="Center"/>
+            <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Text="1" Width="50"/>
+        </WrapPanel>
+        <StackPanel Background="White" Margin="15,5,15,10">
+            <Label Content="Доступные переменные:"></Label>
+            <Separator Margin="5,0,5,0"/>
+            <WrapPanel Margin="15,5,15,5">
+                <Label Background="#FFE0E0E0" Content="P Давление | p1" Margin="5" BorderBrush="#FF13FF00" BorderThickness="1"/>
+                <Label Background="#FFE0E0E0" Content="T Температура | t1" Margin="5" BorderBrush="#FF13FF00" BorderThickness="1"/>
+                <Label Background="#FFE0E0E0" Content="E Энтальпия | e1" Margin="5" BorderBrush="#FF13FF00" BorderThickness="1"/>
+            </WrapPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

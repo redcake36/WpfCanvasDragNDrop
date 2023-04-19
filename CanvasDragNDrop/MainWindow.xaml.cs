@@ -20,6 +20,7 @@ using System.Security.Principal;
 using System.Windows.Ink;
 using System.Net;
 using System.Windows.Markup;
+using CanvasDragNDrop.UserItems;
 
 namespace CanvasDragNDrop
 {
@@ -100,19 +101,38 @@ namespace CanvasDragNDrop
                 LogicElement l = new LogicElement(item);
                 LogicElements.Add(l);
                 Button btn = new Button();
-                btn.Style = Resources["Cmbbtn"] as Style; 
+                btn.Style = Resources["Cmbbtn"] as Style;
                 btn.Content = item.title;
                 btn.Click += new RoutedEventHandler(Button_Click);
                 UIElementList.Children.Add(btn);
             }
-            
+
+        }
+        void GetFromJsonElemList()
+        {
+            string json = File.ReadAllText(rootFolder + @"element.json");
+            Trace.WriteLine(json);
+            mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
+
+            foreach (var item in mashaDBClasses)
+            {
+                LogicElement l = new LogicElement(item);
+                LogicElements.Add(l);
+                Button btn = new Button();
+                btn.Style = Resources["Cmbbtn"] as Style;
+                btn.Content = item.title;
+                btn.Click += new RoutedEventHandler(Button_Click);
+                UIElementList.Children.Add(btn);
+            }
         }
         public MainWindow()
         {
             InitializeComponent();
             DrowGrid();
             //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
-            GetFromServerElemList();
+
+            //GetFromServerElemList();
+            GetFromJsonElemList();
             // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
             //// string json = File.ReadAllText(rootFolder + @"element.json");
             // Trace.WriteLine(json);
@@ -293,7 +313,7 @@ namespace CanvasDragNDrop
 
             //LogicElement? le = JsonConvert.DeserializeObject<LogicElement>(json);
             DependencyObject dp = LogicalTreeHelper.GetParent(sender as DependencyObject);
-            Trace.WriteLine(e.Source + " !!! " 
+            Trace.WriteLine(e.Source + " !!! "
                 + e.OriginalSource.ToString() + " !!! " + dp);
             Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
             AddElement((dp as StackPanel).Children.IndexOf(e.Source as Button));
@@ -419,6 +439,12 @@ namespace CanvasDragNDrop
                 Elementsgrid.Visibility = Visibility.Visible;
             else
                 Elementsgrid.Visibility = Visibility.Hidden;
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            MainWindowD mainWindowD = new MainWindowD();
+            mainWindowD.ShowDialog();
         }
     }
 }

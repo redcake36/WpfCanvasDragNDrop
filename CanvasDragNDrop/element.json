@@ -1,29 +1,56 @@
+//[
+//  {
+//    "height": 100,
+//    "width": 100,
+//    "title": "transformer",
+//    "color": "green",
+//    "temperature": 30.0,
+//    "inputFlowPointsCount": 3,
+//    "outputFlowPointsCount": 3
+//  },
+//  {
+//    "height": 100,
+//    "width": 100,
+//    "title": "source",
+//    "color": "red",
+//    "temperature": 30.0,
+//    "inputFlowPointsCount": 0,
+//    "outputFlowPointsCount": 1
+//  },
+//  {
+//    "height": 100,
+//    "width": 100,
+//    "title": "display",
+//    "color": "blue",
+//    "temperature": 30.0,
+//    "inputFlowPointsCount": 1,
+//    "outputFlowPointsCount": 0
+//  }
+//]
 [
   {
-    "height": 100,
-    "width": 100,
-    "title": "transformer",
-    "color": "green",
-    "temperature": 30.0,
-    "inputFlowPointsCount": 3,
-    "outputFlowPointsCount": 3
+    "description": "Повышает давление до заданной величины",
+    "id": 3,
+    "title": "Насос3"
   },
   {
-    "height": 100,
-    "width": 100,
-    "title": "source",
-    "color": "red",
-    "temperature": 30.0,
-    "inputFlowPointsCount": 0,
-    "outputFlowPointsCount": 1
+    "description": "Повышает давление до заданной величины",
+    "id": 9,
+    "title": "Источник"
   },
   {
-    "height": 100,
-    "width": 100,
-    "title": "display",
-    "color": "blue",
-    "temperature": 30.0,
-    "inputFlowPointsCount": 1,
-    "outputFlowPointsCount": 0
+    "description": "Повышает давление до заданной величины",
+    "id": 10,
+    "title": "Потребитель"
+  },
+  {
+    "description": "Повышает давление до заданной величины",
+    "id": 11,
+    "title": "Насос11"
+  },
+  {
+    "description": "повышает давление",
+    "id": 2,
+    "title": "Насос2"
   }
 ]
