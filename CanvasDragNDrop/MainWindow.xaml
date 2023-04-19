@@ -87,16 +87,16 @@
                         <Image Height="14" Width="14" Margin="40,5,0,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                    <Setter Property="Source" Value="Resources/стре.png"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMouseOver,
                                         ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/светлая стрелка.png"/>
+                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
                                         AncestorType={x:Type Button}, AncestorLevel=1},
                                         Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                            <Setter Property="Source" Value="Resources/стре.png"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -111,16 +111,16 @@
                         <Image Height="14" Width="14" Margin="40,5,0,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                    <Setter Property="Source" Value="Resources/стре.png"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMouseOver,
                                         ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/светлая стрелка.png"/>
+                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
                                         AncestorType={x:Type Button}, AncestorLevel=1},
                                         Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                            <Setter Property="Source" Value="Resources/стре.png"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -135,16 +135,16 @@
                         <Image Height="14" Width="14" Margin="40,5,0,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                    <Setter Property="Source" Value="Resources/стре.png"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMouseOver,
                                         ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/светлая стрелка.png"/>
+                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
                                         AncestorType={x:Type Button}, AncestorLevel=1},
                                         Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                            <Setter Property="Source" Value="Resources/стре.png"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -159,16 +159,16 @@
                         <Image Height="14" Width="14" Margin="40,5,0,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                    <Setter Property="Source" Value="Resources/стре.png"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMouseOver,
                                         ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/светлая стрелка.png"/>
+                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
                                         AncestorType={x:Type Button}, AncestorLevel=1},
                                         Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="C:\Users\User\Desktop\RABoTA\ПНИ\WPF\testSamples\CanvasDragNDrop\CanvasDragNDrop\Resources/стре.png"/>
+                                            <Setter Property="Source" Value="Resources/стре.png"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -251,7 +251,7 @@
                         <Button Style="{StaticResource Cmbbtn}">
                             <TextBlock Text="Сохранить изменения"/>
                         </Button>
-                        <Button Style="{StaticResource Cmbbtn}">
+                        <Button Style="{StaticResource Cmbbtn}" Click="GetFromServerElemList">
                             <TextBlock Text="Синхронизировать данные"/>
                         </Button>
                     </StackPanel>

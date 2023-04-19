@@ -30,7 +30,7 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class MainWindow : Window
     {
-        string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
+        //string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
         bool canDrowLine = false;
         bool startDrow = false;
         bool linePathStarted = false;
@@ -80,7 +80,7 @@ namespace CanvasDragNDrop
                 canvas.Children.Add(l);
             }
         }
-        void GetFromServerElemList()
+        void GetFromServerElemList(object sender, RoutedEventArgs e)
         {
             var samplelist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MashaDBClass>>
                 (Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
@@ -94,6 +94,8 @@ namespace CanvasDragNDrop
                 var ttl = Encoding.UTF8.GetString(bytes);
                 m.title = ttl;
                 m.id = item.id;
+                m.input_flows = item.input_flows;
+                m.output_flows = item.output_flows;
                 mashaDBClasses.Add(m);
             }
             foreach (var item in mashaDBClasses)
@@ -110,7 +112,7 @@ namespace CanvasDragNDrop
         }
         void GetFromJsonElemList()
         {
-            string json = File.ReadAllText(rootFolder + @"element.json");
+            string json = File.ReadAllText("element.json");
             Trace.WriteLine(json);
             mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
 
@@ -131,8 +133,8 @@ namespace CanvasDragNDrop
             DrowGrid();
             //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
 
-            //GetFromServerElemList();
-            GetFromJsonElemList();
+            GetFromServerElemList(null,null);
+            //GetFromJsonElemList();
             // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
             //// string json = File.ReadAllText(rootFolder + @"element.json");
             // Trace.WriteLine(json);

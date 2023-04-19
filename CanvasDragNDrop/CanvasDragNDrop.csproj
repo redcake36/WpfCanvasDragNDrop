@@ -8,12 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="element.json" />
+    <None Remove="Resources\светлая стрелка.png" />
+    <None Remove="Resources\стре.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MathParser.org-mXparser" Version="5.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Content Include="element.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\светлая стрелка.png" />
+    <Resource Include="Resources\стре.png" />
   </ItemGroup>
 
 </Project>
