@@ -66,11 +66,11 @@ namespace CanvasDragNDrop
             thisElementNumber = elementNumber++;
             height = 100;
             width = 100;
-            title = c.title;
+            title = c.Title;
             color = Brushes.White;
             temperature = 10.0;
-            inputFlowPointsCount = c.input_flows.Count;
-            outputFlowPointsCount = c.output_flows.Count;
+            inputFlowPointsCount = c.InputFlows.Count;
+            outputFlowPointsCount = c.OutputFlows.Count;
         }
         public void Initialize()
         {

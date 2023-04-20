@@ -163,7 +163,7 @@ namespace CanvasDragNDrop
     }
 
     //Класс описания выражения
-    public class ExpressionClass: INotifyPropertyChanged
+    public class ExpressionClass : INotifyPropertyChanged
     {
         public int Order { get; set; }
 
@@ -208,7 +208,7 @@ namespace CanvasDragNDrop
 
         }
 
-        public void ExtractNeededVariables ()
+        public void ExtractNeededVariables()
         {
             if (_expression != "")
             {
@@ -391,7 +391,7 @@ namespace CanvasDragNDrop
 
             List<string> DefinedWritableVars = new List<string>();
 
-            foreach(var ExpressionBlock in Expressions)
+            foreach (var ExpressionBlock in Expressions)
             {
                 foreach (var needed in ExpressionBlock.NeededVariables.Split(" ").ToList())
                 {
@@ -402,7 +402,7 @@ namespace CanvasDragNDrop
                 }
                 if (Regex.IsMatch(ExpressionBlock.DefinedVariable, @"^[A-Za-z][A-Za-z0-9]*") == false)
                 {
-                    throw new Exception($"Параметр { ExpressionBlock.DefinedVariable }, определяемый выражением №{ ExpressionBlock.Order}: { ExpressionBlock.Expression} не может начинаться с цифры");
+                    throw new Exception($"Параметр {ExpressionBlock.DefinedVariable}, определяемый выражением №{ExpressionBlock.Order}: {ExpressionBlock.Expression} не может начинаться с цифры");
                 }
                 if (ReadonlyVars.Contains(ExpressionBlock.DefinedVariable) == true)
                 {
@@ -522,13 +522,12 @@ namespace CanvasDragNDrop
         public MainWindowD()
         {
             HttpClient httpClient = new HttpClient();
-            var Domain = "https://1245-95-220-40-200.ngrok-free.app";
             InitializeComponent();
             // получаем ответ
-                BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreation context = (BlockModelCreation)this.DataContext;
             try
             {
-                var response = httpClient.GetStringAsync($"{Domain}/get_envs");
+                var response = httpClient.GetStringAsync(RootUrl.rootServer + "/get_envs");
                 response.Wait();
                 FlowEnvironmentsJSONResponseClass Envs = JsonConvert.DeserializeObject<FlowEnvironmentsJSONResponseClass>(response.Result);
                 context.BaseParameters.AddRange(Envs.BaseParametres);
@@ -554,7 +553,7 @@ namespace CanvasDragNDrop
                 }
             }
 
-            
+
 
         }
         private void AddExpression(object sender, RoutedEventArgs e)
@@ -614,13 +613,13 @@ namespace CanvasDragNDrop
             {
                 var JSON = JsonConvert.SerializeObject(rss);
                 var request = new StringContent(JSON, Encoding.Unicode, "application/json");
-                var response = httpClient.PostAsync($"{Domain}/create_model",request);
+                var response = httpClient.PostAsync($"{RootUrl.rootServer}/create_model", request);
                 response.Wait();
                 this.Close();
             }
             catch (Exception err)
             {
-            MessageBox.Show(err.Message,"Не удалось выполнить запрос");
+                MessageBox.Show(err.Message, "Не удалось выполнить запрос");
 
             }
         }

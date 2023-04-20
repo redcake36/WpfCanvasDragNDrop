@@ -38,6 +38,7 @@ namespace CanvasDragNDrop
         Point? prewPoint = null;
         public static bool state = true;
 
+
         public List<LogicElement> LogicElements = new List<LogicElement>();
         public List<MashaDBClass> mashaDBClasses = new List<MashaDBClass>();
 
@@ -82,20 +83,24 @@ namespace CanvasDragNDrop
         }
         void GetFromServerElemList(object sender, RoutedEventArgs e)
         {
+            UIElementList.Children.Clear();
+            mashaDBClasses.Clear();
+            LogicElements.Clear();
+            Trace.WriteLine(UIElementList.Children.Count);
             var samplelist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MashaDBClass>>
-                (Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
+                (Get(RootUrl.rootServer + "/get_models"));
             foreach (var item in samplelist)
             {
                 MashaDBClass m = new MashaDBClass();
-                byte[] bytes = Encoding.Default.GetBytes(item.description);
+                byte[] bytes = Encoding.Default.GetBytes(item.Description);
                 var desc = Encoding.UTF8.GetString(bytes);
-                m.description = desc;
-                bytes = Encoding.Default.GetBytes(item.title);
+                m.Description = desc;
+                bytes = Encoding.Default.GetBytes(item.Title);
                 var ttl = Encoding.UTF8.GetString(bytes);
-                m.title = ttl;
-                m.id = item.id;
-                m.input_flows = item.input_flows;
-                m.output_flows = item.output_flows;
+                m.Title = ttl;
+                m.Id = item.Id;
+                m.InputFlows = item.InputFlows;
+                m.OutputFlows = item.OutputFlows;
                 mashaDBClasses.Add(m);
             }
             foreach (var item in mashaDBClasses)
@@ -104,7 +109,7 @@ namespace CanvasDragNDrop
                 LogicElements.Add(l);
                 Button btn = new Button();
                 btn.Style = Resources["Cmbbtn"] as Style;
-                btn.Content = item.title;
+                btn.Content = item.Title;
                 btn.Click += new RoutedEventHandler(Button_Click);
                 UIElementList.Children.Add(btn);
             }
@@ -122,7 +127,7 @@ namespace CanvasDragNDrop
                 LogicElements.Add(l);
                 Button btn = new Button();
                 btn.Style = Resources["Cmbbtn"] as Style;
-                btn.Content = item.title;
+                btn.Content = item.Title;
                 btn.Click += new RoutedEventHandler(Button_Click);
                 UIElementList.Children.Add(btn);
             }
@@ -133,7 +138,7 @@ namespace CanvasDragNDrop
             DrowGrid();
             //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
 
-            GetFromServerElemList(null,null);
+            GetFromServerElemList(null, null);
             //GetFromJsonElemList();
             // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
             //// string json = File.ReadAllText(rootFolder + @"element.json");

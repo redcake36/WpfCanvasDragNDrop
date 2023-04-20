@@ -8,21 +8,30 @@ namespace CanvasDragNDrop
 {
     public class MashaDBClass
     {
-        public string description;
-        public int id;
-        public string title;
-        public List<int> input_flows = new List<int>();
-        public List<int> output_flows = new List<int>();
-        public MashaDBClass(string d, int i, string t) {
-            description= d;
-            id= i;
-            title= t;
+        public List<Parameters> AllParameters;
+        public List<Parameters> DefaultParameters;
+        public string Description;
+        public List<BlockExpression> Expressions;
+        public int Id;
+        public List<Flow> InputFlows = new List<Flow>();
+        public List<Flow> OutputFlows = new List<Flow>();
+        public string Title;
+        public MashaDBClass(string d, int i, string t)
+        {
+            Description = d;
+            Id = i;
+            Title = t;
         }
         public MashaDBClass()
         {
-            description = "";
-            id = 0;
-            title = "";
+            AllParameters = new List<Parameters>();
+            DefaultParameters = new List<Parameters>();
+            Description = String.Empty;
+            Expressions = new List<BlockExpression>();
+            Id = 0;
+            InputFlows = new List<Flow>();
+            OutputFlows = new List<Flow>();
+            Title = String.Empty;
         }
     }
 }
