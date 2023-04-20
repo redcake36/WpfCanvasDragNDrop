@@ -11,6 +11,8 @@ namespace CanvasDragNDrop
         public string description;
         public int id;
         public string title;
+        public List<int> input_flows = new List<int>();
+        public List<int> output_flows = new List<int>();
         public MashaDBClass(string d, int i, string t) {
             description= d;
             id= i;

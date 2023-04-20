@@ -24,6 +24,7 @@ using Expression = org.mariuszgromada.math.mxparser.Expression;
 using Newtonsoft.Json;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace CanvasDragNDrop
 {
@@ -536,7 +537,7 @@ namespace CanvasDragNDrop
             catch (Exception e)
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
-                var Dev = true;
+                var Dev = false;
                 if (Dev)
                 {
                     context.BaseParameters.Add(new BaseParametreClass(1, "Массовая энтальпия", "h", "-"));
@@ -607,7 +608,21 @@ namespace CanvasDragNDrop
                 expression["NeededVariables"] = new JArray(needed.Split(" ").ToArray());
             }
 
-            MessageBox.Show(JsonConvert.SerializeObject(rss));
+            HttpClient httpClient = new HttpClient();
+            var Domain = "https://1245-95-220-40-200.ngrok-free.app";
+            try
+            {
+                var JSON = JsonConvert.SerializeObject(rss);
+                var request = new StringContent(JSON, Encoding.Unicode, "application/json");
+                var response = httpClient.PostAsync($"{Domain}/create_model",request);
+                response.Wait();
+                this.Close();
+            }
+            catch (Exception err)
+            {
+            MessageBox.Show(err.Message,"Не удалось выполнить запрос");
+
+            }
         }
     }
 }
