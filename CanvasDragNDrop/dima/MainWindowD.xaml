@@ -11,188 +11,269 @@
         <local:BlockModelCreation/>
     </Window.DataContext>
     <Grid>
-        <ScrollViewer x:Name="MainScrollViewer">
-            <Border Padding="5">
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Название" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="0,0,5,0"/>
-                        <TextBox Grid.Column="1" TextWrapping="Wrap" VerticalContentAlignment="Center" FontSize="14" Text="{Binding Title}"/>
-                    </Grid>
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Описание" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="0,0,5,0"/>
-                        <TextBox Grid.Column="1" TextWrapping="Wrap" FontSize="14" Text="{Binding Description}" VerticalContentAlignment="Center"/>
-                    </Grid>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Margin="3">Описание модели блока</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <ScrollViewer x:Name="MainScrollViewer">
+                        <Border Padding="5">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Content="Название" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="0,0,5,0"/>
+                                    <TextBox Grid.Column="1" TextWrapping="Wrap" VerticalContentAlignment="Center" FontSize="14" Text="{Binding Title}"/>
+                                </Grid>
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Content="Описание" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="0,0,5,0"/>
+                                    <TextBox Grid.Column="1" TextWrapping="Wrap" FontSize="14" Text="{Binding Description}" VerticalContentAlignment="Center"/>
+                                </Grid>
 
-                    <Label Content="Входные потоки" FontSize="18" VerticalAlignment="Center"/>
+                                <Label Content="Входные потоки" FontSize="18" VerticalAlignment="Center"/>
 
-                    <ItemsControl ItemsSource="{Binding InputFlows}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
-                                    <WrapPanel Margin="5,5,5,5">
-                                        <Label Content="Тип среды" VerticalAlignment="Center"/>
-                                        <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
+                                <ItemsControl ItemsSource="{Binding InputFlows}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
+                                                <WrapPanel Margin="5,5,5,5">
+                                                    <Label Content="Тип среды" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
                                                   SelectedValue="{Binding FlowEnviroment}"
                                                   SelectedValuePath="FlowEnviromentId"
                                                   DisplayMemberPath="FlowEnvironmentType"
                                         />
-                                    </WrapPanel>
-                                    <WrapPanel Margin="5,5,5,5">
-                                        <Label Content="Индекс потока" VerticalAlignment="Center"/>
-                                        <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
-                                    </WrapPanel>
-                                    <StackPanel Background="White" Margin="15,5,15,5">
-                                        <Label Content="Доступные переменные:"></Label>
-                                        <Separator Margin="5,0,5,0"/>
-                                        <ItemsControl ItemsSource="{Binding FlowParameters}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Margin="15,5,15,5"></WrapPanel>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label Background="#FFE0E0E0" Content="{Binding Parameter}" Margin="5"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </StackPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                                </WrapPanel>
+                                                <WrapPanel Margin="5,5,5,5">
+                                                    <Label Content="Индекс потока" VerticalAlignment="Center"/>
+                                                    <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
+                                                </WrapPanel>
+                                                <StackPanel Background="White" Margin="15,5,15,5">
+                                                    <Label Content="Доступные переменные:"></Label>
+                                                    <Separator Margin="5,0,5,0"/>
+                                                    <ItemsControl ItemsSource="{Binding FlowParameters}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Margin="15,5,15,5"></WrapPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Label Background="#FFE0E0E0" Content="{Binding Parameter}" Margin="5"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
-                    <Button Background="#E7E7E7" Content="Добавить входной поток" Margin="10,0,10,0" Padding="3" Click="AddInputFlow"/>
+                                <Button Background="#E7E7E7" Content="Добавить входной поток" Margin="10,0,10,0" Padding="3" Click="AddInputFlow"/>
 
-                    <Label Content="Выходные потоки" FontSize="18" VerticalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding OutputFlows}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
-                                    <WrapPanel Margin="5,5,5,5">
-                                        <Label Content="Тип среды" VerticalAlignment="Center"/>
-                                        <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
+                                <Label Content="Выходные потоки" FontSize="18" VerticalAlignment="Center"/>
+                                <ItemsControl ItemsSource="{Binding OutputFlows}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
+                                                <WrapPanel Margin="5,5,5,5">
+                                                    <Label Content="Тип среды" VerticalAlignment="Center"/>
+                                                    <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
                                                   SelectedValue="{Binding FlowEnviroment}"
                                                   SelectedValuePath="FlowEnviromentId"
                                                   DisplayMemberPath="FlowEnvironmentType"
                                         />
-                                    </WrapPanel>
-                                    <WrapPanel Margin="5,5,5,5">
-                                        <Label Content="Индекс потока" VerticalAlignment="Center"/>
-                                        <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
-                                    </WrapPanel>
-                                    <StackPanel Background="White" Margin="15,5,15,5">
-                                        <Label Content="Определяемые переменные:"></Label>
-                                        <Separator Margin="5,0,5,0"/>
-                                        <ItemsControl ItemsSource="{Binding FlowParameters}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <WrapPanel Margin="15,5,15,5"></WrapPanel>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label Background="#FFE0E0E0" Content="{Binding Parameter}" Margin="5"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </StackPanel>
-                                    <WrapPanel Margin="10,0,10,5">
-                                        <Label Content="Количество переменных, требующих определения:" VerticalContentAlignment="Center"/>
-                                        <Label Content="2" VerticalContentAlignment="Center" FontWeight="Bold"/>
-                                    </WrapPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    
-                    <Button Background="#E7E7E7" Content="Добавить выходной поток" Margin="10,0,10,0" Padding="3" Click="AddOutputFlow"/>
-                    
-                    <Label Content="Переменные по умолчанию" FontSize="18" VerticalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding DefaultParameters}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Background="#FFE4E4E4" Margin="10,0,10,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="145"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="Обозначение:" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right"/>
-                                    <TextBox Text="{Binding Symbol}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                                    <Label Content="Единицы измерения:" Margin="20,0,0,0" Grid.Row="0" Grid.Column="2"/>
-                                    <TextBox Text="{Binding Units}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="0" Grid.Column="3"/>
-                                    <Label Content="Описание:" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                                    <TextBox Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                                </WrapPanel>
+                                                <WrapPanel Margin="5,5,5,5">
+                                                    <Label Content="Индекс потока" VerticalAlignment="Center"/>
+                                                    <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
+                                                </WrapPanel>
+                                                <StackPanel Background="White" Margin="15,5,15,5">
+                                                    <Label Content="Определяемые переменные:"></Label>
+                                                    <Separator Margin="5,0,5,0"/>
+                                                    <ItemsControl ItemsSource="{Binding FlowParameters}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Margin="15,5,15,5"></WrapPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Label Background="#FFE0E0E0" Content="{Binding Parameter}" Margin="5"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                                <WrapPanel Margin="10,0,10,5">
+                                                    <Label Content="Количество переменных, требующих определения:" VerticalContentAlignment="Center"/>
+                                                    <Label Content="2" VerticalContentAlignment="Center" FontWeight="Bold"/>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Button Background="#E7E7E7" Content="Добавить выходной поток" Margin="10,0,10,0" Padding="3" Click="AddOutputFlow"/>
+
+                                <Label Content="Переменные по умолчанию" FontSize="18" VerticalAlignment="Center" Width="757"/>
+                                <ItemsControl ItemsSource="{Binding DefaultParameters}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="#FFE4E4E4" Margin="10,0,10,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="145"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Label Content="Обозначение:" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right"/>
+                                                <TextBox Text="{Binding Symbol}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                                                <Label Content="Единицы измерения:" Margin="20,0,0,0" Grid.Row="0" Grid.Column="2"/>
+                                                <TextBox Text="{Binding Units}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="0" Grid.Column="3"/>
+                                                <Label Content="Описание:" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                                                <TextBox Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
 
-                    <Button Background="#E7E7E7" Content="Добавить параметр по умолчанию" Margin="10,0,10,0" Padding="3" Click="AddDefaultParametres"/>
+                                <Button Background="#E7E7E7" Content="Добавить параметр по умолчанию" Margin="10,0,10,0" Padding="3" Click="AddDefaultParametres"/>
 
-                    <Label Content="Дополнительные переменные" FontSize="18" VerticalAlignment="Center"/>
-                    <ItemsControl ItemsSource="{Binding ExtraParameters}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Background="#FFE4E4E4" Margin="10,0,10,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="145"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="Обозначение:" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right"/>
-                                    <Label Content="{Binding Symbol}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                                    <Label Content="Единицы измерения:" Margin="20,0,0,0" Grid.Row="0" Grid.Column="2"/>
-                                    <TextBox Text="{Binding Units}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="0" Grid.Column="3"/>
-                                    <Label Content="Описание:" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                                    <TextBox Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                <Label Content="Дополнительные переменные" FontSize="18" VerticalAlignment="Center"/>
+                                <ItemsControl ItemsSource="{Binding ExtraParameters}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Background="#FFE4E4E4" Margin="10,0,10,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="145"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Label Content="Обозначение:" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right"/>
+                                                <Label Content="{Binding Symbol}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                                                <Label Content="Единицы измерения:" Margin="20,0,0,0" Grid.Row="0" Grid.Column="2"/>
+                                                <TextBox Text="{Binding Units}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="0" Grid.Column="3"/>
+                                                <Label Content="Описание:" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                                                <TextBox Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
 
-                    <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
-                    
-                    <ItemsControl ItemsSource="{Binding Expressions}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Padding="10,0,10,5">
-                                <UserItems:BaseExpression 
+                                <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
+
+                                <ItemsControl ItemsSource="{Binding Expressions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,0,10,5">
+                                                <UserItems:BaseExpression 
                                         Exp="{Binding Expression, Mode=TwoWay}"
                                         ExpOrder="{Binding Order,Mode=TwoWay}"
                                         DefinedVariable="{Binding DefinedVariable,Mode=TwoWay}"
                                         NeededVars="{Binding NeededVariables,Mode=TwoWay}"/>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <Button Background="#E7E7E7" Content="Добавить выражение" Margin="10,0,10,0" Padding="3" Click="AddExpression"/>
-                    <Button Background="#E7E7E7" Content="Сохранить модель блока" Margin="10,10,10,0" Padding="3" Click="SaveBlock" FontSize="16" FontWeight="Bold"/>
-                </StackPanel>
-            </Border>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Button Background="#E7E7E7" Content="Добавить выражение" Margin="10,0,10,0" Padding="3" Click="AddExpression"/>
+                                <Button Background="#E7E7E7" Content="Проверить модель блока" Margin="10,10,10,0" Padding="3" Click="CheckBlock" FontSize="16"/>
+                                <Button Background="#E7E7E7" Content="Сохранить модель блока" Margin="10,10,10,0" Padding="3" Click="SaveBlock" FontSize="16" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Name="CalcTab" Selector.Selected="PrepareCalculationsVars">
+                <TabItem.Header>
+                    <TextBlock Margin="3">Расчёт модели</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <ScrollViewer>
+                        <Border Padding="5">
+                            <StackPanel>
+                                <Label Content="Задаваемые значения" FontSize="18" VerticalAlignment="Center"/>
+                                
+                                <ItemsControl ItemsSource="{Binding FilledCalcVariables}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,0,10,5">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="175"/>
+                                                        <ColumnDefinition Width="30"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Content="{Binding Variable}" HorizontalAlignment="Right" Grid.Column="0"/>
+                                                    <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
+                                                    <TextBox Text="{Binding Value, Mode=TwoWay}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                
+                                <Label Content="Рассчитанные значения" FontSize="18" VerticalAlignment="Center"/>
+                                
+                                <ItemsControl ItemsSource="{Binding CalcedCalcVariables}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,0,10,5">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="175"/>
+                                                        <ColumnDefinition Width="30"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Content="{Binding Variable}" Grid.Column="0" HorizontalAlignment="Right"/>
+                                                    <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
+                                                    <Label Content="{Binding Value}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                
+                                <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
+                                
+                                <ItemsControl ItemsSource="{Binding Expressions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="10,0,10,5">
+                                                <UserItems:BaseExpressionViewer 
+                                        Exp="{Binding Expression, Mode=TwoWay}"
+                                        ExpOrder="{Binding Order,Mode=TwoWay}"
+                                        DefinedVariable="{Binding DefinedVariable,Mode=TwoWay}"
+                                        NeededVars="{Binding NeededVariables,Mode=TwoWay}"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <!--<Button Background="#E7E7E7" Content="Подготовить параметры" Click="PrepareCalculationsVars" Margin="10,10,10,0" Padding="3" FontSize="16"/>-->
+                                <Button Name="CalcBTN" Background="#E7E7E7" Content="{Binding CalcButtonText}" IsEnabled="{Binding CalcButtonAvailable}" Click="CalculateModel" Margin="10,10,10,0" Padding="3" FontSize="16" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
 
-
-        </ScrollViewer>
     </Grid>
 </Window>

@@ -30,7 +30,6 @@ namespace CanvasDragNDrop
     /// </summary>
     public partial class MainWindow : Window
     {
-        //string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
         bool canDrowLine = false;
         bool startDrow = false;
         bool linePathStarted = false;
@@ -136,11 +135,16 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
             DrowGrid();
-            //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
 
-            GetFromServerElemList(null, null);
-            //GetFromJsonElemList();
-            // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
+            if (RootUrl.AutomotiveWork)
+            {
+                GetFromJsonElemList();
+            }
+            else
+            {
+                GetFromServerElemList(null, null);
+            }
+
             //// string json = File.ReadAllText(rootFolder + @"element.json");
             // Trace.WriteLine(json);
             // mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
