@@ -333,10 +333,12 @@ namespace CanvasDragNDrop
             set { _expressions = value; OnPropertyChanged("Expressions"); }
         }
 
+        [JsonIgnore]
         public (string CheckError, string CalcAvailable) StaticStrings = ("В моделе имеются ошибки", "Рассчитать");
 
         private string _calcButtonText = "";
 
+        [JsonIgnore]
         public string CalcButtonText
         {
             get { return _calcButtonText; }
@@ -345,6 +347,7 @@ namespace CanvasDragNDrop
 
         private bool _calcButtonAvailable = false;
 
+        [JsonIgnore]
         public bool CalcButtonAvailable
         {
             get { return _calcButtonAvailable; }
