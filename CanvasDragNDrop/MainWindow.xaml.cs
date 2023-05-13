@@ -106,11 +106,10 @@ namespace CanvasDragNDrop
             {
                 LogicElement l = new LogicElement(item);
                 LogicElements.Add(l);
-                Button btn = new Button();
-                btn.Style = Resources["Cmbbtn"] as Style;
-                btn.Content = item.Title;
-                btn.Click += new RoutedEventHandler(Button_Click);
-                UIElementList.Children.Add(btn);
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = item.Title;
+                menuItem.Click += new RoutedEventHandler(Button_Click);
+                UIElementList.Children.Add(menuItem);
             }
 
         }
@@ -326,8 +325,8 @@ namespace CanvasDragNDrop
             DependencyObject dp = LogicalTreeHelper.GetParent(sender as DependencyObject);
             Trace.WriteLine(e.Source + " !!! "
                 + e.OriginalSource.ToString() + " !!! " + dp);
-            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
-            AddElement((dp as StackPanel).Children.IndexOf(e.Source as Button));
+            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as MenuItem));
+            AddElement((dp as StackPanel).Children.IndexOf(e.Source as MenuItem));
 
             //elementList.Items.Add((new ListBoxItem()).Content = le.title);
         }
@@ -419,38 +418,38 @@ namespace CanvasDragNDrop
 
         //    Trace.WriteLine(sender);
         //}
-        private void Button_ClickProekt(object sender, RoutedEventArgs e)
-        {
-            if (Proektgrid.Visibility == Visibility.Hidden)
-                Proektgrid.Visibility = Visibility.Visible;
-            else
-                Proektgrid.Visibility = Visibility.Hidden;
-        }
+        //private void Button_ClickProekt(object sender, RoutedEventArgs e)
+        //{
+        //    if (Proektgrid.Visibility == Visibility.Hidden)
+        //        Proektgrid.Visibility = Visibility.Visible;
+        //    else
+        //        Proektgrid.Visibility = Visibility.Hidden;
+        //}
 
-        private void Button_ClickInstrument(object sender, RoutedEventArgs e)
-        {
-            if (Instrumentgrid.Visibility == Visibility.Hidden)
-                Instrumentgrid.Visibility = Visibility.Visible;
-            else
-                Instrumentgrid.Visibility = Visibility.Hidden;
-        }
+        //private void Button_ClickInstrument(object sender, RoutedEventArgs e)
+        //{
+        //    if (Instrumentgrid.Visibility == Visibility.Hidden)
+        //        Instrumentgrid.Visibility = Visibility.Visible;
+        //    else
+        //        Instrumentgrid.Visibility = Visibility.Hidden;
+        //}
 
-        private void Button_ClickPolzovatel(object sender, RoutedEventArgs e)
-        {
-            if (Polzovatelgrid.Visibility == Visibility.Hidden)
-                Polzovatelgrid.Visibility = Visibility.Visible;
-            else
-                Polzovatelgrid.Visibility = Visibility.Hidden;
-        }
+        //private void Button_ClickPolzovatel(object sender, RoutedEventArgs e)
+        //{
+        //    if (Polzovatelgrid.Visibility == Visibility.Hidden)
+        //        Polzovatelgrid.Visibility = Visibility.Visible;
+        //    else
+        //        Polzovatelgrid.Visibility = Visibility.Hidden;
+        //}
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
+        //private void Button_Click_4(object sender, RoutedEventArgs e)
+        //{
 
-            if (Elementsgrid.Visibility == Visibility.Hidden)
-                Elementsgrid.Visibility = Visibility.Visible;
-            else
-                Elementsgrid.Visibility = Visibility.Hidden;
-        }
+        //    if (Elementsgrid.Visibility == Visibility.Hidden)
+        //        Elementsgrid.Visibility = Visibility.Visible;
+        //    else
+        //        Elementsgrid.Visibility = Visibility.Hidden;
+        //}
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {

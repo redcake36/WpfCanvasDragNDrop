@@ -12,66 +12,11 @@
         WindowStartupLocation="CenterScreen"
         >
     <Window.Resources>
-        <Style x:Key="Comboboxbutton" TargetType="Button">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Background" Value="#FFEFD6F3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" BorderThickness="0" BorderBrush="Black"
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <EventTrigger RoutedEvent="PreviewMouseDown">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                            Duration="0:0:0.100" To="2,2,0,0"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="PreviewMouseUp">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                            Duration="0:0:0.100" To="0"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="Cmbbtn" TargetType="Button">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Background" Value="#FFEFD6F3"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="Foreground" Value="#FF4D4D4D"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" BorderThickness="0" BorderBrush="Black"
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FFECC0F8"/>
-                                <Setter Property="Foreground" Value="#FF2E2E2E"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Grid Margin="0,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.05*"/>
                 <RowDefinition Height="*"/>
 
             </Grid.RowDefinitions>
@@ -79,104 +24,28 @@
                 <ColumnDefinition Width="*"/>
 
             </Grid.ColumnDefinitions>
-            <ToolBar >
-                <Separator></Separator>
-                <Button Style="{StaticResource Comboboxbutton}" Click="Button_ClickProekt">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                        <TextBlock  Margin="10,0,-20,0">Проект</TextBlock>
-                        <Image Height="14" Width="14" Margin="40,5,0,0">
-                            <Image.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="Resources/стре.png"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsMouseOver,
-                                        ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type Button}, AncestorLevel=1},
-                                        Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="Resources/стре.png"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </StackPanel>
-                </Button>
-                <Separator></Separator>
-                <Button Style="{StaticResource Comboboxbutton}" Click="Button_ClickInstrument">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                        <TextBlock  Margin="10,0,-20,0">Инструменты</TextBlock>
-                        <Image Height="14" Width="14" Margin="40,5,0,0">
-                            <Image.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="Resources/стре.png"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsMouseOver,
-                                        ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type Button}, AncestorLevel=1},
-                                        Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="Resources/стре.png"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </StackPanel>
-                </Button>
-                <Separator></Separator>
-                <Button Style="{StaticResource Comboboxbutton}" Click="Button_Click_4">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,40,0">
-                        <TextBlock  Margin="10,0,-20,0">Добавить блок на рабочую область</TextBlock>
-                        <Image Height="14" Width="14" Margin="40,5,0,0">
-                            <Image.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="Resources/стре.png"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsMouseOver,
-                                        ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type Button}, AncestorLevel=1},
-                                        Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="Resources/стре.png"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </StackPanel>
-                </Button>
-                <Separator></Separator>
-                <Button Style="{StaticResource Comboboxbutton}" Click="Button_ClickPolzovatel">
-                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                        <TextBlock  Margin="10,0,-20,0">Меню пользователя</TextBlock>
-                        <Image Height="14" Width="14" Margin="40,5,0,0">
-                            <Image.Style>
-                                <Style TargetType="{x:Type Image}">
-                                    <Setter Property="Source" Value="Resources/стре.png"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsMouseOver,
-                                        ElementName=CbmBorder}" Value="True">
-                                            <Setter Property="Source" Value="Resources/светлая стрелка.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type Button}, AncestorLevel=1},
-                                        Path=isPressed}" Value="True">
-                                            <Setter Property="Source" Value="Resources/стре.png"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </StackPanel>
-                </Button>
-            </ToolBar>
+            <DockPanel >
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="Проект">
+                        <MenuItem Header="Создать новый проект"/>
+                        <MenuItem Header="Сохранить изменения"/>
+                        <MenuItem Header="Синхронизировать данные" Click="GetFromServerElemList"/>
+                    </MenuItem>
+                    <MenuItem Header="Инструменты" >
+                        <MenuItem Header="Создать модель блока" Click="Button_Click_5"/>
+                        <MenuItem Header="Добавить поток" Click="Button_Pen_Click"/>
+                        <MenuItem Header="Редактировать поток"/>
+                    </MenuItem>
+                    <MenuItem Header="Добавить блок на рабочую область" ScrollViewer.HorizontalScrollBarVisibility="Visible" >
+                        <StackPanel x:Name="UIElementList"/>
+                    </MenuItem>
+                    <MenuItem Header="Меню пользователя" >
+                        <MenuItem Header="Изменить логин/пароль"/>
+                        <MenuItem Header="Посмотреть доступный проекты"/>
+                        <MenuItem Header="Выйти"/>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
             <Canvas 
                 Grid.Column="1"
                 Grid.Row="1"
@@ -191,146 +60,6 @@
                 MouseLeftButtonUp="canvas_MouseLeftButtonUp"
                 MouseMove="canvas_MouseMove">
             </Canvas>
-            <Grid Name="Elementsgrid" Height="99" Width="204" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="372,39,0,0" Grid.RowSpan="2" Visibility="Hidden">
-                <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
-                     Points="0,8
-                     0,88
-                     195,88,
-                     195,8,
-                     37,8,29,0
-                     21,8"/>
-                <Polygon Fill="#FFECC0F8" StrokeThickness="1" Stroke="#FFEFD6F3"
-                     Points="0,8
-                     0,88
-                     195,88,
-                     195,8,
-                     37,8,29,0
-                     21,8"/>
-                <Grid Height="88" Width="195" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="31*"/>
-                        <ColumnDefinition Width="159*"/>
-                    </Grid.ColumnDefinitions>
-                    <ScrollViewer Grid.ColumnSpan="2">
-                        <StackPanel x:Name="UIElementList">
-                            <!--<Button Style="{StaticResource Cmbbtn}" Click="Button_Click"/>-->
-                        </StackPanel>
-                    </ScrollViewer>
-                    <!--<StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
-                        
-                        --><!--<Button Style="{StaticResource Cmbbtn}" Content="4" Click="Button_Click"/>
-                        <Button Style="{StaticResource Cmbbtn}" Content="4"/>--><!--
-                    </StackPanel>-->
-                </Grid>
-
-            </Grid>
-            <Grid Name="Proektgrid" Grid.Row="1" Height="120" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="63,0" Visibility="Hidden">
-                <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
-                     Points="0,8
-                     0,88
-                     195,88,
-                     195,8,
-                     37,8,29,0
-                     21,8"/>
-                <Polygon Fill="#FFECC0F8" StrokeThickness="1" Stroke="#FFEFD6F3"
-                     Points="0,8
-                     0,88
-                     195,88,
-                     195,8,
-                     37,8,29,0
-                     21,8"/>
-                <Grid Height="88" Width="195" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="31*"/>
-                        <ColumnDefinition Width="159*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Создать новый проект"/>
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Сохранить изменения"/>
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}" Click="GetFromServerElemList">
-                            <TextBlock Text="Синхронизировать данные"/>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-
-            </Grid>
-            <Grid Name="Instrumentgrid" Grid.Row="1" Height="120" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="190,0" Visibility="Hidden">
-                <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
-                     Points="0,8
-                     0,88
-                     275,88,
-                     275,8,
-                     17,8,25,0
-                     33,8"/>
-                <Polygon Fill="#FFECC0F8" StrokeThickness="1" Stroke="#FFEFD6F3"
-                     Points="0,8
-                     0,88
-                     275,88,
-                     275,8,
-                     17,8,25,0
-                     33,8"/>
-                <Grid Height="88" Width="275" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="31*"/>
-                        <ColumnDefinition Width="159*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
-                        <Button Style="{StaticResource Cmbbtn}" Click="Button_Click_5">
-                            <TextBlock Text="Создать модель блока"/>
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}" Click="Button_Pen_Click">
-                            <TextBlock Text="Добавить поток" />
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Редактировать поток"/>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-            <Grid Name="Polzovatelgrid" Grid.Row="1"  Height="120" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="360,0,0,0" Visibility="Hidden">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="13*"/>
-                </Grid.ColumnDefinitions>
-                <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
-                     Points="0,8
-                     0,88
-                     235,88,
-                     235,8,
-                     194,8,202,0
-                     210,8" Grid.ColumnSpan="2"/>
-                <Polygon Fill="#FFECC0F8" StrokeThickness="1" Stroke="#FFEFD6F3"
-                     Points="0,8
-                     0,88
-                     235,88,
-                     235,8,
-                     194,8,202,0
-                     210,8" Grid.ColumnSpan="2"/>
-                <Grid Height="88" Width="235" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="31*"/>
-                        <ColumnDefinition Width="159*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Изменить логин/пароль"/>
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Посмотреть доступные проекты"/>
-                        </Button>
-                        <Button Style="{StaticResource Cmbbtn}">
-                            <TextBlock Text="Выйти"/>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Grid>
-
         </Grid>
-
     </ScrollViewer>
-
 </Window>
