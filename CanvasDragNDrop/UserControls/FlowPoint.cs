@@ -24,15 +24,17 @@ namespace CanvasDragNDrop
         {
             DataContext = this;
         }
-        public FlowPoint(Brush br, string type, int index)
+        public FlowPoint(Brush br, string type, int index, FrameworkElement parentElement)
         {
             DataContext = this;
-            this.brush = br;
-            this.pointName = type + index.ToString();
+            brush = br;
+            pointName = type + index.ToString();
             this.type = type;
             this.index = index;
+            this.parentElement = parentElement;
         }
         public string? pointName;
+        public FrameworkElement parentElement;
         public string? type;
         public int index;
         public int edgeLength = 20;
@@ -52,6 +54,5 @@ namespace CanvasDragNDrop
 
         }
         public static readonly DependencyProperty brushProperty = DependencyProperty.Register("brush", typeof(Brush), typeof(LogicElement), new PropertyMetadata(null));
-
     }
 }

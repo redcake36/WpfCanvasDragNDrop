@@ -8,15 +8,22 @@
               >
     <Canvas
         MouseDown="Canvas_MouseDown"
-        x:Name="LogicElementCanvas">
+       
+        x:Name="LogicElementCanvas"
+        
+        >
 
         <Rectangle
             Fill="{Binding color}"
             Height="{Binding height}" 
-            Width="{Binding width}">
+            Width="{Binding width}"
+            ToolTip="{Binding title}"
+            ToolTipService.InitialShowDelay="5">
         </Rectangle>
 
-        <Border BorderThickness="1" BorderBrush="Black" 
+        <Border 
+            x:Name="logicElementBorder"
+            BorderThickness="1" BorderBrush="Black" 
             Height="{Binding height}" 
             Width="{Binding width}">
             <TextBlock 

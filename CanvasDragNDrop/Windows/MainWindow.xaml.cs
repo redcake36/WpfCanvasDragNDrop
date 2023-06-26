@@ -24,22 +24,23 @@ using CanvasDragNDrop.UserItems;
 
 namespace CanvasDragNDrop
 {
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        WindowEventHandler windowEventHandler;
+        //string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
         bool canDrowLine = false;
         bool startDrow = false;
         bool linePathStarted = false;
-        Line? currentLine = null;
+        CustomLine? currentCustLine = null;
         Point? prewPoint = null;
         public static bool state = true;
 
 
         public List<LogicElement> LogicElements = new List<LogicElement>();
-        public List<MashaDBClass> mashaDBClasses = new List<MashaDBClass>();
+        public List<DBBlockModelClass> blockModelClasses = new List<DBBlockModelClass>();
 
         public List<UserControl> userControls = new List<UserControl>();
         public string Get(string uri)
@@ -56,61 +57,74 @@ namespace CanvasDragNDrop
         }
         void DrowGrid()
         {
+            Line line;
             for (int i = 10; i < canvas.Width; i += 10)
             {
-                CustomLine customLine = new CustomLine(i, 0, i, canvas.Height);
-                //Line l = new Line();
-                //l.X1 = i;
-                //l.Y1 = 0;
-                //l.X2 = i;
-                //l.Y2 = canvas.Height;
-                //l.StrokeThickness = 1;
-                //l.Stroke = Brushes.Gray;
-                canvas.Children.Add(customLine.GetLine());
+                line = new Line();
+                line.X1 = i;
+                line.Y1 = 0;
+                line.X2 = i;
+                line.Y2 = canvas.Height;
+                line.StrokeThickness = 1;
+                line.Stroke = Brushes.Gray;
+                canvas.Children.Add(line);
             }
             for (int i = 10; i < canvas.Height; i += 10)
             {
-                Line l = new Line();
-                l.X1 = 0;
-                l.Y1 = i;
-                l.X2 = canvas.Width;
-                l.Y2 = i;
-                l.StrokeThickness = 1;
-                l.Stroke = Brushes.Gray;
-                canvas.Children.Add(l);
+                line = new Line();
+                line.X1 = 0;
+                line.Y1 = i;
+                line.X2 = canvas.Width;
+                line.Y2 = i;
+                line.StrokeThickness = 1;
+                line.Stroke = Brushes.Gray;
+                canvas.Children.Add(line);
             }
         }
         void GetFromServerElemList(object sender, RoutedEventArgs e)
         {
             UIElementList.Children.Clear();
-            mashaDBClasses.Clear();
+            blockModelClasses.Clear();
             LogicElements.Clear();
-            Trace.WriteLine(UIElementList.Children.Count);
-            var samplelist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MashaDBClass>>
-                (Get(RootUrl.rootServer + "/get_models"));
+            List<DBBlockModelClass>? samplelist;
+            //Trace.WriteLine(UIElementList.Children.Count);
+            if (!RootUrl.debug)
+            {
+                samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+                    Get(RootUrl.rootServer + "/get_models"));
+            }
+            else
+            {
+                samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+                    File.ReadAllText("element.json"));
+            }
+            //Trace.WriteLine(string.Join("\n", samplelist));
             foreach (var item in samplelist)
             {
-                MashaDBClass m = new MashaDBClass();
+                DBBlockModelClass m = new DBBlockModelClass();
                 byte[] bytes = Encoding.Default.GetBytes(item.Description);
                 var desc = Encoding.UTF8.GetString(bytes);
                 m.Description = desc;
                 bytes = Encoding.Default.GetBytes(item.Title);
                 var ttl = Encoding.UTF8.GetString(bytes);
                 m.Title = ttl;
-                m.Id = item.Id;
+                m.ModelId = item.ModelId;
                 m.InputFlows = item.InputFlows;
                 m.OutputFlows = item.OutputFlows;
-                mashaDBClasses.Add(m);
+                m.DefaultParameters = item.DefaultParameters;
+                m.Description = desc;
+                m.Expressions = item.Expressions;
+                blockModelClasses.Add(m);
             }
-            foreach (var item in mashaDBClasses)
+            foreach (var item in blockModelClasses)
             {
                 LogicElement l = new LogicElement(item);
                 LogicElements.Add(l);
-
-                MenuItem menuItem = new MenuItem();
-                menuItem.Header = item.Title;
-                menuItem.Click += new RoutedEventHandler(Button_Click);
-                UIElementList.Children.Add(menuItem);
+                Button btn = new Button();
+                btn.Style = Resources["Cmbbtn"] as Style;
+                btn.Content = item.Title;
+                btn.Click += new RoutedEventHandler(Button_Click);
+                UIElementList.Children.Add(btn);
             }
 
         }
@@ -118,9 +132,9 @@ namespace CanvasDragNDrop
         {
             string json = File.ReadAllText("element.json");
             Trace.WriteLine(json);
-            mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
+            blockModelClasses = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(json);
 
-            foreach (var item in mashaDBClasses)
+            foreach (var item in blockModelClasses)
             {
                 LogicElement l = new LogicElement(item);
                 LogicElements.Add(l);
@@ -135,22 +149,16 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
             DrowGrid();
+            windowEventHandler = WindowEventHandler.getInstance();
+            //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
 
-
-            if (RootUrl.AutomotiveWork)
-            {
-                GetFromJsonElemList();
-            }
-            else
-            {
-                GetFromServerElemList(null, null);
-            }
-
-
+            GetFromServerElemList(null, null);
+            //GetFromJsonElemList();
+            // string json = File.ReadAllText(Get("https://1245-95-220-40-200.ngrok-free.app/get_models"));
             //// string json = File.ReadAllText(rootFolder + @"element.json");
             // Trace.WriteLine(json);
-            // mashaDBClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
-            // foreach (var item in mashaDBClasses)
+            // blockModelClasses = JsonConvert.DeserializeObject<List<MashaDBClass>>(json);
+            // foreach (var item in blockModelClasses)
             // {
             //     Trace.WriteLine(item.title);
             // }
@@ -210,50 +218,49 @@ namespace CanvasDragNDrop
 
             if (startDrow)
             {
-                currentLine.X2 = e.GetPosition(canvas).X - 1f;
-                currentLine.Y2 = e.GetPosition(canvas).Y - 1f;
-                //if (currentLine is null)
+                currentCustLine.GetLine().X2 = e.GetPosition(canvas).X - 1f;
+                currentCustLine.GetLine().Y2 = e.GetPosition(canvas).Y - 1f;
+                //if (currentCustLine is null)
                 //{
 
                 //    Trace.WriteLine("newLine");
-                //    currentLine = new Line();
-                //    currentLine.Stroke = System.Windows.Media.Brushes.Red;
+                //    currentCustLine = new Line();
+                //    currentCustLine.Stroke = System.Windows.Media.Brushes.Red;
 
                 //    if (linePathStarted && prewPoint is not null)
                 //    {
-                //        currentLine.X1 = prewPoint.Value.X;
-                //        currentLine.Y1 = prewPoint.Value.Y;
+                //        currentCustLine.X1 = prewPoint.Value.X;
+                //        currentCustLine.Y1 = prewPoint.Value.Y;
                 //    }
                 //    else
                 //    {
-                //        currentLine.X1 = e.GetPosition(canvas).X;
-                //        currentLine.Y1 = e.GetPosition(canvas).Y;
+                //        currentCustLine.X1 = e.GetPosition(canvas).X;
+                //        currentCustLine.Y1 = e.GetPosition(canvas).Y;
                 //    }
-                //    currentLine.X2 = e.GetPosition(canvas).X;
-                //    currentLine.Y2 = e.GetPosition(canvas).Y;
+                //    currentCustLine.X2 = e.GetPosition(canvas).X;
+                //    currentCustLine.Y2 = e.GetPosition(canvas).Y;
 
-                //    currentLine.StrokeThickness = 3;
-                //    canvas.Children.Add(currentLine);
+                //    currentCustLine.StrokeThickness = 3;
+                //    canvas.Children.Add(currentCustLine);
                 //}
                 //Trace.WriteLine(e.GetPosition(canvas).X.ToString(), e.GetPosition(canvas).Y.ToString());
                 //// для ломанной
-                ////if (Math.Abs(currentLine.X1 - e.GetPosition(canvas).X) > Math.Abs(currentLine.Y1 - e.GetPosition(canvas).Y))
+                ////if (Math.Abs(currentCustLine.X1 - e.GetPosition(canvas).X) > Math.Abs(currentCustLine.Y1 - e.GetPosition(canvas).Y))
                 ////{
-                ////	currentLine.X2 = e.GetPosition(canvas).X;
-                ////	currentLine.Y2 = currentLine.Y1;
+                ////	currentCustLine.X2 = e.GetPosition(canvas).X;
+                ////	currentCustLine.Y2 = currentCustLine.Y1;
                 ////}
                 ////else
                 ////{
-                ////	currentLine.X2 = currentLine.X1;
-                ////	currentLine.Y2 = e.GetPosition(canvas).Y;
+                ////	currentCustLine.X2 = currentCustLine.X1;
+                ////	currentCustLine.Y2 = e.GetPosition(canvas).Y;
                 ////}
-                //currentLine.X2 = e.GetPosition(canvas).X - 1f;
-                //currentLine.Y2 = e.GetPosition(canvas).Y - 1f;
-                //prewPoint = new Point(currentLine.X2, currentLine.Y2);
+                //currentCustLine.X2 = e.GetPosition(canvas).X - 1f;
+                //currentCustLine.Y2 = e.GetPosition(canvas).Y - 1f;
+                //prewPoint = new Point(currentCustLine.X2, currentCustLine.Y2);
 
             }
         }
-
         private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DependencyObject dp = LogicalTreeHelper.GetParent(e.OriginalSource as DependencyObject);
@@ -267,36 +274,39 @@ namespace CanvasDragNDrop
                 {
                     linePathStarted = true;
                     Trace.WriteLine("startDrow= false;");
-                    currentLine.Stroke = System.Windows.Media.Brushes.Black;
-                    (dp as FlowPoint).connectedLines.Add(currentLine);
-                    currentLine = null;
-                    Trace.WriteLine("currentLine = null; ");
+                    currentCustLine.GetLine().Stroke = System.Windows.Media.Brushes.Black;
+                    (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
+                    currentCustLine = null;
+                    Trace.WriteLine("currentCustLine = null; ");
                     startDrow = false;
                 }
                 else if ((dp as FlowPoint).type == "out")
                 {
-                    currentLine = new Line();
-                    currentLine.Stroke = System.Windows.Media.Brushes.Red;
-                    currentLine.X1 = e.GetPosition(canvas).X;
-                    currentLine.Y1 = e.GetPosition(canvas).Y;
-                    currentLine.X2 = e.GetPosition(canvas).X;
-                    currentLine.Y2 = e.GetPosition(canvas).Y;
-                    (dp as FlowPoint).connectedLines.Add(currentLine);
-                    currentLine.StrokeThickness = 3;
-                    canvas.Children.Add(currentLine);
+                    currentCustLine = new CustomLine();
+                    currentCustLine.GetLine().Stroke = System.Windows.Media.Brushes.Red;
+                    currentCustLine.GetLine().X1 = e.GetPosition(canvas).X;
+                    currentCustLine.GetLine().Y1 = e.GetPosition(canvas).Y;
+                    currentCustLine.GetLine().X2 = e.GetPosition(canvas).X;
+                    currentCustLine.GetLine().Y2 = e.GetPosition(canvas).Y;
+                    (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
+                    currentCustLine.GetLine().StrokeThickness = 3;
+                    canvas.Children.Add(currentCustLine.GetLine());
                     startDrow = true;
                     Trace.WriteLine("startDrow = true");
                 }
             }
-
         }
         void EndLineDrawMode()
         {
             linePathStarted = false;
             prewPoint = null;
             startDrow = false;
-            canvas.Children.Remove(currentLine);
-            currentLine = null;
+            if (currentCustLine != null)
+            {
+                canvas.Children.Remove(currentCustLine.GetLine());
+                currentCustLine.SetLine(null);
+            }
+
 
             canDrowLine = false;
             state = true;
@@ -305,6 +315,7 @@ namespace CanvasDragNDrop
         private void canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             EndLineDrawMode();
+            windowEventHandler.ResetElement();
         }
 
         private void canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -328,8 +339,8 @@ namespace CanvasDragNDrop
             DependencyObject dp = LogicalTreeHelper.GetParent(sender as DependencyObject);
             Trace.WriteLine(e.Source + " !!! "
                 + e.OriginalSource.ToString() + " !!! " + dp);
-            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as MenuItem));
-            AddElement((dp as StackPanel).Children.IndexOf(e.Source as MenuItem));
+            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
+            AddElement((dp as StackPanel).Children.IndexOf(e.Source as Button));
 
             //elementList.Items.Add((new ListBoxItem()).Content = le.title);
         }
@@ -386,78 +397,25 @@ namespace CanvasDragNDrop
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            LogicElement le = new LogicElement(LogicElements[1]);
-            AddElement(le);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            LogicElement le = new LogicElement(LogicElements[2]);
-            AddElement(le);
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        //private void RectObj_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if (e.LeftButton == MouseButtonState.Pressed)
-        //    {
-        //        DragDrop.DoDragDrop(redRectangle, redRectangle, DragDropEffects.Move);
-        //    }
-        //    if (e.LeftButton == MouseButtonState.Released)
-        //    {
-        //        Trace.WriteLine(sender);
-        //    }
-        //}
-
-        //private void Canvas_Drop(object sender, DragEventArgs e)
-        //{
-        //    Point p = e.GetPosition(canvas);
-
-        //    Trace.WriteLine(sender);
-        //}
-        //private void Button_ClickProekt(object sender, RoutedEventArgs e)
-        //{
-        //    if (Proektgrid.Visibility == Visibility.Hidden)
-        //        Proektgrid.Visibility = Visibility.Visible;
-        //    else
-        //        Proektgrid.Visibility = Visibility.Hidden;
-        //}
-
-        //private void Button_ClickInstrument(object sender, RoutedEventArgs e)
-        //{
-        //    if (Instrumentgrid.Visibility == Visibility.Hidden)
-        //        Instrumentgrid.Visibility = Visibility.Visible;
-        //    else
-        //        Instrumentgrid.Visibility = Visibility.Hidden;
-        //}
-
-        //private void Button_ClickPolzovatel(object sender, RoutedEventArgs e)
-        //{
-        //    if (Polzovatelgrid.Visibility == Visibility.Hidden)
-        //        Polzovatelgrid.Visibility = Visibility.Visible;
-        //    else
-        //        Polzovatelgrid.Visibility = Visibility.Hidden;
-        //}
-
-        //private void Button_Click_4(object sender, RoutedEventArgs e)
-        //{
-
-        //    if (Elementsgrid.Visibility == Visibility.Hidden)
-        //        Elementsgrid.Visibility = Visibility.Visible;
-        //    else
-        //        Elementsgrid.Visibility = Visibility.Hidden;
-        //}
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
             MainWindowD mainWindowD = new MainWindowD();
             mainWindowD.ShowDialog();
+        }
+
+        private void canvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && windowEventHandler.GetElement != null)
+            {
+                canvas.Children.Remove(windowEventHandler.GetCanvasElement());
+                windowEventHandler.DeleteElement();
+                Trace.WriteLine("deleted");
+            }
+            if (e.Key == Key.Escape)
+            {
+                windowEventHandler.ResetElement();
+            }
         }
     }
 }

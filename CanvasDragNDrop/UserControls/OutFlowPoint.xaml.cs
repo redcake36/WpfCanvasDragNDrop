@@ -24,7 +24,7 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
         }
-        public OutFlowPoint(Brush br, string type, int index) : base(br, type, index)
+        public OutFlowPoint(Brush br, string type, int index, FrameworkElement parentElement) : base(br, type, index, parentElement)
         {
             InitializeComponent();
         }
