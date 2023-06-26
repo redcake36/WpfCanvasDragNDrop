@@ -106,6 +106,7 @@ namespace CanvasDragNDrop
             {
                 LogicElement l = new LogicElement(item);
                 LogicElements.Add(l);
+
                 MenuItem menuItem = new MenuItem();
                 menuItem.Header = item.Title;
                 menuItem.Click += new RoutedEventHandler(Button_Click);
@@ -135,6 +136,7 @@ namespace CanvasDragNDrop
             InitializeComponent();
             DrowGrid();
 
+
             if (RootUrl.AutomotiveWork)
             {
                 GetFromJsonElemList();
@@ -143,6 +145,7 @@ namespace CanvasDragNDrop
             {
                 GetFromServerElemList(null, null);
             }
+
 
             //// string json = File.ReadAllText(rootFolder + @"element.json");
             // Trace.WriteLine(json);
