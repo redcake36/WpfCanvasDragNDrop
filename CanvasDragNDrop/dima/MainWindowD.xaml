@@ -71,6 +71,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
                                                 </StackPanel>
+                                                
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

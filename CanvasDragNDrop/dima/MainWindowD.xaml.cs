@@ -26,6 +26,8 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.DirectoryServices.ActiveDirectory;
 using System.Net.WebSockets;
+using Accessibility;
+using System.Collections.Specialized;
 
 namespace CanvasDragNDrop
 {
@@ -377,7 +379,7 @@ namespace CanvasDragNDrop
 
         public BlockModelCreation()
         {
-
+            _inputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
         }
 
         public void CheckFlowIndexes()
@@ -550,6 +552,11 @@ namespace CanvasDragNDrop
                     ExtraParameters.Add(new CustomParametreClass("", var, ""));
                 }
             }
+        }
+
+        private void RegenerateCustomParametres(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RegenerateCustomParametres();
         }
 
         public bool CheckBlock(bool silent = false)
