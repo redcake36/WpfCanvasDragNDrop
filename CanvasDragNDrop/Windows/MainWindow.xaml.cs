@@ -33,9 +33,7 @@ namespace CanvasDragNDrop
         //string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
         bool canDrowLine = false;
         bool startDrow = false;
-        bool linePathStarted = false;
         CustomLine? currentCustLine = null;
-        Point? prewPoint = null;
         public static bool state = true;
 
 
