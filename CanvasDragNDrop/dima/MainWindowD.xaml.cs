@@ -25,6 +25,9 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.DirectoryServices.ActiveDirectory;
+using System.Net.WebSockets;
+using Accessibility;
+using System.Collections.Specialized;
 
 namespace CanvasDragNDrop
 {
@@ -175,8 +178,8 @@ namespace CanvasDragNDrop
             set
             {
                 _expression = value;
+                OnPropertyChanged(nameof(Expression));
                 ExtractNeededVariables();
-                OnPropertyChanged(nameof(NeededVariables));
             }
         }
 
@@ -185,7 +188,7 @@ namespace CanvasDragNDrop
         public string DefinedVariable
         {
             get { return _definedVariable; }
-            set { var old = _definedVariable; _definedVariable = Regex.Replace(value, @"[^a-zA-Z0-9]", ""); _context.RegenerateCustomParametres(old, _definedVariable); }
+            set { var old = _definedVariable; _definedVariable = Regex.Replace(value, @"[^a-zA-Z0-9]", ""); OnPropertyChanged(nameof(DefinedVariable)); _context.RegenerateCustomParametres(old, _definedVariable); }
         }
 
         private string _neededVariables;
@@ -193,7 +196,7 @@ namespace CanvasDragNDrop
         public string NeededVariables
         {
             get { return _neededVariables; }
-            set { _neededVariables = value; }
+            set { _neededVariables = value; OnPropertyChanged(nameof(NeededVariables)); }
         }
 
         private BlockModelCreation _context;
@@ -226,6 +229,37 @@ namespace CanvasDragNDrop
             {
                 NeededVariables = "";
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+    }
+
+    //Класс описания переменных, используемых в вычислениях
+    public class CalcVariable : INotifyPropertyChanged
+    {
+        private string _variable = "";
+        public string Variable
+        {
+            get { return _variable; }
+            set { _variable = value; OnPropertyChanged(nameof(Variable)); }
+        }
+
+        private double _value = 0;
+        public double Value
+        {
+            get { return _value; }
+            set { _value = value; OnPropertyChanged(nameof(Value)); }
+        }
+
+        public CalcVariable(string var, double val)
+        {
+            Variable = var;
+            Value = val;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -301,9 +335,51 @@ namespace CanvasDragNDrop
             set { _expressions = value; OnPropertyChanged("Expressions"); }
         }
 
+        [JsonIgnore]
+        public (string CheckError, string CalcAvailable) StaticStrings = ("В моделе имеются ошибки", "Рассчитать");
+
+        private string _calcButtonText = "";
+
+        [JsonIgnore]
+        public string CalcButtonText
+        {
+            get { return _calcButtonText; }
+            set { _calcButtonText = value; OnPropertyChanged(nameof(CalcButtonText)); }
+        }
+
+        private bool _calcButtonAvailable = false;
+
+        [JsonIgnore]
+        public bool CalcButtonAvailable
+        {
+            get { return _calcButtonAvailable; }
+            set { _calcButtonAvailable = value; OnPropertyChanged(nameof(CalcButtonAvailable)); }
+        }
+
+        private ObservableCollection<CalcVariable> _filledCalcVariables = new ObservableCollection<CalcVariable>();
+        
+        [JsonIgnore]
+        public ObservableCollection<CalcVariable> FilledCalcVariables
+        {
+            get { return _filledCalcVariables; }
+            set { _filledCalcVariables = value; OnPropertyChanged(nameof(FilledCalcVariables)); }
+        }
+
+        private ObservableCollection<CalcVariable> _calcedCalcVariables = new ObservableCollection<CalcVariable>();
+
+        [JsonIgnore]
+        public ObservableCollection<CalcVariable> CalcedCalcVariables
+        {
+            get { return _calcedCalcVariables; }
+            set { _calcedCalcVariables = value; OnPropertyChanged(nameof(CalcedCalcVariables)); }
+        }
+
+
+
+
         public BlockModelCreation()
         {
-
+            _inputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
         }
 
         public void CheckFlowIndexes()
@@ -450,64 +526,139 @@ namespace CanvasDragNDrop
 
         public void RegenerateCustomParametres(string oldVar, string newVar)
         {
-            var FoundVar = ExtraParameters.FirstOrDefault(x => x.Symbol == oldVar);
-            bool remove = false;
-            if (newVar == "") remove = true;
-            if (InputFlows.FirstOrDefault(x => x.FlowParameters.FirstOrDefault(y => y.Variable == newVar) != null) != null) remove = true;
-            if (OutputFlows.FirstOrDefault(x => x.FlowParameters.FirstOrDefault(y => y.Variable == newVar) != null) != null) remove = true;
-            if (DefaultParameters.FirstOrDefault(x => x.Symbol == newVar) != null) remove = true;
-
-            if (remove == true)
+            //if (oldVar == newVar) return;
+            var OldFoundVar = ExtraParameters.FirstOrDefault(x => x.Symbol == oldVar);
+            var NewFoundVar = ExtraParameters.FirstOrDefault(y => y.Symbol == newVar);
+            if (OldFoundVar != null && NewFoundVar == null && newVar!="")
             {
-                if (FoundVar != null)
-                {
-                    ExtraParameters.Remove(FoundVar);
-                }
+                ExtraParameters.Add(new CustomParametreClass(OldFoundVar.Title,newVar, OldFoundVar.Units));
             }
-            else
-            {
-                if (FoundVar != null)
-                {
-                    FoundVar.Symbol = newVar;
-                }
-                else
-                {
-                    ExtraParameters.Add(new CustomParametreClass("", newVar, ""));
-                }
-            }
+            RegenerateCustomParametres();
         }
 
         public void RegenerateCustomParametres()
         {
-            foreach (var item in Expressions)
-            {
-                string checkingVar = item.DefinedVariable;
-                if (checkingVar != "")
-                {
-                    bool remove = false;
-                    if (InputFlows.FirstOrDefault(x => x.FlowParameters.FirstOrDefault(y => y.Variable == checkingVar) != null) != null) remove = true;
-                    if (OutputFlows.FirstOrDefault(x => x.FlowParameters.FirstOrDefault(y => y.Variable == checkingVar) != null) != null) remove = true;
-                    if (DefaultParameters.FirstOrDefault(x => x.Symbol == checkingVar) != null) remove = true;
+            List<string> RawVars = Expressions.Select(x => x.DefinedVariable).ToList();
+            RawVars = RawVars.Where(rawVar => (InputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null)).ToList();
+            RawVars = RawVars.Where(rawVar => (OutputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null)).ToList();
+            RawVars = RawVars.Where(rawVar => (DefaultParameters.FirstOrDefault(DefParam => DefParam.Symbol == rawVar) == null)).ToList();
 
-                    var FoundCustom = ExtraParameters.FirstOrDefault(x => x.Symbol == checkingVar);
-                    if (remove == true)
-                    {
-                        if (FoundCustom != null)
-                        {
-                            ExtraParameters.Remove(FoundCustom);
-                        }
-                    }
-                    else
-                    {
-                        if (FoundCustom == null)
-                        {
-                            ExtraParameters.Add(new CustomParametreClass("", checkingVar, ""));
-                        }
-                    }
+            ExtraParameters = new ObservableCollection<CustomParametreClass>(ExtraParameters.Where(extraParam => RawVars.Contains(extraParam.Symbol)));
+
+            foreach (var var in RawVars)
+            {
+                if (ExtraParameters.FirstOrDefault(x => x.Symbol == var) == null && var != "")
+                {
+                    ExtraParameters.Add(new CustomParametreClass("", var, ""));
                 }
             }
         }
 
+        private void RegenerateCustomParametres(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RegenerateCustomParametres();
+        }
+
+        public bool CheckBlock(bool silent = false)
+        {
+            try
+            {
+                RegenerateCustomParametres();
+                CheckFieldsNotEpmty();
+                CheckFlowIndexes();
+                CheckVarsUsingIsCorrect();
+                CheckExpressionsCorrectness();
+            }
+            catch (Exception ex)
+            {
+                if (silent == false)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка описания блока");
+                }
+                return false;
+            }
+            return true;
+        }
+
+        public bool RegenerateCalcVariables()
+        {
+            if (CheckBlock(true) == false)
+            {
+                CalcButtonText = StaticStrings.CheckError;
+                CalcButtonAvailable = false;
+                return false;
+            }
+            else
+            {
+                var ProcessedCalcedVars = new List<string>(Expressions.Select(x => x.DefinedVariable).ToList());
+                CalcedCalcVariables = new ObservableCollection<CalcVariable>(CalcedCalcVariables.Where(x => ProcessedCalcedVars.Any(y => x.Variable == y)));
+
+                var ProcessedFilledVars = new List<string>();
+                foreach (var expressionBlock in Expressions)
+                {
+                    var NeededVars = expressionBlock.NeededVariables.Split(" ").ToList();
+                    foreach (var variable in NeededVars)
+                    {
+                        if (variable != "")
+                        {
+                            if (CalcedCalcVariables.Any(x => x.Variable == variable) == false)
+                            {
+                                if (FilledCalcVariables.Any(x => x.Variable == variable) == false)
+                                {
+                                    FilledCalcVariables.Add(new CalcVariable(variable, 0));
+                                }
+                                ProcessedFilledVars.Add(variable);
+
+                            }
+                        }
+                    }
+
+                    var defVar = expressionBlock.DefinedVariable;
+                    if (CalcedCalcVariables.Any(x => x.Variable == defVar) == false)
+                    {
+                        CalcedCalcVariables.Add(new CalcVariable(defVar, 0));
+                    }
+                }
+
+                FilledCalcVariables = new ObservableCollection<CalcVariable>(FilledCalcVariables.Where(x => ProcessedFilledVars.Any(y => x.Variable == y)));
+
+                CalcButtonText = StaticStrings.CalcAvailable;
+                CalcButtonAvailable = true;
+                return true;
+            }
+        }
+
+        public void CalculateModel()
+        {
+            foreach (var expBlock in Expressions)
+            {
+                Expression e = new Expression(expBlock.Expression);
+                e.disableImpliedMultiplicationMode();
+                foreach (var arg in expBlock.NeededVariables.Split(" ").ToList())
+                {
+                    var Var = FilledCalcVariables.FirstOrDefault(x => x.Variable == arg);
+                    if (Var != null)
+                    {
+                    e.defineArgument(Var.Variable, Var.Value);
+                    }
+                    else
+                    {
+                        Var = CalcedCalcVariables.FirstOrDefault(x => x.Variable == arg);
+                        e.defineArgument(Var.Variable, Var.Value);
+                    }
+                }
+                if (e.checkSyntax() == false)
+                {
+                    var error = e.getErrorMessage();
+                    throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                }
+                else
+                {
+                    var result = e.calculate();
+                    CalcedCalcVariables[CalcedCalcVariables.IndexOf(CalcedCalcVariables.FirstOrDefault(x => x.Variable == expBlock.DefinedVariable))].Value = result;
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -536,8 +687,7 @@ namespace CanvasDragNDrop
             catch (Exception e)
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
-                var Dev = false;
-                if (Dev)
+                if (RootUrl.AutomotiveWork)
                 {
                     context.BaseParameters.Add(new BaseParametreClass(1, "Массовая энтальпия", "h", "-"));
                     context.BaseParameters.Add(new BaseParametreClass(2, "Температура", "T", "-"));
@@ -575,7 +725,7 @@ namespace CanvasDragNDrop
             BlockModelCreation context = (BlockModelCreation)this.DataContext;
             FlowClass Str = new FlowClass(context.InputFlows.Count + context.OutputFlows.Count + 1, context);
             context.InputFlows.Add(Str);
-            context.RegenerateCustomParametres();
+            //context.RegenerateCustomParametres();
         }
 
         private void AddOutputFlow(object sender, RoutedEventArgs e)
@@ -583,21 +733,13 @@ namespace CanvasDragNDrop
             BlockModelCreation context = (BlockModelCreation)this.DataContext;
             FlowClass Str = new FlowClass(context.InputFlows.Count + context.OutputFlows.Count + 1, context);
             context.OutputFlows.Add(Str);
-            context.RegenerateCustomParametres();
+            //context.RegenerateCustomParametres();
         }
 
         private void SaveBlock(object sender, RoutedEventArgs e)
         {
             BlockModelCreation context = (BlockModelCreation)this.DataContext;
-            try
-            {
-                context.RegenerateCustomParametres();
-                context.CheckFieldsNotEpmty();
-                context.CheckFlowIndexes();
-                context.CheckVarsUsingIsCorrect();
-                context.CheckExpressionsCorrectness();
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка описания блока"); return; }
+            if (context.CheckBlock() == false) { return; }
 
             JObject rss = JObject.FromObject(context);
             JArray expressions = (JArray)rss["Expressions"];
@@ -608,13 +750,16 @@ namespace CanvasDragNDrop
             }
 
             HttpClient httpClient = new HttpClient();
-            var Domain = "https://1245-95-220-40-200.ngrok-free.app";
             try
             {
                 var JSON = JsonConvert.SerializeObject(rss);
                 var request = new StringContent(JSON, Encoding.Unicode, "application/json");
                 var response = httpClient.PostAsync($"{RootUrl.rootServer}/create_model", request);
                 response.Wait();
+                if (!response.Result.IsSuccessStatusCode)
+                {
+                    throw new Exception("Не удалось установить соединение с сервером");
+                }
                 this.Close();
             }
             catch (Exception err)
@@ -622,6 +767,31 @@ namespace CanvasDragNDrop
                 MessageBox.Show(err.Message, "Не удалось выполнить запрос");
 
             }
+        }
+
+        private void CheckBlock(object sender, RoutedEventArgs e)
+        {
+            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            if (context.CheckBlock() == true)
+            {
+                MessageBox.Show("Модель блока корректна", "Проверка блока");
+            }
+        }
+
+        private void PrepareCalculationsVars(object sender, RoutedEventArgs e)
+        {
+            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            context.RegenerateCalcVariables();
+        }
+
+        private void CalculateModel(object sender, RoutedEventArgs e)
+        {
+            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            //if (context.RegenerateCalcVariables() == false)
+            //{
+            //    return;
+            //}
+            context.CalculateModel();
         }
     }
 }
