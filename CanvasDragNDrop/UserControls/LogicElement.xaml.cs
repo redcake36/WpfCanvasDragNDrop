@@ -57,12 +57,10 @@ namespace CanvasDragNDrop
             width = le.width;
             title = le.title;
             color = le.color;
-            temperature = le.temperature;
             inputFlowPointsCount = le.inputFlowPointsCount;
             outputFlowPointsCount = le.outputFlowPointsCount;
-            defParameters = le.defParameters;
-            blockExpressions = le.blockExpressions;
             descr = le.descr;
+            dBBlockModel = le.dBBlockModel;
         }
         public LogicElement(DBBlockModelClass blockModel)
         {
@@ -71,12 +69,10 @@ namespace CanvasDragNDrop
             width = 100;
             title = blockModel.Title;
             color = Brushes.White;
-            temperature = 10.0;
             inputFlowPointsCount = blockModel.InputFlows.Count;
             outputFlowPointsCount = blockModel.OutputFlows.Count;
-            defParameters = blockModel.DefaultParameters;
-            blockExpressions = blockModel.Expressions;
             descr = blockModel.Description;
+            dBBlockModel = blockModel;
         }
         public void Initialize()
         {
@@ -113,10 +109,9 @@ namespace CanvasDragNDrop
         public int inputFlowPointsCount = 3;
         public int outputFlowPointsCount = 4;
 
+        public DBBlockModelClass dBBlockModel;
         public string descr;
 
-        public List<Parameter> defParameters = new List<Parameter>();
-        public List<BlockExpression> blockExpressions = new List<BlockExpression>();
         public int height
         {
             get { return (int)GetValue(heightProperty); }
@@ -144,13 +139,7 @@ namespace CanvasDragNDrop
 
         }
         public static readonly DependencyProperty colorProperty = DependencyProperty.Register("color", typeof(Brush), typeof(LogicElement), new PropertyMetadata(null));
-        public double temperature
-        {
-            get { return (double)GetValue(temperatureProperty); }
-            set { SetValue(temperatureProperty, value); }
-        }
-        public static readonly DependencyProperty temperatureProperty = DependencyProperty.Register("temperature", typeof(double), typeof(LogicElement), new PropertyMetadata(null));
-
+        
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -185,17 +174,6 @@ namespace CanvasDragNDrop
             {
                 ElementPropertiesWindow propertiesWindow = new ElementPropertiesWindow();
                 Trace.WriteLine("defParameters:");
-                foreach (var param in defParameters)
-                {
-                    propertiesWindow.AddParam(param);
-                    Trace.WriteLine("param:" + param.ToString());
-                }
-                Trace.WriteLine("blockExpressions:");
-                foreach (var exp in blockExpressions)
-                {
-                    propertiesWindow.AddExpression(exp);
-                    Trace.WriteLine("exp:" + exp.ToString());
-                }
                 if (propertiesWindow.ShowDialog() == true)
                 {
 

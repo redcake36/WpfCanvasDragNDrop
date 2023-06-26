@@ -5,12 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CanvasDragNDrop"
              mc:Ignorable="d" 
-              >
+             >
     <Canvas
         MouseDown="Canvas_MouseDown"
-       
         x:Name="LogicElementCanvas"
-        
         >
 
         <Rectangle
