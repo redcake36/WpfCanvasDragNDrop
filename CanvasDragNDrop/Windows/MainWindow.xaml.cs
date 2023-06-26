@@ -88,7 +88,7 @@ namespace CanvasDragNDrop
             LogicElements.Clear();
             List<DBBlockModelClass>? samplelist;
             //Trace.WriteLine(UIElementList.Children.Count);
-            if (!RootUrl.debug)
+            if (!RootUrl.AutomotiveWork)
             {
                 samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
                     Get(RootUrl.rootServer + "/get_models"));
@@ -102,17 +102,12 @@ namespace CanvasDragNDrop
             foreach (var item in samplelist)
             {
                 DBBlockModelClass m = new DBBlockModelClass();
-                byte[] bytes = Encoding.Default.GetBytes(item.Description);
-                var desc = Encoding.UTF8.GetString(bytes);
-                m.Description = desc;
-                bytes = Encoding.Default.GetBytes(item.Title);
-                var ttl = Encoding.UTF8.GetString(bytes);
-                m.Title = ttl;
+                m.Description = item.Description;
+                m.Title = item.Title;
                 m.ModelId = item.ModelId;
                 m.InputFlows = item.InputFlows;
                 m.OutputFlows = item.OutputFlows;
                 m.DefaultParameters = item.DefaultParameters;
-                m.Description = desc;
                 m.Expressions = item.Expressions;
                 blockModelClasses.Add(m);
             }
@@ -274,6 +269,7 @@ namespace CanvasDragNDrop
                 {
                     linePathStarted = true;
                     Trace.WriteLine("startDrow= false;");
+                    currentCustLine.toFlowPoint = (dp as FlowPoint);
                     currentCustLine.GetLine().Stroke = System.Windows.Media.Brushes.Black;
                     (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
                     currentCustLine = null;
@@ -290,7 +286,12 @@ namespace CanvasDragNDrop
                     currentCustLine.GetLine().Y2 = e.GetPosition(canvas).Y;
                     (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
                     currentCustLine.GetLine().StrokeThickness = 3;
+                    currentCustLine.fromFlowPoint = (dp as FlowPoint);
+
+
                     canvas.Children.Add(currentCustLine.GetLine());
+
+
                     startDrow = true;
                     Trace.WriteLine("startDrow = true");
                 }

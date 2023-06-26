@@ -16,9 +16,8 @@ namespace CanvasDragNDrop
     {
         Line? line;
         Brush color;
-        FlowPoint? flowPoint { get; set; }
-
-
+        public FlowPoint? fromFlowPoint { get; set; }
+        public FlowPoint? toFlowPoint { get; set; }
 
         protected override Geometry DefiningGeometry => 
             throw new NotImplementedException();
