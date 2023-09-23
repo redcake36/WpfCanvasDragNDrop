@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,20 +25,44 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
         }
-        public InFlowPoint(Brush br, string type, int index, FrameworkElement parentElement) : base(br, type, index, parentElement)
+        public InFlowPoint(Brush br, FlowPointType type, int index, FrameworkElement parentElement) 
+            : base(br, type, index, parentElement)
         {
             InitializeComponent();
         }
-        public override void ChangePosition(int parentHeight, int parentWidth, Point p, float countPointsOnEdge)
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (connectedLines.Count == 0)
+            Trace.WriteLine(e.GetPosition(MainWindow.Instance().canvas));
+        }
+        public void ChangePosition(Point parentPos)
+        {
+            if (connectedPipe is null || connectedPipe.GetLine() is null)
             {
                 return;
             }
-            foreach (Line ln in connectedLines)
+            if (type == FlowPointType.InFlowPoint)
             {
-                ln.X2 = p.X;
-                ln.Y2 = parentHeight * (index + 1) / (countPointsOnEdge + 1)  + p.Y;
+                connectedPipe.SetEndPoint(parentPos + new Vector(0, (5 + edgeLength / 2) * index));
+                //connectedPipe.SetEndPoint(this.TransformToAncestor(MainWindow.getInstance().mainCanvas)
+                //          .Transform(new Point(edgeLength/2, edgeLength / 2)));
+            }
+            if (type == FlowPointType.OutFlowPoint)
+            {
+                connectedPipe.SetStartPoint(parentPos + new Vector(100, (5 + edgeLength / 2) * index));
+
+                // WORKS but very slow, can freeze when mouse moves fast
+                //connectedPipe.SetStartPoint(this.TransformToAncestor(MainWindow.getInstance().mainCanvas)
+                //          .Transform(new Point(edgeLength / 2, edgeLength / 2)));
+            }
+        }
+        public void Delete()
+        {
+            if (connectedPipe != null)
+            {
+                MainWindow.Instance().canvas.Children.Remove(connectedPipe.GetLine());
+                connectedPipe.Delete();
+                
             }
         }
     }

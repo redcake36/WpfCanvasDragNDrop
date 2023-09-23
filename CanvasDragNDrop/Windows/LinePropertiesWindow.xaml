@@ -7,6 +7,44 @@
         mc:Ignorable="d"
         Title="LinePropertiesWindow" Height="300" Width="400">
     <Grid>
-        
+        <ScrollViewer Grid.ColumnSpan="2">
+            <StackPanel>
+                <StackPanel x:Name="DefltParams">
+                    <TextBlock FontSize="16" FontWeight="Bold">Параметры потока</TextBlock>
+                    <WrapPanel>
+                        <TextBlock Margin="4">ID потока: </TextBlock>
+                        <TextBlock Margin="4">67</TextBlock>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Margin="4">Тип среды: </TextBlock>
+                        <TextBlock Margin="4">вода</TextBlock>
+                    </WrapPanel>
+                </StackPanel>
+                <TextBlock ></TextBlock>
+                <StackPanel x:Name="Expr">
+                    <TextBlock FontSize="14" FontWeight="Bold">Переменные</TextBlock>
+                    <TextBlock Margin="4">Энтальпия</TextBlock>
+                    <WrapPanel>
+                        <TextBlock Margin="4">h1</TextBlock>
+                        <TextBlock Margin="4" FontWeight="Bold">0.85</TextBlock>
+                        <TextBlock Margin="4">Дж</TextBlock>
+                    </WrapPanel>
+                    <TextBlock Margin="4">Давление</TextBlock>
+                    <WrapPanel>
+                        <TextBlock Margin="4">p1</TextBlock>
+                        <TextBlock Margin="4" FontWeight="Bold">16.2e6</TextBlock>
+                        <TextBlock Margin="4">Па</TextBlock>
+                    </WrapPanel>
+                    <TextBlock Margin="4">Температура</TextBlock>
+                    <WrapPanel>
+                        <TextBlock Margin="4">T1</TextBlock>
+                        <TextBlock Margin="4" FontWeight="Bold">458</TextBlock>
+                        <TextBlock Margin="4">К</TextBlock>
+                    </WrapPanel>
+                </StackPanel>
+                <Button Click="AcceptClick" Grid.Row="6" Grid.Column="1">Ok</Button>
+                
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

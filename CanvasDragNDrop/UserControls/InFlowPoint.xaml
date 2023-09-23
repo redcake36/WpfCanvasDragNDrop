@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CanvasDragNDrop"
              mc:Ignorable="d">
     <Border 
+        MouseDown="Border_MouseDown"
         Height="20" 
         Width="20"
         Background="{Binding brush}"

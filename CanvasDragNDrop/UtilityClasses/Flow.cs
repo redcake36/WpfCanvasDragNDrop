@@ -14,8 +14,6 @@ namespace CanvasDragNDrop
         public string FlowVariablesIndex { get; set; }
         public int FlowId { get; set; }
 
-
-
         public Flow(List<Variable> availableVariables, string flowVariablesIndex, int flowId)
         {
             AvailableVariables = availableVariables;

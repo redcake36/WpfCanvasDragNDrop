@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="CanvasDragNDrop.VisualBlockComponent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CanvasDragNDrop"
+             mc:Ignorable="d" 
+             >
+    <Canvas
+        MouseDown="Canvas_MouseDown"
+        x:Name="LogicElementCanvas"
+        >
+        <Rectangle
+            Fill="{Binding bgColor}"
+            Height="{Binding height}" 
+            Width="{Binding width}"
+            ToolTip="{Binding title}"
+            ToolTipService.InitialShowDelay="5">
+        </Rectangle>
+
+        <Border 
+            x:Name="visualBlockBorder"
+            BorderThickness="1" BorderBrush="Black" 
+            Height="{Binding height}" 
+            Width="{Binding width}">
+            <TextBlock 
+                Text="{Binding title}" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center">
+            </TextBlock>
+        </Border>
+        <WrapPanel Orientation="Vertical" x:Name="InPoints">
+            <WrapPanel.Resources>
+                <Style TargetType="{x:Type local:InFlowPoint}">
+                    <Setter Property="Margin" Value="-10,5,0,0" />
+                </Style>
+            </WrapPanel.Resources>
+            <!--<local:InFlowPoint brush="Red" Loaded="InFlowPoint_Loaded"></local:InFlowPoint>
+            <local:InFlowPoint brush="Red" Loaded="InFlowPoint_Loaded"></local:InFlowPoint>-->
+        </WrapPanel>
+        <WrapPanel Orientation="Vertical" Margin="100 0"  x:Name="OutPoints">
+            <WrapPanel.Resources>
+                <Style TargetType="{x:Type local:InFlowPoint}">
+                    <Setter Property="Margin" Value="-10,5,0,0" />
+                </Style>
+            </WrapPanel.Resources>
+            <!--<local:InFlowPoint brush="Red" Loaded="InFlowPoint_Loaded"></local:InFlowPoint>
+            <local:InFlowPoint brush="Red" Loaded="InFlowPoint_Loaded"></local:InFlowPoint>-->
+        </WrapPanel>
+    </Canvas>
+</UserControl>

@@ -10,7 +10,7 @@ namespace CanvasDragNDrop
     {
 
         public static string rootServer = "https://0c67-81-177-58-204.ngrok-free.app";
-        public static bool AutomotiveWork = false;
+        public static bool AutomotiveWork = true;
 
     }
 }

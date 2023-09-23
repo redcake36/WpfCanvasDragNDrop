@@ -9,8 +9,7 @@ namespace CanvasDragNDrop
 {
     interface ICanvasChild
     {
-        void Selected();
-        void Deselected();
+        void Selected(bool isSelected);
         void Delete();
         FrameworkElement GetVisualElement();
     }

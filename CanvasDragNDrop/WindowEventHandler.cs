@@ -11,7 +11,7 @@ namespace CanvasDragNDrop
     public class WindowEventHandler
     {
         private static WindowEventHandler? instance;
-        private FrameworkElement? element;
+        private FrameworkElement? currentElement;
         private WindowEventHandler()
         {
             instance = this;
@@ -25,55 +25,48 @@ namespace CanvasDragNDrop
         }
         public FrameworkElement? GetCanvasElement()
         {
-            if(element != null)
-                return ((ICanvasChild)this.element).GetVisualElement();
+            if(currentElement != null)
+                return ((ICanvasChild)currentElement).GetVisualElement();
             return null;
         }
         public FrameworkElement? GetElement()
         {
-            return element;
+            return currentElement;
         }
         public void SetElement(FrameworkElement element)
         {
-            if (this.element != null && this.element != element)
-                SelectElement((ICanvasChild)this.element, false);
-            this.element = element;
-            SelectElement((ICanvasChild)this.element, true);
+            if (currentElement != null && currentElement != element)
+                SelectElement((ICanvasChild)currentElement, false);
+            currentElement = element;
+            SelectElement((ICanvasChild)currentElement, true);
             Trace.WriteLine("set");
         }
         public void ResetElement()
         {
-            if (this.element != null)
+            if (currentElement != null)
             {
-                SelectElement((ICanvasChild)this.element, false);
-                this.element = null;
+                SelectElement((ICanvasChild)currentElement, false);
+                currentElement = null;
             }
         }
 
         public void DeleteElement()
         {
-            if (this.element != null)
+            if (currentElement != null)
             {
-                ((ICanvasChild)this.element).Delete();
-                this.element = null;
+                ((ICanvasChild)currentElement).Delete();
+                currentElement = null;
             }
         }
-        void SelectElement(ICanvasChild canvasChild, bool b)
+        void SelectElement(ICanvasChild canvasChild, bool isSelected)
         {
-            if (b)
-            {
-                canvasChild.Selected();
-            }
-            else
-            {
-                canvasChild.Deselected();
-            }
+            canvasChild.Selected(isSelected);
         }
         public void GetSelectedObjectName()
         {
             try
             {
-                Trace.WriteLine("elem: " + element.Name);
+                Trace.WriteLine("elem: " + currentElement.Name);
             }
             catch (Exception)
             {

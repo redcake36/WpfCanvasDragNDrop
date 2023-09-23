@@ -15,16 +15,19 @@ using System.Windows.Shapes;
 
 namespace CanvasDragNDrop
 {
-    /// <summary>
-    /// Логика взаимодействия для FlowPoint.xaml
-    /// </summary>
+    public enum FlowPointType
+    {
+        InFlowPoint, 
+        OutFlowPoint
+    }
     public partial class FlowPoint : UserControl
     {
         public FlowPoint()
         {
             DataContext = this;
+            parentElement = null;
         }
-        public FlowPoint(Brush br, string type, int index, FrameworkElement parentElement)
+        public FlowPoint(Brush br, FlowPointType type, int index, FrameworkElement parentElement)
         {
             DataContext = this;
             brush = br;
@@ -34,25 +37,17 @@ namespace CanvasDragNDrop
             this.parentElement = parentElement;
         }
         public string? pointName;
-        public FrameworkElement parentElement;
-        public string? type;
+        public FrameworkElement? parentElement;
+        public FlowPointType type;
         public int index;
         public int edgeLength = 20;
-        public List<Line> connectedLines = new List<Line>();
-        public virtual void ChangePosition(int parentHeight, int parentWidth, Point p, float countPointsOnEdge)
-        {
-            if (connectedLines.Count == 0)
-            {
-                return;
-            }
-        }
+        public Pipe connectedPipe;
 
         public Brush brush
         {
             get { return (Brush)GetValue(brushProperty); }
             set { SetValue(brushProperty, value); }
-
         }
-        public static readonly DependencyProperty brushProperty = DependencyProperty.Register("brush", typeof(Brush), typeof(LogicElement), new PropertyMetadata(null));
+        public static readonly DependencyProperty brushProperty = DependencyProperty.Register("brush", typeof(Brush), typeof(FlowPoint), new PropertyMetadata(null));
     }
 }
