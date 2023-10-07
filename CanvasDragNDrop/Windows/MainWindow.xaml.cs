@@ -342,7 +342,7 @@ namespace CanvasDragNDrop
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            MainWindowD mainWindowD = new MainWindowD();
+            BlockModelCreationWindow mainWindowD = new BlockModelCreationWindow();
             mainWindowD.ShowDialog();
         }
 

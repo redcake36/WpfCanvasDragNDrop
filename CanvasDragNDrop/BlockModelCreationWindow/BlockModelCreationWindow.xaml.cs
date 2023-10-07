@@ -10,9 +10,9 @@ using System.Windows.Controls;
 
 namespace CanvasDragNDrop
 {
-    public partial class MainWindowD : Window
+    public partial class BlockModelCreationWindow : Window
     {
-        public MainWindowD()
+        public BlockModelCreationWindow()
         {
             HttpClient httpClient = new HttpClient();
             InitializeComponent();
