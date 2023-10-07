@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <None Remove="element.json" />
+    <None Remove="Resources\arrow_down.png" />
+    <None Remove="Resources\Arrow_Up.png" />
+    <None Remove="Resources\delete.png" />
     <None Remove="Resources\светлая стрелка.png" />
     <None Remove="Resources\стре.png" />
   </ItemGroup>
@@ -22,6 +25,9 @@
     <Content Include="element.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\arrow_down.png" />
+    <Resource Include="Resources\arrow_up.png" />
+    <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\светлая стрелка.png" />
     <Resource Include="Resources\стре.png" />
   </ItemGroup>

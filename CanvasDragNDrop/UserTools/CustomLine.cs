@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -25,6 +26,19 @@ namespace CanvasDragNDrop
         public CustomLine()
         {
             line = new Line();
+            color = Brushes.Black;
+            line.MouseDown += new MouseButtonEventHandler(LineClick);
+        }
+
+        public CustomLine(MouseButtonEventArgs e, Canvas canvas)
+        {
+            line = new Line();
+            line.Stroke = System.Windows.Media.Brushes.Red;
+            line.X1 = e.GetPosition(canvas).X;
+            line.Y1 = e.GetPosition(canvas).Y;
+            line.X2 = e.GetPosition(canvas).X;
+            line.Y2 = e.GetPosition(canvas).Y;
+            line.StrokeThickness = 3;
             color = Brushes.Black;
             line.MouseDown += new MouseButtonEventHandler(LineClick);
         }
