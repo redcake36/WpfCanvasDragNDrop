@@ -39,18 +39,30 @@
 
                                 <Label Content="Входные потоки" FontSize="18" VerticalAlignment="Center"/>
 
-                                <ItemsControl ItemsSource="{Binding InputFlows}">
+                                <ItemsControl ItemsSource="{Binding InputFlows}" AlternationCount="{Binding InputFlows.Count}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
-                                                <WrapPanel Margin="5,5,5,5">
-                                                    <Label Content="Тип среды" VerticalAlignment="Center"/>
-                                                    <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="45"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <WrapPanel Margin="5,5,5,5" Grid.Column="0">
+                                                        <Label Content="Тип среды" VerticalAlignment="Center"/>
+                                                        <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
                                                   SelectedValue="{Binding FlowEnviroment}"
                                                   SelectedValuePath="FlowEnviromentId"
-                                                  DisplayMemberPath="FlowEnvironmentType"
-                                        />
-                                                </WrapPanel>
+                                                  DisplayMemberPath="FlowEnvironmentType"/>
+                                                    </WrapPanel>
+                                                    <Image Source="/Resources/delete.png" 
+                                                           Width="30" 
+                                                           Height="30" 
+                                                           Margin="0,0,5,0" 
+                                                           Grid.Column="1" 
+                                                           MouseDown="DeleteImputFlow"
+                                                           Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
+                                                </Grid>
                                                 <WrapPanel Margin="5,5,5,5">
                                                     <Label Content="Индекс потока" VerticalAlignment="Center"/>
                                                     <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
@@ -71,7 +83,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
                                                 </StackPanel>
-                                                
+
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -80,18 +92,30 @@
                                 <Button Background="#E7E7E7" Content="Добавить входной поток" Margin="10,0,10,0" Padding="3" Click="AddInputFlow"/>
 
                                 <Label Content="Выходные потоки" FontSize="18" VerticalAlignment="Center"/>
-                                <ItemsControl ItemsSource="{Binding OutputFlows}">
+                                <ItemsControl ItemsSource="{Binding OutputFlows}" AlternationCount="{Binding OutputFlows.Count}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Background="#FFE4E4E4" Margin="10,5,10,5">
-                                                <WrapPanel Margin="5,5,5,5">
-                                                    <Label Content="Тип среды" VerticalAlignment="Center"/>
-                                                    <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
-                                                  SelectedValue="{Binding FlowEnviroment}"
-                                                  SelectedValuePath="FlowEnviromentId"
-                                                  DisplayMemberPath="FlowEnvironmentType"
-                                        />
-                                                </WrapPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="45"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <WrapPanel Margin="5,5,5,5" Grid.Column="0">
+                                                        <Label Content="Тип среды" VerticalAlignment="Center"/>
+                                                        <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
+                                                                SelectedValue="{Binding FlowEnviroment}"
+                                                                SelectedValuePath="FlowEnviromentId"
+                                                                DisplayMemberPath="FlowEnvironmentType"/>
+                                                    </WrapPanel>
+                                                    <Image Source="/Resources/delete.png" 
+                                                           Width="30" 
+                                                           Height="30" 
+                                                           Margin="0,0,5,0" 
+                                                           Grid.Column="1"
+                                                           MouseDown="DeleteOutputFlow"
+                                                           Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
+                                                </Grid>
                                                 <WrapPanel Margin="5,5,5,5">
                                                     <Label Content="Индекс потока" VerticalAlignment="Center"/>
                                                     <TextBox VerticalAlignment="Center" Text="{Binding FlowVariableIndex}" Width="50"/>
@@ -124,7 +148,7 @@
                                 <Button Background="#E7E7E7" Content="Добавить выходной поток" Margin="10,0,10,0" Padding="3" Click="AddOutputFlow"/>
 
                                 <Label Content="Переменные по умолчанию" FontSize="18" VerticalAlignment="Center" Width="757"/>
-                                <ItemsControl ItemsSource="{Binding DefaultParameters}">
+                                <ItemsControl ItemsSource="{Binding DefaultParameters}" AlternationCount="{Binding DefaultParameters.Count}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Grid Background="#FFE4E4E4" Margin="10,0,10,5">
@@ -133,6 +157,7 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="145"/>
                                                     <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="35"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
@@ -144,6 +169,14 @@
                                                 <TextBox Text="{Binding Units}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="0" Grid.Column="3"/>
                                                 <Label Content="Описание:" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0"/>
                                                 <TextBox Text="{Binding Title}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+                                                <Image Source="/Resources/delete.png" 
+                                                       Width="30" 
+                                                       Height="30" 
+                                                       Margin="0,0,5,0" 
+                                                       Grid.Column="4" 
+                                                       Grid.Row="0"
+                                                       MouseDown="DeleteDefaultParametre"
+                                                       Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -189,7 +222,10 @@
                                         Exp="{Binding Expression, Mode=TwoWay}"
                                         ExpOrder="{Binding Order,Mode=TwoWay}"
                                         DefinedVariable="{Binding DefinedVariable,Mode=TwoWay}"
-                                        NeededVars="{Binding NeededVariables,Mode=TwoWay}"/>
+                                        NeededVars="{Binding NeededVariables,Mode=TwoWay}"
+                                                    DeleteExpressionEvent="DeleteExpression"
+                                                    MoveUpExpressionEvent="MoveUpExpression"
+                                                    MoveDownExpressionEvent="MoveDownExpression"/>
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -211,7 +247,7 @@
                         <Border Padding="5">
                             <StackPanel>
                                 <Label Content="Задаваемые значения" FontSize="18" VerticalAlignment="Center"/>
-                                
+
                                 <ItemsControl ItemsSource="{Binding FilledCalcVariables}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
@@ -230,9 +266,9 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                
+
                                 <Label Content="Рассчитанные значения" FontSize="18" VerticalAlignment="Center"/>
-                                
+
                                 <ItemsControl ItemsSource="{Binding CalcedCalcVariables}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
@@ -251,9 +287,9 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                
+
                                 <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
-                                
+
                                 <ItemsControl ItemsSource="{Binding Expressions}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>

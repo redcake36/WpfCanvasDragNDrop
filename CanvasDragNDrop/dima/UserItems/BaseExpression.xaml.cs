@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CanvasDragNDrop.UserItems
 {
@@ -27,46 +14,64 @@ namespace CanvasDragNDrop.UserItems
             InitializeComponent();
         }
 
+        /// <summary> Расчётное выражение </summary>
         public string Exp
         {
             get { return (string)GetValue(ExpProperty); }
             set { SetValue(ExpProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Exp.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExpProperty =
             DependencyProperty.Register("Exp", typeof(string), typeof(BaseExpression));
 
+        /// <summary> Определяемая переменная </summary>
         public string DefinedVariable
         {
             get { return (string)GetValue(DefinedVariableProperty); }
             set { SetValue(DefinedVariableProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DefinedVariable.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DefinedVariableProperty =
             DependencyProperty.Register("DefinedVariable", typeof(string), typeof(BaseExpression));
 
+        /// <summary> Используемые переменные </summary>
         public string NeededVars
         {
             get { return (string)GetValue(NeededVarsProperty); }
             set { SetValue(NeededVarsProperty, value); }
         }
-        // Using a DependencyProperty as the backing store for NeededVars.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeededVarsProperty =
             DependencyProperty.Register("NeededVars", typeof(string), typeof(BaseExpression));
 
+        /// <summary> Порядковый номер расчётного выражения </summary>
         public int ExpOrder
         {
             get { return (int)GetValue(ExpOrderProperty); }
             set { SetValue(ExpOrderProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ExpOrder.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExpOrderProperty =
             DependencyProperty.Register("ExpOrder", typeof(int), typeof(BaseExpression), new PropertyMetadata(0));
 
+        /// <summary> Делегат операции над выражением </summary>
+        public delegate void ExpressionOperationHandler(int expressionOrder);
 
+        public event ExpressionOperationHandler DeleteExpressionEvent;
+        /// <summary> Метод для удаления расчётного выражения </summary>
+        private void DeleteExpression(object sender, MouseButtonEventArgs e)
+        {
+            DeleteExpressionEvent?.Invoke(ExpOrder);
+        }
 
+        public event ExpressionOperationHandler MoveUpExpressionEvent;
+        /// <summary> Метод для подъёма выражения на один вверх </summary>
+        private void MoveUpExpression(object sender, MouseButtonEventArgs e)
+        {
+            MoveUpExpressionEvent?.Invoke(ExpOrder);
+        }
+
+        public event ExpressionOperationHandler MoveDownExpressionEvent;
+        /// <summary> Метод для опускания выражения на один вниз </summary>
+        private void MoveDownExpression(object sender, MouseButtonEventArgs e)
+        {
+            MoveDownExpressionEvent?.Invoke(ExpOrder);
+        }
     }
 }
