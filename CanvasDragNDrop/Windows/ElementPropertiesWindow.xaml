@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Свойства блока" Height="300" Width="400">
     <TabControl>
-        <TabItem Header="Параметры">
+        <TabItem Header="Параметры" IsSelected="True">
             <ScrollViewer Grid.ColumnSpan="2">
                 <StackPanel>
                     <StackPanel x:Name="DefltParams">
@@ -60,7 +60,7 @@
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Расчет" IsSelected="True">
+        <TabItem Header="Расчет" IsSelected="False">
             <ScrollViewer Grid.ColumnSpan="2">
                 <StackPanel>
                     <!--<StackPanel x:Name="CustomParams">

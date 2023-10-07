@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -89,6 +90,8 @@ namespace CanvasDragNDrop
             exprVar.Text = expr.DefinedVariableId.ToString();
             TextBlock exprStr = new TextBlock(); exprStr.Margin = new Thickness(4);
             exprStr.Text = expr.Expression;
+
+            Trace.TraceWarning("ItemsControl");
 
             WrapPanel wp = new WrapPanel();
             //wp.Children.Add(exprVar);

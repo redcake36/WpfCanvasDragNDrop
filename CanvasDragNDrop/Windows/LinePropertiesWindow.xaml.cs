@@ -23,5 +23,9 @@ namespace CanvasDragNDrop.Windows
         {
             InitializeComponent();
         }
+        private void AcceptClick(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+        }
     }
 }

@@ -13,64 +13,33 @@ using System.Windows.Shapes;
 
 namespace CanvasDragNDrop
 {
-    public class CustomLine : Shape, ICanvasChild
+    public class CustomLine : Shape
     {
-        Line? line;
-        Brush color;
-        public FlowPoint? fromFlowPoint { get; set; }
-        public FlowPoint? toFlowPoint { get; set; }
+        protected Line line;
+        protected Brush defaultColor;
+        protected Brush highlightColor;
 
-        protected override Geometry DefiningGeometry => 
+        protected override Geometry DefiningGeometry =>
             throw new NotImplementedException();
 
         public CustomLine()
         {
             line = new Line();
-            color = Brushes.Black;
-            line.MouseDown += new MouseButtonEventHandler(LineClick);
+            line.StrokeThickness = 2;
+            defaultColor = Brushes.Black;
+            highlightColor = Brushes.Red;
+            line.Stroke = defaultColor;
         }
-
-        public CustomLine(MouseButtonEventArgs e, Canvas canvas)
+        public CustomLine(MouseButtonEventArgs e, IInputElement parent) : this()
         {
-            line = new Line();
-            line.Stroke = System.Windows.Media.Brushes.Red;
-            line.X1 = e.GetPosition(canvas).X;
-            line.Y1 = e.GetPosition(canvas).Y;
-            line.X2 = e.GetPosition(canvas).X;
-            line.Y2 = e.GetPosition(canvas).Y;
-            line.StrokeThickness = 3;
-            color = Brushes.Black;
-            line.MouseDown += new MouseButtonEventHandler(LineClick);
+            line.X1 = e.GetPosition(parent).X;
+            line.Y1 = e.GetPosition(parent).Y;
+            line.X2 = e.GetPosition(parent).X;
+            line.Y2 = e.GetPosition(parent).Y;
         }
-        
-        void LineClick(object sender, MouseButtonEventArgs e)
-        {
-            Trace.WriteLine("im line");
-            if (e.ClickCount == 1)
-            {
-                WindowEventHandler.getInstance().SetElement(this);
-                WindowEventHandler.getInstance().GetSelectedObjectName();
-            }
-            if (e.ClickCount == 2)
-            {
-                LinePropertiesWindow propertiesWindow = new LinePropertiesWindow();
-                if (propertiesWindow.ShowDialog() == true)
-                {
-
-                }
-            }
-        }
-        public CustomLine(double x1, double y1, double x2, double y2)
-        {
-            line = new Line();
-            line.X1 = x1;
-            line.Y1 = y1;
-            line.X2 = x2;
-            line.Y2 = y2;
-            line.MouseDown += new MouseButtonEventHandler(LineClick);
-            color = Brushes.Black;
-        }
-        public CustomLine(double x1, double y1, double x2, double y2, double strokeThickness, Brush brush)
+        public CustomLine(double x1, double y1, double x2, double y2,
+            double strokeThickness = 1f,
+            Brush? HLBrush = null, Brush? DefBrush = null)
         {
             line = new Line();
             line.X1 = x1;
@@ -78,37 +47,62 @@ namespace CanvasDragNDrop
             line.X2 = x2;
             line.Y2 = y2;
             line.StrokeThickness = strokeThickness;
-            line.Stroke = brush;
-            color = brush;
-            line.MouseDown += new MouseButtonEventHandler(LineClick);
+
+            if (HLBrush is null)
+                highlightColor = Brushes.Red;
+            else
+                highlightColor = HLBrush;
+            if (DefBrush is null)
+                defaultColor = Brushes.Black;
+            else
+                defaultColor = DefBrush;
+            line.Stroke = defaultColor;
         }
-        public Line? GetLine()
+
+        public void SetCoords(float x1, float y1, float x2, float y2)
+        {
+            line.X1 = x1;
+            line.Y1 = y1;
+            line.X2 = x2;
+            line.Y2 = y2;
+        }
+        public void SetStartPoint(float x1, float y1)
+        {
+            line.X1 = x1;
+            line.Y1 = y1;
+        }
+        public void SetStartPoint(Point p)
+        {
+            line.X1 = p.X;
+            line.Y1 = p.Y;
+        }
+        public void SetEndPoint(float x2, float y2)
+        {
+            line.X2 = x2;
+            line.Y2 = y2;
+        }
+        public void SetEndPoint(Point p)
+        {
+            line.X2 = p.X;
+            line.Y2 = p.Y;
+        }
+        public void HighLight()
+        {
+            line.Stroke = highlightColor;
+        }
+
+        public void SetDefltColor()
+        {
+            line.Stroke = defaultColor;
+        }
+
+        public Line GetLine()
         {
             return line;
         }
-        public void SetLine(Line? line)
+        public void SetLine(Line line)
         {
             this.line = line;
-        }
-
-        public void Selected()
-        {
-            line.Stroke = Brushes.Red;
-        }
-
-        public void Deselected()
-        {
-            line.Stroke = color;
-        }
-
-        public void Delete()
-        {
-            line = null;
-        }
-
-        public FrameworkElement GetVisualElement()
-        {
-            return line;
         }
     }
 }

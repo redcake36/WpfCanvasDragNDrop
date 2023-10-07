@@ -21,28 +21,37 @@ using System.Windows.Ink;
 using System.Net;
 using System.Windows.Markup;
 using CanvasDragNDrop.UserItems;
+using CanvasDragNDrop.Windows;
+using CanvasDragNDrop.UtilityClasses;
+using System.Windows.Media.Media3D;
 
 namespace CanvasDragNDrop
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         WindowEventHandler windowEventHandler;
-        //string rootFolder = @"C:/Users/User/Desktop/RABoTA/ПНИ/WPF/testSamples/CanvasDragNDrop/CanvasDragNDrop/";
+        public Canvas mainCanvas;
         bool canDrowLine = false;
         bool startDrow = false;
         bool linePathStarted = false;
-        CustomLine? currentCustLine = null;
+        Pipe? currentPipe = null;
         Point? prewPoint = null;
         public static bool state = true;
 
-
-        public List<LogicElement> LogicElements = new List<LogicElement>();
+        public List<BlockModelHolder> LogicElements = new List<BlockModelHolder>();
         public List<DBBlockModelClass> blockModelClasses = new List<DBBlockModelClass>();
 
         public List<UserControl> userControls = new List<UserControl>();
+
+        private static MainWindow? instance;
+
+        public static MainWindow Instance()
+        {
+            if (instance == null)
+                instance = new MainWindow();
+            return instance;
+        }
+
         public string Get(string uri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
@@ -57,28 +66,27 @@ namespace CanvasDragNDrop
         }
         void DrowGrid()
         {
-            Line line;
+            CustomLine customLine;
+            customLine = new CustomLine(0, 0, 0, canvas.Height);
+            canvas.Children.Add(customLine.GetLine());
+
+            customLine = new CustomLine(canvas.Width, 0, canvas.Width, canvas.Height);
+            canvas.Children.Add(customLine.GetLine());
+
+            customLine = new CustomLine(0, 0, canvas.Width, 0);
+            canvas.Children.Add(customLine.GetLine());
+
+            customLine = new CustomLine(0, canvas.Height, canvas.Width, canvas.Height);
+            canvas.Children.Add(customLine.GetLine());
             for (int i = 10; i < canvas.Width; i += 10)
             {
-                line = new Line();
-                line.X1 = i;
-                line.Y1 = 0;
-                line.X2 = i;
-                line.Y2 = canvas.Height;
-                line.StrokeThickness = 1;
-                line.Stroke = Brushes.Gray;
-                canvas.Children.Add(line);
+                customLine = new CustomLine(i, 0, i, canvas.Height, DefBrush: Brushes.Gray);
+                canvas.Children.Add(customLine.GetLine());
             }
             for (int i = 10; i < canvas.Height; i += 10)
             {
-                line = new Line();
-                line.X1 = 0;
-                line.Y1 = i;
-                line.X2 = canvas.Width;
-                line.Y2 = i;
-                line.StrokeThickness = 1;
-                line.Stroke = Brushes.Gray;
-                canvas.Children.Add(line);
+                customLine = new CustomLine(0, i, canvas.Width, i, DefBrush: Brushes.Gray);
+                canvas.Children.Add(customLine.GetLine());
             }
         }
         void GetFromServerElemList(object sender, RoutedEventArgs e)
@@ -98,14 +106,14 @@ namespace CanvasDragNDrop
                 samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
                     File.ReadAllText("element.json"));
             }
-            
-            foreach (var item in samplelist)
+
+            foreach (DBBlockModelClass item in samplelist)
             {
-                LogicElement l = new LogicElement(item);
+                BlockModelHolder l = new BlockModelHolder(item);
                 LogicElements.Add(l);
                 Button btn = new Button();
                 btn.Style = Resources["Cmbbtn"] as Style;
-                btn.Content = item.Title;
+                btn.Content = l.dBBlockModel.Title;
                 btn.Click += new RoutedEventHandler(Button_Click);
                 UIElementList.Children.Add(btn);
             }
@@ -113,13 +121,13 @@ namespace CanvasDragNDrop
 
         public MainWindow()
         {
+
             InitializeComponent();
             DrowGrid();
             windowEventHandler = WindowEventHandler.getInstance();
-            //Trace.WriteLine(Encoding.Unicode.GetString(Get("https://1245-95-220-40-200.ngrok-free.app/get_models")));
-
             GetFromServerElemList(null, null);
-
+            mainCanvas = canvas;
+            instance = this;
         }
 
         private void Button_Pen_Click(object sender, RoutedEventArgs e)
@@ -133,79 +141,84 @@ namespace CanvasDragNDrop
             }
             else { EndLineDrawMode(); }
 
-            // для проверки пересечения
-            //Rectangle r = new Rectangle();
-            //var g = br.RenderedGeometry.Clone();
-            //g.Transform = GetFullTransform(br);
-            //var q = redr.RenderedGeometry.Clone();
-            //q.Transform = GetFullTransform(redr);
-            //Trace.WriteLine("HasIntersection " + HasIntersection(g, q).ToString());
-            //Canvas.SetLeft(br, 99);
+
         }
-        private static bool HasIntersection(Geometry g1, Geometry g2) =>
-    g1.FillContainsWithDetail(g2) != IntersectionDetail.Empty;
-        private static Transform GetFullTransform(UIElement e)
-        {
-            // The order in which transforms are applied is important!
-            var transforms = new TransformGroup();
 
-            if (e.RenderTransform != null)
-                transforms.Children.Add(e.RenderTransform);
-
-            var xTranslate = (double)e.GetValue(Canvas.LeftProperty);
-            if (double.IsNaN(xTranslate))
-                xTranslate = 0D;
-
-            var yTranslate = (double)e.GetValue(Canvas.TopProperty);
-            if (double.IsNaN(yTranslate))
-                yTranslate = 0D;
-
-            var translateTransform = new TranslateTransform(xTranslate, yTranslate);
-            transforms.Children.Add(translateTransform);
-
-            return transforms;
-        }
 
         protected void canvas_MouseMove(object sender, MouseEventArgs e)
         {
 
             if (startDrow)
             {
-                currentCustLine.GetLine().X2 = e.GetPosition(canvas).X - 1f;
-                currentCustLine.GetLine().Y2 = e.GetPosition(canvas).Y - 1f;
-                
+                currentPipe.SetEndPoint(e.GetPosition(canvas));
+                //currentPipe.GetLine().X2 = e.GetPosition(canvas).X - 1f;
+                //currentPipe.GetLine().Y2 = e.GetPosition(canvas).Y - 1f;
             }
+        }
+        List<DependencyObject> hitResultsList = new List<DependencyObject>();
+        // Return the result of the hit test to the callback.
+        public HitTestResultBehavior MyHitTestResult(HitTestResult result)
+        {
+            // Add the hit test result to the list that will be processed after the enumeration.
+            hitResultsList.Add(result.VisualHit);
+
+            // Set the behavior to return visuals at all z-order levels.
+            return HitTestResultBehavior.Continue;
         }
         private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DependencyObject dp = LogicalTreeHelper.GetParent(e.OriginalSource as DependencyObject);
-            //LogicalTreeHelper.GetParent( e.OriginalSource as DependencyObject)
-            Trace.WriteLine(e.Source + " !!! " + e.GetPosition(e.Source as UIElement)
-                + e.OriginalSource.ToString() + " !!! " + dp);
-            if (canDrowLine && typeof(FlowPoint).IsAssignableFrom(dp.GetType()))
-            {
-                Trace.WriteLine((dp as FlowPoint).pointName);
-                if (startDrow && (dp as FlowPoint).type == "in")
-                {
-                    linePathStarted = true;
-                    Trace.WriteLine("startDrow= false;");
-                    currentCustLine.toFlowPoint = (dp as FlowPoint);
-                    currentCustLine.GetLine().Stroke = System.Windows.Media.Brushes.Black;
-                    (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
-                    currentCustLine = null;
-                    Trace.WriteLine("currentCustLine = null; ");
-                    startDrow = false;
-                }
-                else if ((dp as FlowPoint).type == "out")
-                {
-                    currentCustLine = new CustomLine(e, canvas);
-                    
-                    (dp as FlowPoint).connectedLines.Add(currentCustLine.GetLine());
-                    currentCustLine.fromFlowPoint = (dp as FlowPoint);
+            //DependencyObject dp = LogicalTreeHelper.GetParent(e.OriginalSource as DependencyObject);
 
-                    canvas.Children.Add(currentCustLine.GetLine());
-                    startDrow = true;
-                    Trace.WriteLine("startDrow = true");
+            //======================================
+            // Retrieve the coordinate of the mouse position.
+            Point pt = e.GetPosition((UIElement)sender);
+
+            // Clear the contents of the list used for hit test results.
+            hitResultsList.Clear();
+
+            // Set up a callback to receive the hit test result enumeration.
+            VisualTreeHelper.HitTest(mainCanvas, null,
+                new HitTestResultCallback(MyHitTestResult),
+                new PointHitTestParameters(pt));
+            DependencyObject dp = null;
+            foreach (DependencyObject item in hitResultsList)
+            {
+                DependencyObject itemParent = LogicalTreeHelper.GetParent(item);
+                if (itemParent is FlowPoint)
+                {
+                    Trace.WriteLine("PIPEEEEEEEEEEEEEEEEEEEEE");
+                    dp = (FlowPoint)itemParent;
+                    break;
+                }
+            }
+            //======================================
+            if (dp != null)
+            {
+                if (startDrow && (dp as FlowPoint).type == FlowPointType.InFlowPoint)
+                {
+                    if (currentPipe.fromFlowPoint.parentElement != (dp as FlowPoint).parentElement)
+                    {
+                        linePathStarted = true;
+                        currentPipe.toFlowPoint = (dp as FlowPoint);
+                        currentPipe.SetDefltColor();
+                        (dp as FlowPoint).connectedPipe = currentPipe;
+                        currentPipe = null;
+                        startDrow = false;
+                    }
+                }
+                else if ((dp as FlowPoint).type == FlowPointType.OutFlowPoint)
+                {
+                    if ((dp as FlowPoint).connectedPipe == null)
+                    {
+                        currentPipe = new Pipe(e, canvas);
+                        currentPipe.HighLight();
+
+                        (dp as FlowPoint).connectedPipe = currentPipe;
+                        currentPipe.fromFlowPoint = (dp as FlowPoint);
+
+                        canvas.Children.Add(currentPipe.GetLine());
+                        startDrow = true;
+                    }
                 }
             }
         }
@@ -214,10 +227,11 @@ namespace CanvasDragNDrop
             linePathStarted = false;
             prewPoint = null;
             startDrow = false;
-            if (currentCustLine != null)
+            if (currentPipe != null)
             {
-                canvas.Children.Remove(currentCustLine.GetLine());
-                currentCustLine.SetLine(null);
+                canvas.Children.Remove(currentPipe.GetLine());
+                currentPipe.Delete();
+                currentPipe = null;
             }
 
             canDrowLine = false;
@@ -232,70 +246,95 @@ namespace CanvasDragNDrop
 
         private void canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
             // activeLine = true;
-            Trace.WriteLine("activeLine = true;");
+            //Trace.WriteLine("activeLine = true;");
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //LogicElement? le = JsonConvert.DeserializeObject<LogicElement>(json);
             DependencyObject dp = LogicalTreeHelper.GetParent(sender as DependencyObject);
-            Trace.WriteLine(e.Source + " !!! "
-                + e.OriginalSource.ToString() + " !!! " + dp);
-            Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
+            //Trace.WriteLine(e.Source + " !!! "
+            //    + e.OriginalSource.ToString() + " !!! " + dp);
+            //Trace.Write((dp as StackPanel).Children.IndexOf(e.Source as Button));
             AddElement((dp as StackPanel).Children.IndexOf(e.Source as Button));
 
             //elementList.Items.Add((new ListBoxItem()).Content = le.title);
         }
         private void AddElement(int elemId)
         {
-            LogicElement le = new LogicElement(LogicElements[elemId]);
-            userControls.Add(le);
-            le.Initialize();
-            canvas.Children.Add(le);
-            Trace.WriteLine(le.title);
-            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+            BlockModelHolder le = new BlockModelHolder(LogicElements[elemId]);
+            userControls.Add(le.visualBlockComponent);
+            le.visualBlockComponent.Initialize();
+            canvas.Children.Add(le.visualBlockComponent);
+
         }
         private void AddElement()
         {
-            LogicElement le = new LogicElement(LogicElements[0]);
-            userControls.Add(le);
-            le.Initialize();
-            canvas.Children.Add(le);
-            Trace.WriteLine(le.title);
-            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+            BlockModelHolder le = new BlockModelHolder(LogicElements[0]);
+            userControls.Add(le.visualBlockComponent);
+            le.visualBlockComponent.Initialize();
+            canvas.Children.Add(le.visualBlockComponent);
         }
-        private void AddElement(LogicElement le)
-        {
-            userControls.Add(le);
-            le.Initialize();
-            canvas.Children.Add(le);
-            Trace.WriteLine(le.title);
-            //elementList.Items.Add((new ListBoxItem()).Content = le.title);
-        }
-        private void UpdateUi()
-        {
 
-        }
+        //private void AddElement(LogicElement le)
+        //{
+        //    userControls.Add(le);
+        //    le.Initialize();
+        //    canvas.Children.Add(le);
+        //    //Trace.WriteLine(le.title);
+        //    //elementList.Items.Add((new ListBoxItem()).Content = le.title);
+        //}
         private void Canvas_Drop(object sender, DragEventArgs e)
         {
-            var obj = e.Data.GetData(typeof(LogicElement)) as LogicElement;
+            var obj = e.Data.GetData(typeof(VisualBlockComponent)) as VisualBlockComponent;
             if (obj != null)
+            {
                 Canvas.SetZIndex(obj, 0);
+            }
+            elementDragPoint = new Point();
         }
-
+        Point elementDragPoint = new Point();
         private void canvas_DragOver(object sender, DragEventArgs e)
         {
             Point dropPoint = e.GetPosition(canvas);
 
-            var obj = e.Data.GetData(typeof(LogicElement)) as LogicElement;
+            var obj = e.Data.GetData(typeof(VisualBlockComponent)) as VisualBlockComponent;
+            //Trace.WriteLine("main win 268 i:" + obj.inFlowPoints[1]
+            //    .TransformToAncestor(mainCanvas)
+            //              .Transform(new Point(0, 0)));
+            //Trace.WriteLine("main win 268 o:" + obj.outFlowPoints[0]
+            //    .TransformToAncestor(mainCanvas)
+            //              .Transform(new Point(0, 0)));
+
+            if (elementDragPoint == new Point())
+            {
+                elementDragPoint = e.GetPosition(obj);
+            }
             if (obj != null)
             {
+                dropPoint.X = dropPoint.X - elementDragPoint.X;
+                dropPoint.Y = dropPoint.Y - elementDragPoint.Y;
                 int localX = ((int)Math.Round(dropPoint.X / 10.0)) * 10;
                 int localY = ((int)Math.Round(dropPoint.Y / 10.0)) * 10;
+                if (localX < 0)
+                {
+                    localX = 0;
+                }
+                if (localY < 0)
+                {
+                    localY = 0;
+                }
+                if (localX > mainCanvas.Width - obj.width)
+                {
+                    localX = (int)(mainCanvas.Width - obj.width);
+                }
+                if (localY > mainCanvas.Height - obj.height)
+                {
+                    localY = (int)(mainCanvas.Height - obj.height);
+                }
+                obj.ChangePosition(new Point(localX, localY));
                 Canvas.SetLeft(obj, localX);
                 Canvas.SetTop(obj, localY);
-                obj.ChangePosition(new Point(localX, localY));
                 Canvas.SetZIndex(obj, 1);
             }
         }
@@ -313,12 +352,18 @@ namespace CanvasDragNDrop
             {
                 canvas.Children.Remove(windowEventHandler.GetCanvasElement());
                 windowEventHandler.DeleteElement();
-                Trace.WriteLine("deleted");
+                //Trace.WriteLine("deleted");
             }
             if (e.Key == Key.Escape)
             {
                 windowEventHandler.ResetElement();
             }
+        }
+
+        private void CreateCompBlock(object sender, RoutedEventArgs e)
+        {
+            FakeComposBlockWindow fakeW = new FakeComposBlockWindow();
+            fakeW.ShowDialog();
         }
     }
 }
