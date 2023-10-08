@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CanvasDragNDrop
 {
-    public class DBBlockModelClass
+    public class DBBlockModelClass: NotifyPropertyChangedClass
     {
+
         public List<Parameter> CustomParameters;
         public List<Parameter> DefaultParameters;
         public string Description;
@@ -15,7 +16,12 @@ namespace CanvasDragNDrop
         public List<Flow> InputFlows;
         public int ModelId;
         public List<Flow> OutputFlows;
-        public string Title;
+        public string Title
+        {
+            get { return _title; }
+            set { _title = value; OnPropertyChanged(); }
+        }
+        private string _title;
         public DBBlockModelClass(string d, int i, string t)
         {
             Description = d;

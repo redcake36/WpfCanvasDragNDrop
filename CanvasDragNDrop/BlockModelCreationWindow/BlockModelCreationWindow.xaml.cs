@@ -20,7 +20,7 @@ namespace CanvasDragNDrop
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             try
             {
-                var response = httpClient.GetStringAsync(RootUrl.rootServer + "/get_envs");
+                var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
                 response.Wait();
                 FlowEnvironmentsJSONResponseClass Envs = JsonConvert.DeserializeObject<FlowEnvironmentsJSONResponseClass>(response.Result);
                 context.BaseParameters.AddRange(Envs.BaseParametres);
@@ -29,7 +29,7 @@ namespace CanvasDragNDrop
             catch (Exception e)
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
-                if (RootUrl.AutomotiveWork)
+                if (API.AutomotiveWork)
                 {
                     context.BaseParameters.Add(new BaseParametreClass(1, "Массовая энтальпия", "h", "-"));
                     context.BaseParameters.Add(new BaseParametreClass(2, "Температура", "T", "-"));
@@ -92,7 +92,7 @@ namespace CanvasDragNDrop
                 var JSON = JsonConvert.SerializeObject(rss);
                 var request = new StringContent(JSON, Encoding.Unicode, "application/json");
                 //MessageBox.Show(JSON);
-                var response = httpClient.PostAsync($"{RootUrl.rootServer}/create_model", request);
+                var response = httpClient.PostAsync($"{API.rootServer}/create_model", request);
                 response.Wait();
                 if (!response.Result.IsSuccessStatusCode)
                 {

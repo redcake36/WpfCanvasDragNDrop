@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:CanvasDragNDrop"
         mc:Ignorable="d"
         Title="Главное окно" Height="450" Width="1000"
-        
-        
-        
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"        
         WindowStartupLocation="CenterScreen"
         KeyDown="canvas_KeyDown">
     <Window.Resources>
@@ -26,8 +24,23 @@
                 <MenuItem Header="Создать составной блок" Click="CreateCompBlock"/>
                 <MenuItem Header="Добавить поток" Click="Button_Pen_Click"/>
             </MenuItem>
-            <MenuItem Header="Добавить блок на рабочую область" ScrollViewer.HorizontalScrollBarVisibility="Visible" >
-                <StackPanel x:Name="UIElementList"/>
+            <MenuItem Header="Добавить блок на рабочую область">
+                <!--<StackPanel x:Name="UIElementList"/>-->
+                <!--<ItemsControl ItemsSource="{Binding AvailableBlockModels}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <MenuItem Header="Добавить блок на рабочую область"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Title}" Click="Button_Pen_Click"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>-->
+                <MenuItem ItemsSource="{Binding AvailableBlockModels}" DisplayMemberPath="Title" Header="dfgsdrrtber34t35"/>
+
+                <MenuItem Header="{Binding Test}" Click="Button_Pen_Click"/>
             </MenuItem>
             <MenuItem Header="Меню пользователя" >
                 <MenuItem Header="Изменить логин/пароль"/>

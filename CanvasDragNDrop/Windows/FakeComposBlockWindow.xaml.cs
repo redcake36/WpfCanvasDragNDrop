@@ -89,10 +89,10 @@ namespace CanvasDragNDrop.Windows
     //        LogicElements.Clear();
     //        List<DBBlockModelClass>? samplelist;
     //        //Trace.WriteLine(UIElementList.Children.Count);
-    //        if (!RootUrl.AutomotiveWork)
+    //        if (!API.AutomotiveWork)
     //        {
     //            samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
-    //                Get(RootUrl.rootServer + "/get_models"));
+    //                Get(API.rootServer + "/get_models"));
     //        }
     //        else
     //        {

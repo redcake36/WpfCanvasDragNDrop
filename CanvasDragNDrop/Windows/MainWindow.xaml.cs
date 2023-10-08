@@ -1,33 +1,23 @@
-﻿using System;
+﻿using CanvasDragNDrop.UtilityClasses;
+using CanvasDragNDrop.Windows;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+using System.IO;
+using System.Net;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using Newtonsoft.Json;
-using System.Security.Principal;
-using System.Windows.Ink;
-using System.Net;
-using System.Windows.Markup;
-using CanvasDragNDrop.UserItems;
-using CanvasDragNDrop.Windows;
-using CanvasDragNDrop.UtilityClasses;
-using System.Windows.Media.Media3D;
 
 namespace CanvasDragNDrop
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         WindowEventHandler windowEventHandler;
         public Canvas mainCanvas;
@@ -41,6 +31,22 @@ namespace CanvasDragNDrop
         public List<BlockModelHolder> LogicElements = new List<BlockModelHolder>();
         public List<DBBlockModelClass> blockModelClasses = new List<DBBlockModelClass>();
 
+        /// <summary> Коллекция доступных к соззданию блоков </summary>
+        public ObservableCollection<DBBlockModelClass> AvailableBlockModels
+        { 
+            get { return _availableBlockModels;}
+            set { _availableBlockModels = value; OnPropertyChanged(); } 
+        }
+        private ObservableCollection<DBBlockModelClass> _availableBlockModels = new ObservableCollection<DBBlockModelClass>();
+
+
+        public string Test
+        {
+            get { return _test; }
+            set { _test = value; OnPropertyChanged();}
+        }
+        private string _test = "TestDtring";
+
         public List<UserControl> userControls = new List<UserControl>();
 
         private static MainWindow? instance;
@@ -52,18 +58,22 @@ namespace CanvasDragNDrop
             return instance;
         }
 
-        public string Get(string uri)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        //public string Get(string uri)
+        //{
+        //    //var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
+        //    //response.Wait();
+        //    //FlowEnvironmentsJSONResponseClass Envs = JsonConvert.DeserializeObject<FlowEnvironmentsJSONResponseClass>(response.Result);
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+        //    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+        //    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        //    using (Stream stream = response.GetResponseStream())
+        //    using (StreamReader reader = new StreamReader(stream))
+        //    {
+        //        return reader.ReadToEnd();
+        //    }
+        //}
         void DrowGrid()
         {
             CustomLine customLine;
@@ -91,37 +101,47 @@ namespace CanvasDragNDrop
         }
         void GetFromServerElemList(object sender, RoutedEventArgs e)
         {
-            UIElementList.Children.Clear();
-            blockModelClasses.Clear();
-            LogicElements.Clear();
-            List<DBBlockModelClass>? samplelist;
-            //Trace.WriteLine(UIElementList.Children.Count);
-            if (!RootUrl.AutomotiveWork)
+            var GettingBlockModelsResult = API.GetBlockModels();
+            if (GettingBlockModelsResult.isSuccess)
             {
-                samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
-                    Get(RootUrl.rootServer + "/get_models"));
+                AvailableBlockModels = new ObservableCollection<DBBlockModelClass>(GettingBlockModelsResult.blockModels);
             }
             else
             {
-                samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
-                    File.ReadAllText("element.json"));
+                MessageBox.Show("Не удалось получить данные с сервера");
+                return;
             }
+            //UIElementList.Children.Clear();
+            blockModelClasses.Clear();
+            LogicElements.Clear();
+            //List<DBBlockModelClass> samplelist;
+            ////Trace.WriteLine(UIElementList.Children.Count);
+            //if (!API.AutomotiveWork)
+            //{
+            //    samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+            //        Get(API.rootServer + "/get_models"));
+            //}
+            //else
+            //{
+            //    samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+            //        File.ReadAllText("element.json"));
+            //}
 
-            foreach (DBBlockModelClass item in samplelist)
-            {
-                BlockModelHolder l = new BlockModelHolder(item);
-                LogicElements.Add(l);
-                Button btn = new Button();
-                btn.Style = Resources["Cmbbtn"] as Style;
-                btn.Content = l.dBBlockModel.Title;
-                btn.Click += new RoutedEventHandler(Button_Click);
-                UIElementList.Children.Add(btn);
-            }
+            //foreach (DBBlockModelClass item in samplelist)
+            //{
+            //    BlockModelHolder l = new BlockModelHolder(item);
+            //    LogicElements.Add(l);
+            //    Button btn = new Button();
+            //    btn.Style = Resources["Cmbbtn"] as Style;
+            //    btn.Content = l.dBBlockModel.Title;
+            //    btn.Click += new RoutedEventHandler(Button_Click);
+            //    UIElementList.Children.Add(btn);
+            //}
         }
 
         public MainWindow()
         {
-
+            //DataContext = this;
             InitializeComponent();
             DrowGrid();
             windowEventHandler = WindowEventHandler.getInstance();
@@ -364,6 +384,12 @@ namespace CanvasDragNDrop
         {
             FakeComposBlockWindow fakeW = new FakeComposBlockWindow();
             fakeW.ShowDialog();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
