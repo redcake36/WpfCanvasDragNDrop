@@ -17,7 +17,7 @@ namespace CanvasDragNDrop
             HttpClient httpClient = new HttpClient();
             InitializeComponent();
             // получаем ответ
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             try
             {
                 var response = httpClient.GetStringAsync(RootUrl.rootServer + "/get_envs");
@@ -47,35 +47,35 @@ namespace CanvasDragNDrop
         }
         private void AddExpression(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             ExpressionClass Str = new ExpressionClass(context.Expressions.Count + 1, "", "", "", context.RegenerateCustomParametres);
             context.Expressions.Add(Str);
         }
 
         private void AddDefaultParametres(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             CustomParametreClass Str = new CustomParametreClass("", "", "", context.RegenerateCustomParametres);
             context.DefaultParameters.Add(Str);
         }
 
         private void AddInputFlow(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
-            FlowClass Str = new FlowClass(context.InputFlows.Count + context.OutputFlows.Count + 1, context);
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
+            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters,context.FlowTypes,context.RegenerateCustomParametres);
             context.InputFlows.Add(Str);
         }
 
         private void AddOutputFlow(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
-            FlowClass Str = new FlowClass(context.InputFlows.Count + context.OutputFlows.Count + 1, context);
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
+            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters, context.FlowTypes, context.RegenerateCustomParametres);
             context.OutputFlows.Add(Str);
         }
 
         private void SaveBlock(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (context.CheckBlock() == false) { return; }
 
             JObject rss = JObject.FromObject(context);
@@ -109,7 +109,7 @@ namespace CanvasDragNDrop
 
         private void CheckBlock(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (context.CheckBlock() == true)
             {
                 MessageBox.Show("Модель блока корректна", "Проверка блока");
@@ -118,26 +118,26 @@ namespace CanvasDragNDrop
 
         private void PrepareCalculationsVars(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.RegenerateCalcVariables();
         }
 
         private void CalculateModel(object sender, RoutedEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.CalculateModel();
         }
 
         private void DeleteExpression(int Order)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.Expressions.RemoveAt(Order - 1);
             context.ResortExpressions();
         }
 
         private void MoveUpExpression(int Order)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (Order > 1)
             {
                 context.Expressions.Move(Order - 1, Order - 2);
@@ -147,7 +147,7 @@ namespace CanvasDragNDrop
 
         private void MoveDownExpression(int Order)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (Order < context.Expressions.Count)
             {
                 context.Expressions.Move(Order - 1, Order);
@@ -157,19 +157,19 @@ namespace CanvasDragNDrop
 
         private void DeleteImputFlow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.InputFlows.RemoveAt((int)((sender as Image).Tag));
         }
 
         private void DeleteOutputFlow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.OutputFlows.RemoveAt((int)((sender as Image).Tag));
         }
 
         private void DeleteDefaultParametre(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            BlockModelCreation context = (BlockModelCreation)this.DataContext;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.DefaultParameters.RemoveAt((int)((sender as Image).Tag));
         }
     }

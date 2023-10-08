@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CanvasDragNDrop
 {
     //Класс описания переменных, используемых в вычислениях
-    public class CalcVariable : NotifyPropertyChangedClass
+    public class CalcVariableClass : NotifyPropertyChangedClass
     {
         private string _variable = "";
         public string Variable
@@ -25,7 +25,7 @@ namespace CanvasDragNDrop
             set { _value = value; OnPropertyChanged(); }
         }
 
-        public CalcVariable(string var, double val)
+        public CalcVariableClass(string var, double val)
         {
             Variable = var;
             Value = val;

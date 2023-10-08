@@ -8,7 +8,7 @@
         x:Name="Window1"
         Title="Создание модели блока" Width="800" Height="800">
     <Window.DataContext>
-        <local:BlockModelCreation/>
+        <local:BlockModelCreationClass/>
     </Window.DataContext>
     <Grid>
         <TabControl>

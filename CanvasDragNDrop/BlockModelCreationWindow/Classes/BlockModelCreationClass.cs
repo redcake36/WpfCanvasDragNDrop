@@ -10,7 +10,7 @@ using Expression = org.mariuszgromada.math.mxparser.Expression;
 
 namespace CanvasDragNDrop
 {
-    public class BlockModelCreation : NotifyPropertyChangedClass
+    public class BlockModelCreationClass : NotifyPropertyChangedClass
     {
         /// <summary>Массив базовых параметров</summary>
         [JsonIgnore]
@@ -101,23 +101,23 @@ namespace CanvasDragNDrop
 
         /// <summary> Массив вводимых переменных для расчёта </summary>
         [JsonIgnore]
-        public ObservableCollection<CalcVariable> FilledCalcVariables
+        public ObservableCollection<CalcVariableClass> FilledCalcVariables
         {
             get { return _filledCalcVariables; }
             set { _filledCalcVariables = value; OnPropertyChanged(); }
         }
-        private ObservableCollection<CalcVariable> _filledCalcVariables = new ObservableCollection<CalcVariable>();
+        private ObservableCollection<CalcVariableClass> _filledCalcVariables = new ObservableCollection<CalcVariableClass>();
 
         /// <summary> Массив рассчитанных переменных </summary>
         [JsonIgnore]
-        public ObservableCollection<CalcVariable> CalcedCalcVariables
+        public ObservableCollection<CalcVariableClass> CalcedCalcVariables
         {
             get { return _calcedCalcVariables; }
             set { _calcedCalcVariables = value; OnPropertyChanged(); }
         }
-        private ObservableCollection<CalcVariable> _calcedCalcVariables = new ObservableCollection<CalcVariable>();
+        private ObservableCollection<CalcVariableClass> _calcedCalcVariables = new ObservableCollection<CalcVariableClass>();
 
-        public BlockModelCreation()
+        public BlockModelCreationClass()
         {
             _inputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
             _outputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
@@ -359,7 +359,7 @@ namespace CanvasDragNDrop
             else
             {
                 var ProcessedCalcedVars = new List<string>(Expressions.Select(x => x.DefinedVariable).ToList());
-                CalcedCalcVariables = new ObservableCollection<CalcVariable>(CalcedCalcVariables.Where(x => ProcessedCalcedVars.Any(y => x.Variable == y)));
+                CalcedCalcVariables = new ObservableCollection<CalcVariableClass>(CalcedCalcVariables.Where(x => ProcessedCalcedVars.Any(y => x.Variable == y)));
 
                 var ProcessedFilledVars = new List<string>();
                 foreach (var expressionBlock in Expressions)
@@ -373,7 +373,7 @@ namespace CanvasDragNDrop
                             {
                                 if (FilledCalcVariables.Any(x => x.Variable == variable) == false)
                                 {
-                                    FilledCalcVariables.Add(new CalcVariable(variable, 0));
+                                    FilledCalcVariables.Add(new CalcVariableClass(variable, 0));
                                 }
                                 ProcessedFilledVars.Add(variable);
 
@@ -384,11 +384,11 @@ namespace CanvasDragNDrop
                     var defVar = expressionBlock.DefinedVariable;
                     if (CalcedCalcVariables.Any(x => x.Variable == defVar) == false)
                     {
-                        CalcedCalcVariables.Add(new CalcVariable(defVar, 0));
+                        CalcedCalcVariables.Add(new CalcVariableClass(defVar, 0));
                     }
                 }
 
-                FilledCalcVariables = new ObservableCollection<CalcVariable>(FilledCalcVariables.Where(x => ProcessedFilledVars.Any(y => x.Variable == y)));
+                FilledCalcVariables = new ObservableCollection<CalcVariableClass>(FilledCalcVariables.Where(x => ProcessedFilledVars.Any(y => x.Variable == y)));
 
                 CalcButtonText = StaticStrings.CalcAvailable;
                 CalcButtonAvailable = true;
@@ -436,6 +436,15 @@ namespace CanvasDragNDrop
             {
                 Expressions[i].Order = i + 1;
             }
+        }
+
+        /// <summary> Метод получения максимального индекса с входных и выходных потоков </summary>
+        public int GetLastFlowsIndex()
+        {
+            int MaxInputFlowIndex = InputFlows.Count > 0?InputFlows.Max(flow => flow.FlowVariableIndex):0;
+            int MaxOutputFlowIndex = OutputFlows.Count > 0 ? OutputFlows.Max(flow => flow.FlowVariableIndex) : 0;
+            return Math.Max(MaxInputFlowIndex, MaxOutputFlowIndex);
+
         }
     }
 }

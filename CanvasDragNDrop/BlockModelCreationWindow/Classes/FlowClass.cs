@@ -5,10 +5,13 @@ using System.Linq;
 
 namespace CanvasDragNDrop
 {
-    //Класс описания потока
+    /// <summary> Класс описания потока </summary>
     public class FlowClass
     {
-        private BlockModelCreation _context;
+        /// <summary> Делегат для обновления дополнительных параметров </summary>
+        public delegate void RegenerateCustomParametresHandler();
+
+        private RegenerateCustomParametresHandler regenerateCustomParametres;
 
         private int _flowVariableIndex;
         public int FlowVariableIndex
@@ -30,11 +33,11 @@ namespace CanvasDragNDrop
 
         [JsonIgnore]
         public ObservableCollection<FlowParametersClass> FlowParameters { get; set; } = new ObservableCollection<FlowParametersClass>();
-        public FlowClass(int flowVariableIndex, BlockModelCreation context)
+        public FlowClass(int flowVariableIndex,List<BaseParametreClass> baseParametres,List<FlowTypeClass> flowTypes, RegenerateCustomParametresHandler handler)
         {
-            _context = context;
-            _baseParameters = context.BaseParameters;
-            FlowTypes = new ObservableCollection<FlowTypeClass>(context.FlowTypes);
+            regenerateCustomParametres = handler;
+            _baseParameters = new List<BaseParametreClass>(baseParametres);
+            FlowTypes = new ObservableCollection<FlowTypeClass>(flowTypes);
             _flowVariableIndex = flowVariableIndex;
             FlowEnviroment = FlowTypes[0].FlowEnviromentId;
 
@@ -48,7 +51,7 @@ namespace CanvasDragNDrop
                 var param = _baseParameters.Find(x => x.ParameterId == item);
                 FlowParameters.Add(new FlowParametersClass($"{param.Title} | {param.Symbol}{FlowVariableIndex}", 1, $"{param.Symbol}{FlowVariableIndex}"));
             }
-            _context.RegenerateCustomParametres();
+            regenerateCustomParametres?.Invoke();
         }
     }
 }
