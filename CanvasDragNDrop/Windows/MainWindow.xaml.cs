@@ -391,5 +391,10 @@ namespace CanvasDragNDrop
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+        private void test_click(object sender, RoutedEventArgs e)
+        {
+           var a = (sender as MenuItem).Header;
+        }
     }
 }

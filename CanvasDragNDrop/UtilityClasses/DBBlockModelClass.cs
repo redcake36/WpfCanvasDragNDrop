@@ -14,7 +14,12 @@ namespace CanvasDragNDrop
         public string Description;
         public List<BlockExpression> Expressions;
         public List<Flow> InputFlows;
-        public int ModelId;
+        public int ModelId
+        {
+            get { return _modelId; }
+            set { _modelId = value; OnPropertyChanged(); }
+        }
+        private int _modelId;
         public List<Flow> OutputFlows;
         public string Title
         {

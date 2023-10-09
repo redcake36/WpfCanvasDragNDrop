@@ -24,23 +24,14 @@
                 <MenuItem Header="Создать составной блок" Click="CreateCompBlock"/>
                 <MenuItem Header="Добавить поток" Click="Button_Pen_Click"/>
             </MenuItem>
-            <MenuItem Header="Добавить блок на рабочую область">
-                <!--<StackPanel x:Name="UIElementList"/>-->
-                <!--<ItemsControl ItemsSource="{Binding AvailableBlockModels}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <MenuItem Header="Добавить блок на рабочую область"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem Header="{Binding Title}" Click="Button_Pen_Click"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>-->
-                <MenuItem ItemsSource="{Binding AvailableBlockModels}" DisplayMemberPath="Title" Header="dfgsdrrtber34t35"/>
-
-                <MenuItem Header="{Binding Test}" Click="Button_Pen_Click"/>
+            <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="dfgsdrrtber34t35">
+                <MenuItem.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="MenuItem.Header" Value="{Binding Title}"/>
+                        <Setter Property="MenuItem.Tag" Value="{Binding ModelId}"/>
+                        <EventSetter Event="MenuItem.Click" Handler="test_click" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
             </MenuItem>
             <MenuItem Header="Меню пользователя" >
                 <MenuItem Header="Изменить логин/пароль"/>
@@ -52,7 +43,7 @@
             Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
             <StackPanel Margin="10">
                 <Button Height="40" Width="80" Margin="10" Background="OrangeRed">Расчёт</Button>
-                
+
             </StackPanel>
 
             <Canvas 
@@ -90,11 +81,11 @@
                 </DockPanel>
 
 
-                
+
             </Grid>
 
         </ScrollViewer>
     </StackPanel>
-    
-    
+
+
 </Window>
