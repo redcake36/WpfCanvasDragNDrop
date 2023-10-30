@@ -1,4 +1,5 @@
-﻿using CanvasDragNDrop.UtilityClasses;
+﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows;
 using Newtonsoft.Json;
 using System;
@@ -29,15 +30,15 @@ namespace CanvasDragNDrop
         public static bool state = true;
 
         public List<BlockModelHolder> LogicElements = new List<BlockModelHolder>();
-        public List<DBBlockModelClass> blockModelClasses = new List<DBBlockModelClass>();
+        public List<APIBlockModelClass> blockModelClasses = new List<APIBlockModelClass>();
 
         /// <summary> Коллекция доступных к соззданию блоков </summary>
-        public ObservableCollection<DBBlockModelClass> AvailableBlockModels
+        public ObservableCollection<APIBlockModelClass> AvailableBlockModels
         { 
             get { return _availableBlockModels;}
             set { _availableBlockModels = value; OnPropertyChanged(); } 
         }
-        private ObservableCollection<DBBlockModelClass> _availableBlockModels = new ObservableCollection<DBBlockModelClass>();
+        private ObservableCollection<APIBlockModelClass> _availableBlockModels = new ObservableCollection<APIBlockModelClass>();
 
 
         public string Test
@@ -62,7 +63,7 @@ namespace CanvasDragNDrop
         //{
         //    //var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
         //    //response.Wait();
-        //    //FlowEnvironmentsJSONResponseClass Envs = JsonConvert.DeserializeObject<FlowEnvironmentsJSONResponseClass>(response.Result);
+        //    //APIGetEnvsResponseClass Envs = JsonConvert.DeserializeObject<APIGetEnvsResponseClass>(response.Result);
 
         //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
         //    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -104,7 +105,7 @@ namespace CanvasDragNDrop
             var GettingBlockModelsResult = API.GetBlockModels();
             if (GettingBlockModelsResult.isSuccess)
             {
-                AvailableBlockModels = new ObservableCollection<DBBlockModelClass>(GettingBlockModelsResult.blockModels);
+                AvailableBlockModels = new ObservableCollection<APIBlockModelClass>(GettingBlockModelsResult.blockModels);
             }
             else
             {
@@ -114,20 +115,20 @@ namespace CanvasDragNDrop
             //UIElementList.Children.Clear();
             blockModelClasses.Clear();
             LogicElements.Clear();
-            //List<DBBlockModelClass> samplelist;
+            //List<APIBlockModelClass> samplelist;
             ////Trace.WriteLine(UIElementList.Children.Count);
             //if (!API.AutomotiveWork)
             //{
-            //    samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+            //    samplelist = JsonConvert.DeserializeObject<List<APIBlockModelClass>>(
             //        Get(API.rootServer + "/get_models"));
             //}
             //else
             //{
-            //    samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+            //    samplelist = JsonConvert.DeserializeObject<List<APIBlockModelClass>>(
             //        File.ReadAllText("element.json"));
             //}
 
-            //foreach (DBBlockModelClass item in samplelist)
+            //foreach (APIBlockModelClass item in samplelist)
             //{
             //    BlockModelHolder l = new BlockModelHolder(item);
             //    LogicElements.Add(l);
@@ -148,6 +149,9 @@ namespace CanvasDragNDrop
             GetFromServerElemList(null, null);
             mainCanvas = canvas;
             instance = this;
+            var AltWind = new AlternateMainWindow();
+            AltWind.Show();
+            MessageBox.Show(CoolProp.PropsSI("T", "P", 101325, "Q", 0, "Water").ToString());
         }
 
         private void Button_Pen_Click(object sender, RoutedEventArgs e)

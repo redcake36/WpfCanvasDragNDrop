@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace CanvasDragNDrop.UserItems
 {
     /// <summary>
-    /// Interaction logic for Flow.xaml
+    /// Interaction logic for APIBlockModelFlowClass.xaml
     /// </summary>
     public partial class Flow : UserControl
     {

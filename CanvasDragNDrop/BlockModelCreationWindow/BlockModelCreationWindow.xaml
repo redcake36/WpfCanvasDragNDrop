@@ -51,8 +51,8 @@
                                                     <WrapPanel Margin="5,5,5,5" Grid.Column="0">
                                                         <Label Content="Тип среды" VerticalAlignment="Center"/>
                                                         <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
-                                                  SelectedValue="{Binding FlowEnviroment}"
-                                                  SelectedValuePath="FlowEnviromentId"
+                                                  SelectedValue="{Binding FlowEnvironment}"
+                                                  SelectedValuePath="FlowEnvironmentId"
                                                   DisplayMemberPath="FlowEnvironmentType"/>
                                                     </WrapPanel>
                                                     <Image Source="/Resources/delete.png" 
@@ -104,8 +104,8 @@
                                                     <WrapPanel Margin="5,5,5,5" Grid.Column="0">
                                                         <Label Content="Тип среды" VerticalAlignment="Center"/>
                                                         <ComboBox Width="120" ItemsSource="{Binding FlowTypes}"
-                                                                SelectedValue="{Binding FlowEnviroment}"
-                                                                SelectedValuePath="FlowEnviromentId"
+                                                                SelectedValue="{Binding FlowEnvironment}"
+                                                                SelectedValuePath="FlowEnvironmentId"
                                                                 DisplayMemberPath="FlowEnvironmentType"/>
                                                     </WrapPanel>
                                                     <Image Source="/Resources/delete.png" 

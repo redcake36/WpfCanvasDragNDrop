@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CanvasDragNDrop.APIClases;
 
 namespace CanvasDragNDrop.UtilityClasses
 {
     public class BlockModelHolder
     {
-        public DBBlockModelClass dBBlockModel;
+        public APIBlockModelClass dBBlockModel;
         public VisualBlockComponent visualBlockComponent;
         public CalcResults calcResults;
 
@@ -19,7 +20,7 @@ namespace CanvasDragNDrop.UtilityClasses
             dBBlockModel = bhm.dBBlockModel;
         }
 
-        public BlockModelHolder(DBBlockModelClass blockModel)
+        public BlockModelHolder(APIBlockModelClass blockModel)
         {
             visualBlockComponent = new VisualBlockComponent(this, blockModel);
             dBBlockModel = blockModel;

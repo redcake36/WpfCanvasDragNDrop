@@ -8,7 +8,7 @@ namespace CanvasDragNDrop.UtilityClasses
     {
         public List<Expression> parsedMathExpression = new List<Expression>();
         public BlockModelHolder blockModelHolder;
-        public List<List<FlowVariable>> flowsCalcResults;
+        //public List<List<FlowVariable>> flowsCalcResults;
         //FlowCalcResults 
         //public List<> 
 

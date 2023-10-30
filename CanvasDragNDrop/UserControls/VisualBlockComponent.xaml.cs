@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.UtilityClasses;
 
 namespace CanvasDragNDrop
@@ -62,7 +63,7 @@ namespace CanvasDragNDrop
         public Brush defaultBorderColor = Brushes.Black;
 
         BlockModelHolder? parentElement;
-        DBBlockModelClass? dBBlockModelClass;
+        APIBlockModelClass? dBBlockModelClass;
 
         public List<InFlowPoint> inFlowPoints = new List<InFlowPoint>();
         public List<InFlowPoint> outFlowPoints = new List<InFlowPoint>();
@@ -101,7 +102,7 @@ namespace CanvasDragNDrop
             dBBlockModelClass = visualBlock.dBBlockModelClass;
         }
 
-        public VisualBlockComponent(BlockModelHolder parentElement, DBBlockModelClass dBBlockModelClass)
+        public VisualBlockComponent(BlockModelHolder parentElement, APIBlockModelClass dBBlockModelClass)
         {
             VisualInit();
             title = dBBlockModelClass.Title;

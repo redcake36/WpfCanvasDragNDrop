@@ -1,0 +1,62 @@
+﻿{
+  "BaseParameters": [
+    {
+      "ParameterId": 1,
+      "Symbol": "p",
+      "Title": "Давление",
+      "Units": "Pa"
+    },
+    {
+      "ParameterId": 2,
+      "Symbol": "T",
+      "Title": "Температура",
+      "Units": "K"
+    },
+    {
+      "ParameterId": 3,
+      "Symbol": "h",
+      "Title": "Энтальпия",
+      "Units": "J"
+    },
+    {
+      "ParameterId": 4,
+      "Symbol": "Q",
+      "Title": "Тепловая мощность",
+      "Units": "Вт"
+    },
+    {
+      "ParameterId": 5,
+      "Symbol": "s",
+      "Title": "Полная мощность",
+      "Units": "ВА"
+    },
+    {
+      "ParameterId": 6,
+      "Symbol": "G",
+      "Title": "Некое обозначение",
+      "Units": "Вт"
+    }
+  ],
+  "FlowEnvironments": [
+    {
+      "BaseParameters": [
+        6,
+        5,
+        3,
+        2,
+        1
+      ],
+      "FlowEnvironmentId": 1,
+      "FlowEnvironmentType": "вода"
+    },
+    {
+      "BaseParameters": [
+        4,
+        3,
+        1
+      ],
+      "FlowEnvironmentId": 2,
+      "FlowEnvironmentType": "влажный пар"
+    }
+  ]
+}

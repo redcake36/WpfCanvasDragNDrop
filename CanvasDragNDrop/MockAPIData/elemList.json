@@ -1,0 +1,128 @@
+
+  {
+    "Description": "Повышает давление до заданной велечины",
+    
+    "InputFlows": [
+        { 
+            "FlowId": 3124, 
+            "FlowVariablesIndex": 1, 
+            "AvailableVariables": [ 
+                {
+                    "FlowVariableId": 23552,
+                    "FlowId": 3124,
+                    "FlowVariableName": "p1", 
+                    "VariablePrototype": { 
+                        "ParameterId": 5323,
+                        "Title": "Давление",
+                        "Symbol": "p",
+                        "Units": "Pa"
+                    }
+                },
+                {
+                    "FlowVariableId": 64645,
+                    "FlowId": 3124, 
+                    "FlowVariableName": "t1", 
+                    "VariablePrototype": { 
+                        "ParameterId": 4565,
+                        "Title": "Температура", 
+                        "Symbol": "t",
+                        "Units": "Deg C" 
+                    }
+                },
+                {
+                    "FlowVariableId": 56856, 
+                    "FlowId": 3124, 
+                    "FlowVariableName": "h1", 
+                    "VariablePrototype": { 
+                        "ParameterId": 8575,
+                        "Title": "Энтальпия", 
+                        "Symbol": "h", 
+                        "Units": "J" 
+                    }
+                }
+            ]
+        }
+    ],
+    
+    "DefaultParameters": [
+        {
+            "ParameterId": 4252, 
+            "VariableName": "pOut",
+            "Title": "Давление на выходе", 
+            "Units": "МПа" 
+        }
+    ],
+    "CustomParameters": [ 
+        {
+            "ParameterId": 4564, 
+            "VariableName": "Ti1", 
+            "Title": "Нагрев насоса", 
+            "Units": "Deg"
+        }
+    ],
+    "Expressions": [
+        {
+            "ExpressionId": 2423, 
+            "Order": 1, 
+            "Expression": "2*pOut+50",
+            "DefinedVariableId": 98494, 
+            "NeededVariables": [
+                4252
+            ] 
+        },
+        {
+            "ExpressionId": 2838,
+            "Order": 2,
+            "Expression": "h1",
+            "DefinedVariableId": 75675,
+            "NeededVariables": [
+                56856
+            ]
+        }
+    ],
+    "ModelId": 1323,
+    "OutputFlows": [
+        {
+            "FlowId": 2343,
+            "FlowVariablesIndex": 2, 
+            "FlowType": "Output",
+            "RequiredVariables": [
+                {
+                    "FlowVariableId": 98494,
+                    "FlowId": 2343,
+                    "FlowVariableName": "p2", 
+                    "VariablePrototype": { 
+                        "ParameterId": 5323,
+                        "Title": "Давление", 
+                        "Symbol": "p", 
+                        "Units": "Pa" 
+                    }
+                },
+                {
+                    "FlowVariableId": 35345, 
+                    "FlowId": 2343, 
+                    "FlowVariableName": "t2", 
+                    "VariablePrototype": { 
+                        "ParameterId": 4565,
+                        "Title": "Температура", 
+                        "Symbol": "t", 
+                        "Units": "Deg C" 
+                    }
+                },
+                {
+                    "FlowVariableId": 75675, 
+                    "FlowId": 2343, 
+                    "FlowVariableName": "h2", 
+                    "VariablePrototype": { 
+                        "ParameterId": 8575,
+                        "Title": "Энтальпия", 
+                        "Symbol": "h", 
+                        "Units": "J" 
+                    }
+                }
+            ], 
+            "CountOfMustBeDefinedVars": 2, 
+        }
+    ],
+    "Title": "Насос" 
+}

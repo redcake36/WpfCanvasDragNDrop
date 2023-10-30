@@ -41,7 +41,7 @@ namespace CanvasDragNDrop.Windows
 
 
     //    public List<BlockModelHolder> LogicElements = new List<BlockModelHolder>();
-    //    public List<DBBlockModelClass> blockModelClasses = new List<DBBlockModelClass>();
+    //    public List<APIBlockModelClass> blockModelClasses = new List<APIBlockModelClass>();
 
     //    public List<BlockModelHolder> userControls = new List<BlockModelHolder>();
     //    public string Get(string uri)
@@ -87,16 +87,16 @@ namespace CanvasDragNDrop.Windows
     //        UIElementList.Children.Clear();
     //        blockModelClasses.Clear();
     //        LogicElements.Clear();
-    //        List<DBBlockModelClass>? samplelist;
+    //        List<APIBlockModelClass>? samplelist;
     //        //Trace.WriteLine(UIElementList.Children.Count);
     //        if (!API.AutomotiveWork)
     //        {
-    //            samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+    //            samplelist = JsonConvert.DeserializeObject<List<APIBlockModelClass>>(
     //                Get(API.rootServer + "/get_models"));
     //        }
     //        else
     //        {
-    //            samplelist = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(
+    //            samplelist = JsonConvert.DeserializeObject<List<APIBlockModelClass>>(
     //                File.ReadAllText("element.json"));
     //        }
 

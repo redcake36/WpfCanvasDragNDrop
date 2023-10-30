@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="CanvasDragNDrop.BlockInstanseControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             x:Name="BlockInstanse"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Canvas Width="{Binding BlockWidth,RelativeSource={RelativeSource AncestorType=UserControl}}" 
+            Height="{Binding BlockHeight, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+            Background="Transparent">
+
+
+        <ItemsControl ItemsSource="{Binding ElementName=BlockInstanse, Path=InputConnectors}" AlternationCount="{Binding ElementName=BlockInstanse, Path=InputConnectors.Count}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding ConnectorOffsetLeft}" />
+                    <Setter Property="Canvas.Top" Value="{Binding ConnectorOffsetTop}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Name="InputConnector" Fill="#053576" 
+                             Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"
+                               Width="{Binding ConnectorSize, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                               Height="{Binding ConnectorSize, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl ItemsSource="{Binding ElementName=BlockInstanse, Path=OutputConnectors}" AlternationCount="{Binding ElementName=BlockInstanse, Path=OutputConnectors.Count}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding ConnectorOffsetLeft}" />
+                    <Setter Property="Canvas.Top" Value="{Binding ConnectorOffsetTop}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Name="OutputConnector" Fill="#FF5757"
+                             Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"
+                       Width="{Binding ConnectorSize, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                       Height="{Binding ConnectorSize, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Rectangle Width="{Binding ElementName=BlockInstanse, Path=BlockWidth}" 
+            Height="{Binding ElementName=BlockInstanse, Path=BlockHeight}" 
+            Fill="{Binding ElementName=BlockInstanse, Path=BlockBackgroundColor}" RadiusX="5" RadiusY="5"/>
+        <Label Content="{Binding ElementName=BlockInstanse, Path=Title}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding ElementName=BlockInstanse, Path=BlockWidth}" Height="{Binding ElementName=BlockInstanse, Path=BlockHeight}"/>
+    </Canvas>
+</UserControl>

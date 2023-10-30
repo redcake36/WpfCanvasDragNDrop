@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="element.json">
+    <Content Include="MockAPIData\element.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\arrow_down.png" />
@@ -30,6 +30,27 @@
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\светлая стрелка.png" />
     <Resource Include="Resources\стре.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CoolProp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CoolProp.lib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="libCoolProp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="libCoolProp.dll.a">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MockAPIData\get_envs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MockAPIData\get_models.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

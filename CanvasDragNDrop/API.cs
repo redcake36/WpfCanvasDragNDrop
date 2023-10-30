@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CanvasDragNDrop.APIClases;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,10 +14,33 @@ namespace CanvasDragNDrop
     public static class API
     {
 
-        public static string rootServer = "https://0c67-81-177-58-204.ngrok-free.app";
+        public static string rootServer = "https://563f-79-111-219-20.ngrok-free.app";
 
         public static bool AutomotiveWork = true;
 
+        public static string MockDataFolder = "MockAPIData/";
+
+        /// <summary> Метод парсинга ответа от сервера и формирования объекта данных </summary>
+        public static (T? data, bool isSuccess) GenerateResponse<T>(string json, bool isSuccess)
+        {
+            T Data = default;
+            bool IsSuccess = isSuccess;
+            if (!IsSuccess)
+            {
+                return (Data, IsSuccess);
+            }
+            try
+            {
+                Data = JsonConvert.DeserializeObject<T>(json);
+            }
+            catch
+            {
+                IsSuccess = false;
+            }
+            return (Data, IsSuccess);
+        }
+
+        /// <summary> Метод GET запроса к серверу </summary>
         public static (string data, bool isSuccess) GetRequest(string path)
         {
             try
@@ -36,24 +60,28 @@ namespace CanvasDragNDrop
 
         }
 
-        public static (List<DBBlockModelClass> blockModels, bool isSuccess) GetBlockModels()
+        /// <summary> Запрос получения моделей блоков </summary>
+        public static (List<APIBlockModelClass> blockModels, bool isSuccess) GetBlockModels()
         {
-            var result = (data:new List<DBBlockModelClass>(), isSuccess:false);
-            if (!AutomotiveWork)
+            if (AutomotiveWork)
             {
-                var requestResult = GetRequest("/get_models");
-                if (requestResult.isSuccess)
-                {
-                    result.data = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(requestResult.data);
-                    result.isSuccess = true;
-                }
+                return GenerateResponse<List<APIBlockModelClass>>(File.ReadAllText(MockDataFolder + "get_models.json"), true);
             }
-            else
+
+            var requestResult = GetRequest("/get_models");
+            return GenerateResponse<List<APIBlockModelClass>>(requestResult.data, requestResult.isSuccess);
+        }
+
+        /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
+        public static (APIGetEnvsResponseClass environments, bool isSuccess) GetEnvironments()
+        {
+            if (AutomotiveWork)
             {
-                result.data = JsonConvert.DeserializeObject<List<DBBlockModelClass>>(File.ReadAllText("element.json"));
-                result.isSuccess = true;
+                return GenerateResponse<APIGetEnvsResponseClass>(File.ReadAllText(MockDataFolder + "get_envs.json"), true);
             }
-            return result;
+
+            var requestResult = GetRequest("/get_envs");
+            return GenerateResponse<APIGetEnvsResponseClass>(requestResult.data, requestResult.isSuccess);
         }
 
     }

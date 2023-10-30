@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CanvasDragNDrop.APIClases;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,11 +15,11 @@ namespace CanvasDragNDrop
     {
         /// <summary>Массив базовых параметров</summary>
         [JsonIgnore]
-        public List<BaseParametreClass> BaseParameters { get; set; } = new List<BaseParametreClass>();
+        public List<APIBaseParametreClass> BaseParameters { get; set; } = new List<APIBaseParametreClass>();
 
         /// <summary>Массив доступных сред</summary>
         [JsonIgnore]
-        public List<FlowTypeClass> FlowTypes { get; set; } = new List<FlowTypeClass> { };
+        public List<APIFlowTypeClass> FlowTypes { get; set; } = new List<APIFlowTypeClass> { };
 
         /// <summary> Название модели </summary>
         public string Title

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CanvasDragNDrop.APIClases;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,34 +17,45 @@ namespace CanvasDragNDrop
         {
             HttpClient httpClient = new HttpClient();
             InitializeComponent();
-            // получаем ответ
+            // получаем типы сред и массив базовых параметров
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            try
+            var RequestResult = API.GetEnvironments();
+            if(RequestResult.isSuccess)
             {
-                var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
-                response.Wait();
-                FlowEnvironmentsJSONResponseClass Envs = JsonConvert.DeserializeObject<FlowEnvironmentsJSONResponseClass>(response.Result);
-                context.BaseParameters.AddRange(Envs.BaseParametres);
-                context.FlowTypes.AddRange(Envs.FlowEnvironments);
+                context.BaseParameters.AddRange(RequestResult.environments.BaseParametres);
+                context.FlowTypes.AddRange(RequestResult.environments.FlowEnvironments);
             }
-            catch (Exception e)
+            else
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
-                if (API.AutomotiveWork)
-                {
-                    context.BaseParameters.Add(new BaseParametreClass(1, "Массовая энтальпия", "h", "-"));
-                    context.BaseParameters.Add(new BaseParametreClass(2, "Температура", "T", "-"));
-                    context.BaseParameters.Add(new BaseParametreClass(3, "Давление", "p", "-"));
-                    context.BaseParameters.Add(new BaseParametreClass(4, "Тепловая мощность", "Q", "-"));
-
-                    context.FlowTypes.Add(new FlowTypeClass(1, "Нормальная", new List<int>() { 1, 2, 3 }));
-                    context.FlowTypes.Add(new FlowTypeClass(2, "Влажный пар", new List<int>() { 1, 3, 4 }));
-                }
-                else
-                {
-                    this.Close();
-                }
+                this.Close();
             }
+            //try
+            //{
+            //    var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
+            //    response.Wait();
+            //    APIGetEnvsResponseClass Envs = JsonConvert.DeserializeObject<APIGetEnvsResponseClass>(response.Result);
+            //    context.BaseParameters.AddRange(Envs.BaseParametres);
+            //    context.FlowTypes.AddRange(Envs.FlowEnvironments);
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Не удалось получить данные с сервера");
+            //    if (API.AutomotiveWork)
+            //    {
+            //        context.BaseParameters.Add(new APIBaseParametreClass(1, "Массовая энтальпия", "h", "-"));
+            //        context.BaseParameters.Add(new APIBaseParametreClass(2, "Температура", "T", "-"));
+            //        context.BaseParameters.Add(new APIBaseParametreClass(3, "Давление", "P", "-"));
+            //        context.BaseParameters.Add(new APIBaseParametreClass(4, "Тепловая мощность", "Q", "-"));
+
+            //        context.FlowTypes.Add(new APIFlowTypeClass(1, "Нормальная", new List<int>() { 1, 2, 3 }));
+            //        context.FlowTypes.Add(new APIFlowTypeClass(2, "Влажный пар", new List<int>() { 1, 3, 4 }));
+            //    }
+            //    else
+            //    {
+            //        this.Close();
+            //    }
+            //}
         }
         private void AddExpression(object sender, RoutedEventArgs e)
         {
@@ -91,7 +103,7 @@ namespace CanvasDragNDrop
             {
                 var JSON = JsonConvert.SerializeObject(rss);
                 var request = new StringContent(JSON, Encoding.Unicode, "application/json");
-                //MessageBox.Show(JSON);
+                MessageBox.Show(JSON);
                 var response = httpClient.PostAsync($"{API.rootServer}/create_model", request);
                 response.Wait();
                 if (!response.Result.IsSuccessStatusCode)

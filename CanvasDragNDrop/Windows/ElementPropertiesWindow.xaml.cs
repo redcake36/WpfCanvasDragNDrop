@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using CanvasDragNDrop.APIClases;
 
 namespace CanvasDragNDrop
 {
@@ -62,7 +63,7 @@ namespace CanvasDragNDrop
             //elementPropertiesWindowList.Items.Add((new ListBoxItem { }).Content = s);
         }
 
-        public void AddParam(Parameter p) {
+        public void AddParam(APIBlockModelParameterClass p) {
             TextBlock paramTitle =  new TextBlock(); paramTitle.Margin = new Thickness(4);
             paramTitle.Text = p.Title;
             TextBlock paramVariableName = new TextBlock(); paramVariableName.Margin = new Thickness(4);
@@ -84,7 +85,7 @@ namespace CanvasDragNDrop
             DefltParams.Children.Add(wp);
         }
 
-        public void AddExpression(BlockExpression expr)
+        public void AddExpression(APIBlockModelExpressionClass expr)
         {
             TextBlock exprVar = new TextBlock(); exprVar.Margin = new Thickness(4);
             exprVar.Text = expr.DefinedVariableId.ToString();

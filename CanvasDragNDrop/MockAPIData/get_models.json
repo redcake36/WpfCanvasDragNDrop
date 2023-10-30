@@ -1,0 +1,517 @@
+[
+  {
+    "CustomParameters": [],
+    "DefaultParameters": [
+      {
+        "ParameterId": 396,
+        "Title": "Прирост давления на выходе",
+        "Units": "КПа",
+        "VariableName": "dpkotel"
+      }
+    ],
+    "Description": "Нагревает среду",
+    "Expressions": [
+      {
+        "DefinedVariable": [
+          405
+        ],
+        "Expression": "Tend+273.15",
+        "ExpressionId": 57,
+        "NeededVariables": [
+          395
+        ],
+        "Order": 1
+      },
+      {
+        "DefinedVariable": [
+          406
+        ],
+        "Expression": "p1*dpkotel",
+        "ExpressionId": 58,
+        "NeededVariables": [
+          396,
+          401
+        ],
+        "Order": 2
+      }
+    ],
+    "InputFlows": [
+      {
+        "AvailableVariables": [
+          {
+            "FlowId": 91,
+            "FlowVariableId": 397,
+            "FlowVariableName": "G1",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 91,
+            "FlowVariableId": 398,
+            "FlowVariableName": "s1",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 91,
+            "FlowVariableId": 399,
+            "FlowVariableName": "h1",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 91,
+            "FlowVariableId": 400,
+            "FlowVariableName": "T1",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 91,
+            "FlowVariableId": 401,
+            "FlowVariableName": "p1",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ],
+        "EnvironmentId": 1,
+        "FlowId": 91,
+        "FlowVariablesIndex": "1"
+      }
+    ],
+    "ModelId": 47,
+    "OutputFlows": [
+      {
+        "CountOfMustBeDefinedVars": 2,
+        "EnvironmentId": 1,
+        "FlowId": 92,
+        "FlowVariablesIndex": "2",
+        "RequiredVariables": [
+          {
+            "FlowId": 92,
+            "FlowVariableId": 402,
+            "FlowVariableName": "G2",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 92,
+            "FlowVariableId": 403,
+            "FlowVariableName": "s2",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 92,
+            "FlowVariableId": 404,
+            "FlowVariableName": "h2",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 92,
+            "FlowVariableId": 405,
+            "FlowVariableName": "T2",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 92,
+            "FlowVariableId": 406,
+            "FlowVariableName": "p2",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ]
+      }
+    ],
+    "Title": "Котёл"
+  },
+  {
+    "CustomParameters": [],
+    "DefaultParameters": [
+      {
+        "ParameterId": 412,
+        "Title": "Давление на выходе",
+        "Units": "КПа",
+        "VariableName": "pEnd"
+      }
+    ],
+    "Description": "Повышает давление среды",
+    "Expressions": [
+      {
+        "DefinedVariable": [
+          420
+        ],
+        "Expression": "h1-(h1-hEnd)/KPDNasos",
+        "ExpressionId": 60,
+        "NeededVariables": [
+          410,
+          411
+        ],
+        "Order": 2
+      },
+      {
+        "DefinedVariable": [
+          422
+        ],
+        "Expression": "pEnd",
+        "ExpressionId": 59,
+        "NeededVariables": [
+          412
+        ],
+        "Order": 1
+      },
+      {
+        "DefinedVariable": [
+          420
+        ],
+        "Expression": "h1-(h1-hEnd)/KPDNasos",
+        "ExpressionId": 60,
+        "NeededVariables": [
+          415
+        ],
+        "Order": 2
+      }
+    ],
+    "InputFlows": [
+      {
+        "AvailableVariables": [
+          {
+            "FlowId": 95,
+            "FlowVariableId": 413,
+            "FlowVariableName": "G1",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 95,
+            "FlowVariableId": 414,
+            "FlowVariableName": "s1",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 95,
+            "FlowVariableId": 415,
+            "FlowVariableName": "h1",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 95,
+            "FlowVariableId": 416,
+            "FlowVariableName": "T1",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 95,
+            "FlowVariableId": 417,
+            "FlowVariableName": "p1",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ],
+        "EnvironmentId": 1,
+        "FlowId": 95,
+        "FlowVariablesIndex": "1"
+      }
+    ],
+    "ModelId": 49,
+    "OutputFlows": [
+      {
+        "CountOfMustBeDefinedVars": 2,
+        "EnvironmentId": 1,
+        "FlowId": 96,
+        "FlowVariablesIndex": "2",
+        "RequiredVariables": [
+          {
+            "FlowId": 96,
+            "FlowVariableId": 418,
+            "FlowVariableName": "G2",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 96,
+            "FlowVariableId": 419,
+            "FlowVariableName": "s2",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 96,
+            "FlowVariableId": 420,
+            "FlowVariableName": "h2",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 96,
+            "FlowVariableId": 421,
+            "FlowVariableName": "T2",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 96,
+            "FlowVariableId": 422,
+            "FlowVariableName": "p2",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ]
+      }
+    ],
+    "Title": "Насос (Ренкин)"
+  },
+  {
+    "CustomParameters": [],
+    "DefaultParameters": [
+      {
+        "ParameterId": 380,
+        "Title": "КПД турбины",
+        "Units": "-",
+        "VariableName": "KPDoi"
+      }
+    ],
+    "Description": "Вырабатывает энергию",
+    "Expressions": [
+      {
+        "DefinedVariable": [
+          390
+        ],
+        "Expression": "Pend",
+        "ExpressionId": 55,
+        "NeededVariables": [
+          379
+        ],
+        "Order": 1
+      },
+      {
+        "DefinedVariable": [
+          388
+        ],
+        "Expression": "h1*KPDoi",
+        "ExpressionId": 56,
+        "NeededVariables": [
+          380,
+          383
+        ],
+        "Order": 2
+      }
+    ],
+    "InputFlows": [
+      {
+        "AvailableVariables": [
+          {
+            "FlowId": 89,
+            "FlowVariableId": 381,
+            "FlowVariableName": "G1",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 89,
+            "FlowVariableId": 382,
+            "FlowVariableName": "s1",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 89,
+            "FlowVariableId": 383,
+            "FlowVariableName": "h1",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 89,
+            "FlowVariableId": 384,
+            "FlowVariableName": "T1",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 89,
+            "FlowVariableId": 385,
+            "FlowVariableName": "p1",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ],
+        "EnvironmentId": 1,
+        "FlowId": 89,
+        "FlowVariablesIndex": "1"
+      }
+    ],
+    "ModelId": 44,
+    "OutputFlows": [
+      {
+        "CountOfMustBeDefinedVars": 2,
+        "EnvironmentId": 1,
+        "FlowId": 90,
+        "FlowVariablesIndex": "2",
+        "RequiredVariables": [
+          {
+            "FlowId": 90,
+            "FlowVariableId": 386,
+            "FlowVariableName": "G2",
+            "VariablePrototype": {
+              "ParameterId": 6,
+              "Symbol": "G",
+              "Title": "Некое обозначение",
+              "Units": "Вт"
+            }
+          },
+          {
+            "FlowId": 90,
+            "FlowVariableId": 387,
+            "FlowVariableName": "s2",
+            "VariablePrototype": {
+              "ParameterId": 5,
+              "Symbol": "s",
+              "Title": "Полная мощность",
+              "Units": "ВА"
+            }
+          },
+          {
+            "FlowId": 90,
+            "FlowVariableId": 388,
+            "FlowVariableName": "h2",
+            "VariablePrototype": {
+              "ParameterId": 3,
+              "Symbol": "h",
+              "Title": "Энтальпия",
+              "Units": "J"
+            }
+          },
+          {
+            "FlowId": 90,
+            "FlowVariableId": 389,
+            "FlowVariableName": "T2",
+            "VariablePrototype": {
+              "ParameterId": 2,
+              "Symbol": "T",
+              "Title": "Температура",
+              "Units": "K"
+            }
+          },
+          {
+            "FlowId": 90,
+            "FlowVariableId": 390,
+            "FlowVariableName": "p2",
+            "VariablePrototype": {
+              "ParameterId": 1,
+              "Symbol": "p",
+              "Title": "Давление",
+              "Units": "Pa"
+            }
+          }
+        ]
+      }
+    ],
+    "Title": "Турбина"
+  }
+]
