@@ -1,5 +1,6 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.UtilityClasses;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using System;
 using System.Collections.Generic;

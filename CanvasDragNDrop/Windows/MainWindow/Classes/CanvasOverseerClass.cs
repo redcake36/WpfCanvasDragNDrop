@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 
 namespace CanvasDragNDrop.Windows.MainWindow.Classes
 {

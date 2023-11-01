@@ -16,11 +16,11 @@ namespace CanvasDragNDrop.APIClases
         public int FlowEnvironmentId { get; set; }
 
         /// <summary> Массив идентификаторов базовых параметров, доступных в потоке </summary>
-        public List<int> BaseParametres { get; set; }
+        public List<int> BaseParameters { get; set; }
 
         public APIFlowTypeClass(int ind, string name, List<int> baseParam)
         {
-            BaseParametres = baseParam;
+            BaseParameters = baseParam;
             FlowEnvironmentType = name;
             FlowEnvironmentId = ind;
         }

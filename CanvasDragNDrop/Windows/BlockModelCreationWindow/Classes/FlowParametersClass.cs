@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     /// <summary> Класс параметров конкретного потока </summary>
     public class FlowParametersClass

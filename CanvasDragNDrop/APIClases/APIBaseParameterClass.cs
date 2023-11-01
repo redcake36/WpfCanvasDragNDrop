@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CanvasDragNDrop.APIClases
 {
     /// <summary> Класс базовых параметров </summary>
-    public class APIBaseParametreClass
+    public class APIBaseParameterClass
     {
         /// <summary> Id базового параметра </summary>
         public int ParameterId { get; set; }
@@ -21,7 +21,7 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Единицы измерения </summary>
         public string Units { get; set; }
 
-        public APIBaseParametreClass(int parametreId, string title, string symbol, string units)
+        public APIBaseParameterClass(int parametreId, string title, string symbol, string units)
         {
             ParameterId = parametreId;
             Title = title;

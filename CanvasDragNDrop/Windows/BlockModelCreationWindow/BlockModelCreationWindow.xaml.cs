@@ -1,4 +1,5 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,14 +16,13 @@ namespace CanvasDragNDrop
     {
         public BlockModelCreationWindow()
         {
-            HttpClient httpClient = new HttpClient();
             InitializeComponent();
             // получаем типы сред и массив базовых параметров
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             var RequestResult = API.GetEnvironments();
-            if(RequestResult.isSuccess)
+            if (RequestResult.isSuccess)
             {
-                context.BaseParameters.AddRange(RequestResult.environments.BaseParametres);
+                context.BaseParameters.AddRange(RequestResult.environments.BaseParameters);
                 context.FlowTypes.AddRange(RequestResult.environments.FlowEnvironments);
             }
             else
@@ -30,58 +30,32 @@ namespace CanvasDragNDrop
                 MessageBox.Show("Не удалось получить данные с сервера");
                 this.Close();
             }
-            //try
-            //{
-            //    var response = httpClient.GetStringAsync(API.rootServer + "/get_envs");
-            //    response.Wait();
-            //    APIGetEnvsResponseClass Envs = JsonConvert.DeserializeObject<APIGetEnvsResponseClass>(response.Result);
-            //    context.BaseParameters.AddRange(Envs.BaseParametres);
-            //    context.FlowTypes.AddRange(Envs.FlowEnvironments);
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Не удалось получить данные с сервера");
-            //    if (API.AutomotiveWork)
-            //    {
-            //        context.BaseParameters.Add(new APIBaseParametreClass(1, "Массовая энтальпия", "h", "-"));
-            //        context.BaseParameters.Add(new APIBaseParametreClass(2, "Температура", "T", "-"));
-            //        context.BaseParameters.Add(new APIBaseParametreClass(3, "Давление", "P", "-"));
-            //        context.BaseParameters.Add(new APIBaseParametreClass(4, "Тепловая мощность", "Q", "-"));
-
-            //        context.FlowTypes.Add(new APIFlowTypeClass(1, "Нормальная", new List<int>() { 1, 2, 3 }));
-            //        context.FlowTypes.Add(new APIFlowTypeClass(2, "Влажный пар", new List<int>() { 1, 3, 4 }));
-            //    }
-            //    else
-            //    {
-            //        this.Close();
-            //    }
-            //}
         }
         private void AddExpression(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            ExpressionClass Str = new ExpressionClass(context.Expressions.Count + 1, "", "", "", context.RegenerateCustomParametres);
+            ExpressionClass Str = new ExpressionClass(context.Expressions.Count + 1, "", "", context.RegenerateCustomParameters);
             context.Expressions.Add(Str);
         }
 
-        private void AddDefaultParametres(object sender, RoutedEventArgs e)
+        private void AddDefaultParameters(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            CustomParametreClass Str = new CustomParametreClass("", "", "", context.RegenerateCustomParametres);
+            CustomParametreClass Str = new CustomParametreClass("", "", "", context.RegenerateCustomParameters);
             context.DefaultParameters.Add(Str);
         }
 
         private void AddInputFlow(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters,context.FlowTypes,context.RegenerateCustomParametres);
+            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters, context.FlowTypes, context.RegenerateCustomParameters);
             context.InputFlows.Add(Str);
         }
 
         private void AddOutputFlow(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters, context.FlowTypes, context.RegenerateCustomParametres);
+            FlowClass Str = new FlowClass(context.GetLastFlowsIndex() + 1, context.BaseParameters, context.FlowTypes, context.RegenerateCustomParameters);
             context.OutputFlows.Add(Str);
         }
 
@@ -90,33 +64,44 @@ namespace CanvasDragNDrop
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (context.CheckBlock() == false) { return; }
 
-            JObject rss = JObject.FromObject(context);
-            JArray expressions = (JArray)rss["Expressions"];
-            foreach (JObject expression in expressions)
-            {
-                string needed = (string)expression["NeededVariables"];
-                expression["NeededVariables"] = new JArray(needed.Split(" ").ToArray());
-            }
+            //JObject rss = JObject.FromObject(context);
+            //JArray expressions = (JArray)rss["Expressions"];
+            //foreach (JObject expression in expressions)
+            //{
+            //    string needed = (string)expression["NeededVariables"];
+            //    expression["NeededVariables"] = new JArray(needed.Split(" ").ToArray());
+            //}
 
-            HttpClient httpClient = new HttpClient();
-            try
+            var Result = API.CreateBlockModel(context);
+            if (Result.isSuccess)
             {
-                var JSON = JsonConvert.SerializeObject(rss);
-                var request = new StringContent(JSON, Encoding.Unicode, "application/json");
-                MessageBox.Show(JSON);
-                var response = httpClient.PostAsync($"{API.rootServer}/create_model", request);
-                response.Wait();
-                if (!response.Result.IsSuccessStatusCode)
-                {
-                    throw new Exception("Не удалось установить соединение с сервером");
-                }
                 this.Close();
             }
-            catch (Exception err)
+            else
             {
-                MessageBox.Show(err.Message, "Не удалось выполнить запрос");
-
+                MessageBox.Show(Result.response, "Не удалось выполнить запрос");
             }
+
+
+            //HttpClient httpClient = new HttpClient();
+            //try
+            //{
+            //    var JSON = JsonConvert.SerializeObject(rss);
+            //    var request = new StringContent(JSON, Encoding.Unicode, "application/json");
+            //    MessageBox.Show(JSON);
+            //    var response = httpClient.PostAsync($"{API.rootServer}/create_model", request);
+            //    response.Wait();
+            //    if (!response.Result.IsSuccessStatusCode)
+            //    {
+            //        throw new Exception("Не удалось установить соединение с сервером");
+            //    }
+            //    this.Close();
+            //}
+            //catch (Exception err)
+            //{
+            //    MessageBox.Show(err.Message, "Не удалось выполнить запрос");
+
+            //}
         }
 
         private void CheckBlock(object sender, RoutedEventArgs e)
@@ -137,7 +122,14 @@ namespace CanvasDragNDrop
         private void CalculateModel(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
-            context.CalculateModel();
+            try
+            {
+                context.CalculateModel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка при расчёте блока");
+            }
         }
 
         private void DeleteExpression(int Order)

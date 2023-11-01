@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     public class NotifyPropertyChangedClass : INotifyPropertyChanged
     {

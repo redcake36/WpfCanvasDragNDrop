@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CanvasDragNDrop.UserItems
@@ -33,14 +34,14 @@ namespace CanvasDragNDrop.UserItems
         public static readonly DependencyProperty DefinedVariableProperty =
             DependencyProperty.Register("DefinedVariable", typeof(string), typeof(BaseExpressionViewer));
 
-        public string NeededVars
+        /// <summary> Используемые переменные </summary>
+        public ObservableCollection<string> NeededVars
         {
-            get { return (string)GetValue(NeededVarsProperty); }
+            get { return (ObservableCollection<string>)GetValue(NeededVarsProperty); }
             set { SetValue(NeededVarsProperty, value); }
         }
-        // Using a DependencyProperty as the backing store for NeededVars.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeededVarsProperty =
-            DependencyProperty.Register("NeededVars", typeof(string), typeof(BaseExpressionViewer));
+            DependencyProperty.Register(nameof(NeededVars), typeof(ObservableCollection<string>), typeof(BaseExpressionViewer));
 
         public int ExpOrder
         {

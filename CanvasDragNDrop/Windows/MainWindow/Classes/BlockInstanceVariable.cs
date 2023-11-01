@@ -12,6 +12,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
     {
 		public enum Types : int
 		{
+			NotSet,
 			Input,
 			Output,
 			Default,
@@ -23,21 +24,21 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 			get { return _type; }
 			set { _type = value; }
 		}
-		private Types _type;
+		private Types _type = 0;
 
 		public int VariableId
 		{
 			get { return _variableId; }
 			set { _variableId = value; }
 		}
-		private int _variableId;
+		private int _variableId = 0;
 
 		public int VariablePrototypeId
 		{
 			get { return _variablePrototypeId; }
 			set { _variablePrototypeId = value; }
 		}
-		private int _variablePrototypeId;
+		private int _variablePrototypeId = 0;
 
 		public string VariableName
 		{
@@ -58,14 +59,14 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 			get { return _title; }
 			set { _title = value; }
 		}
-		private string _title;
+		private string _title = "";
 
 		public string Units
 		{
 			get { return _units; }
 			set { _units = value; }
 		}
-		private string _units;
+		private string _units = "";
 
 		public BlockInstanceVariable(Types type, int variableId, int varaiblePrototypeId, string variableName, double value, string title, string units)
         {
@@ -77,5 +78,12 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             Title = title;
             Units = units;
         }
+
+
+		public BlockInstanceVariable(string variableName, double value)
+		{
+			VariableName = variableName;
+			Value = value;
+		}
     }
 }

@@ -1,4 +1,6 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.UtilityClasses;
+using CanvasDragNDrop.Windows.MainWindow.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,13 +11,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using Expression = org.mariuszgromada.math.mxparser.Expression;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     public class BlockModelCreationClass : NotifyPropertyChangedClass
     {
         /// <summary>Массив базовых параметров</summary>
         [JsonIgnore]
-        public List<APIBaseParametreClass> BaseParameters { get; set; } = new List<APIBaseParametreClass>();
+        public List<APIBaseParameterClass> BaseParameters { get; set; } = new List<APIBaseParameterClass>();
 
         /// <summary>Массив доступных сред</summary>
         [JsonIgnore]
@@ -120,9 +122,9 @@ namespace CanvasDragNDrop
 
         public BlockModelCreationClass()
         {
-            _inputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
-            _outputFlows.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
-            _expressions.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(RegenerateCustomParametres);
+            _inputFlows.CollectionChanged += new NotifyCollectionChangedEventHandler(RegenerateCustomParameters);
+            _outputFlows.CollectionChanged += new NotifyCollectionChangedEventHandler(RegenerateCustomParameters);
+            _expressions.CollectionChanged += new NotifyCollectionChangedEventHandler(RegenerateCustomParameters);
         }
 
         /// <summary> Метод проверки индексов потоков на уникальность </summary>
@@ -131,7 +133,7 @@ namespace CanvasDragNDrop
             var Indexes = new List<int>();
             foreach (var item in InputFlows)
             {
-                if ((Indexes.IndexOf(item.FlowVariableIndex)) == -1)
+                if (Indexes.IndexOf(item.FlowVariableIndex) == -1)
                 {
                     Indexes.Add(item.FlowVariableIndex);
                 }
@@ -142,7 +144,7 @@ namespace CanvasDragNDrop
             }
             foreach (var item in OutputFlows)
             {
-                if ((Indexes.IndexOf(item.FlowVariableIndex)) == -1)
+                if (Indexes.IndexOf(item.FlowVariableIndex) == -1)
                 {
                     Indexes.Add(item.FlowVariableIndex);
                 }
@@ -223,7 +225,7 @@ namespace CanvasDragNDrop
             foreach (var ExpressionBlock in Expressions)
             {
                 //Проверяем, что значение переменной, используемое в расчётном выражении уже было определено
-                foreach (var needed in ExpressionBlock.NeededVariables.Split(" ").ToList())
+                foreach (var needed in ExpressionBlock.NeededVariables)
                 {
                     if (ReadonlyVars.Contains(needed) == false && DefinedWritableVars.Contains(needed) == false && needed != "")
                     {
@@ -268,28 +270,47 @@ namespace CanvasDragNDrop
         {
             foreach (var expBlock in Expressions)
             {
-                Expression e = new Expression(expBlock.Expression);
-                e.disableImpliedMultiplicationMode();
-                foreach (var arg in expBlock.NeededVariables.Split(" ").ToList())
+                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.Expression)
                 {
-                    e.defineArgument(arg, 10);
+                    Expression e = new Expression(expBlock.Expression);
+                    e.disableImpliedMultiplicationMode();
+                    foreach (var arg in expBlock.NeededVariables)
+                    {
+                        e.defineArgument(arg, 10);
+                    }
+                    if (e.checkSyntax() == false)
+                    {
+                        var error = e.getErrorMessage();
+                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                    }
                 }
-                if (e.checkSyntax() == false)
+                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.PropSI)
                 {
-                    var error = e.getErrorMessage();
-                    throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                    //List<BlockInstanceVariable> Variables = new();
+                    //foreach (var var in expBlock.NeededVariables)
+                    //{
+                    //    Variables.Add(new(var, 10));
+                    //}
+                    //try
+                    //{
+                    //    CalcUtilitiesClass.CallPropSIFromString(expBlock.Expression, Variables);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{ex.Message}");
+                    //}
                 }
             }
         }
 
         /// <summary> Хендлер события для регенерации параметров по умолчанию </summary>
-        private void RegenerateCustomParametres(object sender, NotifyCollectionChangedEventArgs e)
+        private void RegenerateCustomParameters(object sender, NotifyCollectionChangedEventArgs e)
         {
-            RegenerateCustomParametres();
+            RegenerateCustomParameters();
         }
 
         /// <summary> Метод регененрации дополнительных параметров в случе изменения их имени </summary>
-        public void RegenerateCustomParametres(string oldVar, string newVar)
+        public void RegenerateCustomParameters(string oldVar, string newVar)
         {
             var OldFoundVar = ExtraParameters.FirstOrDefault(x => x.Symbol == oldVar);
             var NewFoundVar = ExtraParameters.FirstOrDefault(y => y.Symbol == newVar);
@@ -298,20 +319,20 @@ namespace CanvasDragNDrop
             {
                 ExtraParameters.Add(new CustomParametreClass(OldFoundVar.Title, newVar, OldFoundVar.Units));
             }
-            RegenerateCustomParametres();
+            RegenerateCustomParameters();
         }
 
         /// <summary> Метод регенерации дополнительных параметров в остальных случаях </summary>
-        public void RegenerateCustomParametres()
+        public void RegenerateCustomParameters()
         {
             //Берём все определяемые расчётными выражениями переменные
             List<string> RawVars = Expressions.Select(x => x.DefinedVariable).ToList();
             //Убираем переменные из входных потоков
-            RawVars = RawVars.Where(rawVar => (InputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null)).ToList();
+            RawVars = RawVars.Where(rawVar => InputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null).ToList();
             //... из выходных потоков
-            RawVars = RawVars.Where(rawVar => (OutputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null)).ToList();
+            RawVars = RawVars.Where(rawVar => OutputFlows.FirstOrDefault(flow => flow.FlowParameters.FirstOrDefault(flowParam => flowParam.Variable == rawVar) != null) == null).ToList();
             //Убираем переменные по умолчанию
-            RawVars = RawVars.Where(rawVar => (DefaultParameters.FirstOrDefault(DefParam => DefParam.Symbol == rawVar) == null)).ToList();
+            RawVars = RawVars.Where(rawVar => DefaultParameters.FirstOrDefault(DefParam => DefParam.Symbol == rawVar) == null).ToList();
 
             // Убираем страрые, не используемые более дополнительные парамтеры
             ExtraParameters = new ObservableCollection<CustomParametreClass>(ExtraParameters.Where(extraParam => RawVars.Contains(extraParam.Symbol)));
@@ -331,7 +352,7 @@ namespace CanvasDragNDrop
         {
             try
             {
-                RegenerateCustomParametres();
+                RegenerateCustomParameters();
                 CheckFieldsNotEpmty();
                 CheckFlowIndexes();
                 CheckVarsUsingIsCorrect();
@@ -365,20 +386,15 @@ namespace CanvasDragNDrop
                 var ProcessedFilledVars = new List<string>();
                 foreach (var expressionBlock in Expressions)
                 {
-                    var NeededVars = expressionBlock.NeededVariables.Split(" ").ToList();
-                    foreach (var variable in NeededVars)
+                    foreach (var variable in expressionBlock.NeededVariables)
                     {
-                        if (variable != "")
+                        if (CalcedCalcVariables.Any(x => x.Variable == variable) == false)
                         {
-                            if (CalcedCalcVariables.Any(x => x.Variable == variable) == false)
+                            if (FilledCalcVariables.Any(x => x.Variable == variable) == false)
                             {
-                                if (FilledCalcVariables.Any(x => x.Variable == variable) == false)
-                                {
-                                    FilledCalcVariables.Add(new CalcVariableClass(variable, 0));
-                                }
-                                ProcessedFilledVars.Add(variable);
-
+                                FilledCalcVariables.Add(new CalcVariableClass(variable, 0));
                             }
+                            ProcessedFilledVars.Add(variable);
                         }
                     }
 
@@ -402,31 +418,47 @@ namespace CanvasDragNDrop
         {
             foreach (var expBlock in Expressions)
             {
-                Expression e = new Expression(expBlock.Expression);
-                e.disableImpliedMultiplicationMode();
-                foreach (var arg in expBlock.NeededVariables.Split(" ").ToList())
+                List<BlockInstanceVariable> PreparedNeededVars = new List<BlockInstanceVariable>();
+                foreach (var arg in expBlock.NeededVariables)
                 {
                     var Var = FilledCalcVariables.FirstOrDefault(x => x.Variable == arg);
-                    if (Var != null)
+                    if (Var == null)
                     {
-                        e.defineArgument(Var.Variable, Var.Value);
+                        Var = CalcedCalcVariables.FirstOrDefault(x => x.Variable == arg);
+                    }
+                    PreparedNeededVars.Add(new(Var.Variable, Var.Value));
+                }
+
+                double result = 0;
+
+                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.Expression)
+                {
+                    Expression e = new Expression(expBlock.Expression);
+                    e.disableImpliedMultiplicationMode();
+                    PreparedNeededVars.ForEach(x => e.defineArgument(x.VariableName, x.Value));
+                    if (e.checkSyntax() == false)
+                    {
+                        var error = e.getErrorMessage();
+                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
                     }
                     else
                     {
-                        Var = CalcedCalcVariables.FirstOrDefault(x => x.Variable == arg);
-                        e.defineArgument(Var.Variable, Var.Value);
+                        result = e.calculate();
                     }
                 }
-                if (e.checkSyntax() == false)
+
+                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.PropSI)
                 {
-                    var error = e.getErrorMessage();
-                    throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                    try
+                    {
+                        result = CalcUtilitiesClass.CallPropSIFromString(expBlock.Expression, PreparedNeededVars);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{ex.Message}");
+                    }
                 }
-                else
-                {
-                    var result = e.calculate();
-                    CalcedCalcVariables[CalcedCalcVariables.IndexOf(CalcedCalcVariables.FirstOrDefault(x => x.Variable == expBlock.DefinedVariable))].Value = result;
-                }
+                CalcedCalcVariables[CalcedCalcVariables.IndexOf(CalcedCalcVariables.FirstOrDefault(x => x.Variable == expBlock.DefinedVariable))].Value = result;
             }
         }
 
@@ -442,7 +474,7 @@ namespace CanvasDragNDrop
         /// <summary> Метод получения максимального индекса с входных и выходных потоков </summary>
         public int GetLastFlowsIndex()
         {
-            int MaxInputFlowIndex = InputFlows.Count > 0?InputFlows.Max(flow => flow.FlowVariableIndex):0;
+            int MaxInputFlowIndex = InputFlows.Count > 0 ? InputFlows.Max(flow => flow.FlowVariableIndex) : 0;
             int MaxOutputFlowIndex = OutputFlows.Count > 0 ? OutputFlows.Max(flow => flow.FlowVariableIndex) : 0;
             return Math.Max(MaxInputFlowIndex, MaxOutputFlowIndex);
 

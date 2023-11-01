@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -21,7 +22,7 @@ namespace CanvasDragNDrop.UserItems
             set { SetValue(ExpProperty, value); }
         }
         public static readonly DependencyProperty ExpProperty =
-            DependencyProperty.Register("Exp", typeof(string), typeof(BaseExpression));
+            DependencyProperty.Register(nameof(Exp), typeof(string), typeof(BaseExpression));
 
         /// <summary> Определяемая переменная </summary>
         public string DefinedVariable
@@ -30,16 +31,16 @@ namespace CanvasDragNDrop.UserItems
             set { SetValue(DefinedVariableProperty, value); }
         }
         public static readonly DependencyProperty DefinedVariableProperty =
-            DependencyProperty.Register("DefinedVariable", typeof(string), typeof(BaseExpression));
+            DependencyProperty.Register(nameof(DefinedVariable), typeof(string), typeof(BaseExpression));
 
         /// <summary> Используемые переменные </summary>
-        public string NeededVars
+        public ObservableCollection<string> NeededVars
         {
-            get { return (string)GetValue(NeededVarsProperty); }
+            get { return (ObservableCollection<string>)GetValue(NeededVarsProperty); }
             set { SetValue(NeededVarsProperty, value); }
         }
         public static readonly DependencyProperty NeededVarsProperty =
-            DependencyProperty.Register("NeededVars", typeof(string), typeof(BaseExpression));
+            DependencyProperty.Register(nameof(NeededVars), typeof(ObservableCollection<string>), typeof(BaseExpression));
 
         /// <summary> Порядковый номер расчётного выражения </summary>
         public int ExpOrder
@@ -48,7 +49,16 @@ namespace CanvasDragNDrop.UserItems
             set { SetValue(ExpOrderProperty, value); }
         }
         public static readonly DependencyProperty ExpOrderProperty =
-            DependencyProperty.Register("ExpOrder", typeof(int), typeof(BaseExpression), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(ExpOrder), typeof(int), typeof(BaseExpression), new PropertyMetadata(0));
+
+        public string ExpressionType
+        {
+            get { return (string)GetValue(ExpressionTypeProperty); }
+            set { SetValue(ExpressionTypeProperty, value); }
+        }
+        public static readonly DependencyProperty ExpressionTypeProperty =
+            DependencyProperty.Register(nameof(ExpressionType), typeof(string), typeof(BaseExpression));
+
 
         /// <summary> Делегат операции над выражением </summary>
         public delegate void ExpressionOperationHandler(int expressionOrder);

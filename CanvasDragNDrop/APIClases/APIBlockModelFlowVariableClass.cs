@@ -18,9 +18,9 @@ namespace CanvasDragNDrop.APIClases
         public string FlowVariableName { get; set; }
 
         /// <summary> Пбазовый параметр переменной </summary>
-        public APIBaseParametreClass VariablePrototype { get; set; }
+        public APIBaseParameterClass VariablePrototype { get; set; }
 
-        public APIBlockModelFlowVariableClass(int flowId, int flowVariableId, string flowVariableName, APIBaseParametreClass variablePrototype)
+        public APIBlockModelFlowVariableClass(int flowId, int flowVariableId, string flowVariableName, APIBaseParameterClass variablePrototype)
         {
             FlowId = flowId;
             FlowVariableId = flowVariableId;

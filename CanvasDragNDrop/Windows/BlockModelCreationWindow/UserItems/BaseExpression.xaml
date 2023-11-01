@@ -4,19 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CanvasDragNDrop.UserItems"
+             x:Name="BaseExpressionUserItem"
              mc:Ignorable="d" d:DesignWidth="800">
     <StackPanel Background="#FFE4E4E4">
         <Grid Margin="10,5,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <WrapPanel Grid.Column="0">
                 <Label Content="Номер выражения:" VerticalAlignment="Center"/>
-                <Label VerticalAlignment="Center" Content="{Binding ExpOrder, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="50"/>
+                <Label VerticalAlignment="Center" Content="{Binding ExpOrder, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="50" FontWeight="Bold"/>
+                <Label Content="Тип расчётного выражения:"/>
+                <Label Content="{Binding ElementName=BaseExpressionUserItem, Path=ExpressionType}" FontWeight="Bold"/>
             </WrapPanel>
             <WrapPanel HorizontalAlignment="Right" Grid.Column="1">
-                <Image Source="/Resources/arrow_up.png" Width="30" Height="30" Margin="20,0,0,0" MouseDown="MoveUpExpression"  />
+                <Image Source="/Resources/arrow_up.png" Width="30" Height="30" Margin="0,0,0,0" MouseDown="MoveUpExpression"  />
                 <Image Source="/Resources/arrow_down.png" Width="30" Height="30" Margin="5,0,0,0" MouseDown="MoveDownExpression"/>
                 <Image Source="/Resources/delete.png" Width="30" Height="30" Margin="5,0,0,0" MouseDown="DeleteExpression"  />
             </WrapPanel>
@@ -33,7 +36,18 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Content="Используемые переменные:" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right"/>
-                <Label Content="{Binding NeededVars, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <ItemsControl ItemsSource="{Binding NeededVars,ElementName=BaseExpressionUserItem}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Margin="0,0,0,0"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding}" Margin="0" Padding="5,5,0,5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <TextBox Text="{Binding DefinedVariable, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" Margin="10,0,0,0" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right"/>
                 <Label Content="=" HorizontalContentAlignment="Center" Grid.Row="1" Grid.Column="1"/>
                 <TextBox Text="{Binding Exp, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="170" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3"/>

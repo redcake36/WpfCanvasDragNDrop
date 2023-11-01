@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     /// <summary> Класс описания потока </summary>
     public class FlowClass
     {
         /// <summary> Делегат для обновления дополнительных параметров </summary>
-        public delegate void RegenerateCustomParametresHandler();
+        public delegate void RegenerateCustomParametersHandler();
 
-        private RegenerateCustomParametresHandler regenerateCustomParametres;
+        private RegenerateCustomParametersHandler regenerateCustomParameters;
 
         private int _flowVariableIndex;
         public int FlowVariableIndex
@@ -28,16 +28,16 @@ namespace CanvasDragNDrop
             set { _flowEnvironment = value; ChangeFlowType(); }
         }
 
-        private List<APIBaseParametreClass> _baseParameters;
+        private List<APIBaseParameterClass> _baseParameters;
         [JsonIgnore]
         public ObservableCollection<APIFlowTypeClass> FlowTypes { get; set; } = new ObservableCollection<APIFlowTypeClass>();
 
         [JsonIgnore]
         public ObservableCollection<FlowParametersClass> FlowParameters { get; set; } = new ObservableCollection<FlowParametersClass>();
-        public FlowClass(int flowVariableIndex,List<APIBaseParametreClass> baseParametres,List<APIFlowTypeClass> flowTypes, RegenerateCustomParametresHandler handler)
+        public FlowClass(int flowVariableIndex, List<APIBaseParameterClass> baseParameters, List<APIFlowTypeClass> flowTypes, RegenerateCustomParametersHandler handler)
         {
-            regenerateCustomParametres = handler;
-            _baseParameters = new List<APIBaseParametreClass>(baseParametres);
+            regenerateCustomParameters = handler;
+            _baseParameters = new List<APIBaseParameterClass>(baseParameters);
             FlowTypes = new ObservableCollection<APIFlowTypeClass>(flowTypes);
             _flowVariableIndex = flowVariableIndex;
             FlowEnvironment = FlowTypes[0].FlowEnvironmentId;
@@ -47,12 +47,12 @@ namespace CanvasDragNDrop
         private void ChangeFlowType()
         {
             FlowParameters.Clear();
-            foreach (var item in FlowTypes.FirstOrDefault(x => x.FlowEnvironmentId == FlowEnvironment).BaseParametres)
+            foreach (var item in FlowTypes.FirstOrDefault(x => x.FlowEnvironmentId == FlowEnvironment).BaseParameters)
             {
                 var param = _baseParameters.Find(x => x.ParameterId == item);
-                FlowParameters.Add(new FlowParametersClass($"{param.Title} | {param.Symbol}{FlowVariableIndex}", 1, $"{param.Symbol}{FlowVariableIndex}"));
+                FlowParameters.Add(new FlowParametersClass($"{param.Title}, {param.Units} | {param.Symbol}{FlowVariableIndex}", 1, $"{param.Symbol}{FlowVariableIndex}"));
             }
-            regenerateCustomParametres?.Invoke();
+            regenerateCustomParameters?.Invoke();
         }
     }
 }

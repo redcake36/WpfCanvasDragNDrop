@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     /// <summary> Класс дополнительных параметров и параметров по умолчанию </summary>
     public class CustomParametreClass : NotifyPropertyChangedClass
     {
-        public delegate void RegenerateCustomParametresHandler();
+        public delegate void RegenerateCustomParametersHandler();
 
-        private RegenerateCustomParametresHandler regenerateCustomParametres;
+        private RegenerateCustomParametersHandler regenerateCustomParameters;
 
         /// <summary> Наименование параметра по умолчанию или дополнительного параметра </summary>
         public string Title { get; set; }
@@ -17,14 +17,14 @@ namespace CanvasDragNDrop
         public string Symbol
         {
             get => symbol;
-            set { symbol = Regex.Replace(value, @"[^a-zA-Z0-9]", ""); OnPropertyChanged(); regenerateCustomParametres?.Invoke(); }
+            set { symbol = Regex.Replace(value, @"[^a-zA-Z0-9]", ""); OnPropertyChanged(); regenerateCustomParameters?.Invoke(); }
         }
 
         /// <summary> Единицы измерения параметра по умолчанию или дополнительного параметра </summary>
         public string Units { get; set; }
-        public CustomParametreClass(string title, string symbol, string units, RegenerateCustomParametresHandler handler = null)
+        public CustomParametreClass(string title, string symbol, string units, RegenerateCustomParametersHandler handler = null)
         {
-            regenerateCustomParametres = handler;
+            regenerateCustomParameters = handler;
             Title = title;
             Symbol = symbol;
             Units = units;

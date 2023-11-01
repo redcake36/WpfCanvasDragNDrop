@@ -9,7 +9,7 @@ namespace CanvasDragNDrop.APIClases
     //Класс объекта, возвращаемого запросом к серверу на получение доступных сред
     public class APIGetEnvsResponseClass
     {
-        public List<APIBaseParametreClass> BaseParametres = new List<APIBaseParametreClass>();
+        public List<APIBaseParameterClass> BaseParameters = new List<APIBaseParameterClass>();
         public List<APIFlowTypeClass> FlowEnvironments = new List<APIFlowTypeClass>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using CanvasDragNDrop.Windows.MainWindow.Classes;
+﻿using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+using CanvasDragNDrop.Windows.MainWindow.Classes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

@@ -11,7 +11,6 @@ namespace CanvasDragNDrop.UtilityClasses
     {
         public APIBlockModelClass dBBlockModel;
         public VisualBlockComponent visualBlockComponent;
-        public CalcResults calcResults;
 
         public BlockModelHolder(BlockModelHolder bhm)
         {

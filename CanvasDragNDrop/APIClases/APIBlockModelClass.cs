@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 
 namespace CanvasDragNDrop.APIClases
 {
@@ -43,7 +44,7 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Массив расчётных выражений </summary>
         public List<APIBlockModelExpressionClass> Expressions;
 
-        public APIBlockModelClass(int modelID, string title, string description,List<APIBlockModelFlowClass> inputFlows, List<APIBlockModelFlowClass> outputFlows, List<APIBlockModelParameterClass> customParameters, List<APIBlockModelParameterClass> defaultParametres, List<APIBlockModelExpressionClass> expressions)
+        public APIBlockModelClass(int modelID, string title, string description,List<APIBlockModelFlowClass> inputFlows, List<APIBlockModelFlowClass> outputFlows, List<APIBlockModelParameterClass> customParameters, List<APIBlockModelParameterClass> defaultParameters, List<APIBlockModelExpressionClass> expressions)
         {
             ModelId = modelID;
             Title = title;
@@ -51,7 +52,7 @@ namespace CanvasDragNDrop.APIClases
             InputFlows = inputFlows;
             OutputFlows = outputFlows;
             CustomParameters = customParameters;
-            DefaultParameters = defaultParametres;
+            DefaultParameters = defaultParameters;
             Expressions = expressions;
         }
     }
