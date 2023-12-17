@@ -1,4 +1,6 @@
-﻿using org.mariuszgromada.math.mxparser.mathcollection;
+﻿using CanvasDragNDrop.UtilityClasses;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+using org.mariuszgromada.math.mxparser.mathcollection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +27,18 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Порядковый номер выражения </summary>
         public int Order { get; set; }
 
-        public APIBlockModelExpressionClass(int expressionId, int definedVariableId, string expression, List<int> neededVariables, int order)
+        public List<int> DefinedVariable {  get; set; }
+
+        public GlobalTypes.ExpressionTypes ExpressionType { get; set; }
+
+        public APIBlockModelExpressionClass(int expressionId, int definedVariableId, string expression, List<int> neededVariables, int order, List<int> definedVariable)
         {
             ExpressionId = expressionId;
             DefinedVariableId = definedVariableId;
             Expression = expression;
             NeededVariables = neededVariables;
             Order = order;
+            DefinedVariable = definedVariable;
         }
     }
 }

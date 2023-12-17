@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using CanvasDragNDrop.UtilityClasses;
 
 namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {

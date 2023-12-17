@@ -1,0 +1,27 @@
+﻿<Window x:Class="CanvasDragNDrop.Windows.BlockInstancePropertiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CanvasDragNDrop.Windows"
+        mc:Ignorable="d"
+        Name="BlockInstancePropertiesWindowUI"
+        Title="Задайте начальные значения для циклического расчёта" Height="200" Width="550">
+    <StackPanel>
+        <Label Content="{Binding ElementName=BlockInstancePropertiesWindowUI,Path=BlockInstance.BlockModel.Title}"/>
+        <DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.DefaultVariables}" AutoGenerateColumns="False">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Copy" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Идентификатор" Binding="{Binding VariableId}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Переменная" Binding="{Binding VariableName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Значение" Binding="{Binding Value}"/>
+                <DataGridTextColumn Header="Ед. изм." Binding="{Binding Units}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Window>

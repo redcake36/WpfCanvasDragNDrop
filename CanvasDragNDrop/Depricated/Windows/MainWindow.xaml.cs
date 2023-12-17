@@ -151,7 +151,7 @@ namespace CanvasDragNDrop
             instance = this;
             var AltWind = new AlternateMainWindow();
             AltWind.Show();
-            MessageBox.Show(CoolProp.PropsSI("T", "P", 101325, "Q", 0, "Water").ToString());
+            //MessageBox.Show(CoolProp.PropsSI("T", "P", 101325, "Q", 0, "Water").ToString());
         }
 
         private void Button_Pen_Click(object sender, RoutedEventArgs e)
@@ -367,7 +367,7 @@ namespace CanvasDragNDrop
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
             BlockModelCreationWindow mainWindowD = new BlockModelCreationWindow();
-            mainWindowD.ShowDialog();
+            mainWindowD?.ShowDialog();
         }
 
         private void canvas_KeyDown(object sender, KeyEventArgs e)

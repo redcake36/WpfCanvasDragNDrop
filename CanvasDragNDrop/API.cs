@@ -16,7 +16,7 @@ namespace CanvasDragNDrop
     public static class API
     {
 
-        public static string rootServer = "https://563f-79-111-219-20.ngrok-free.app";
+        public static string rootServer = "https://3b5b-79-111-219-20.ngrok-free.app";
 
         public static bool AutomotiveWork = true;
 
@@ -110,7 +110,7 @@ namespace CanvasDragNDrop
         public static (string response, bool isSuccess) CreateBlockModel(BlockModelCreationClass BlockModel)
         {
             string JSON = JsonConvert.SerializeObject(BlockModel);
-            MessageBox.Show(JSON);
+            //MessageBox.Show(JSON);
             return PostRequest("/create_model", JSON);
         }
 

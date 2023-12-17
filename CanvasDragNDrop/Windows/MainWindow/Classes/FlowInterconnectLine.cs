@@ -1,4 +1,4 @@
-﻿using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+﻿using CanvasDragNDrop.UtilityClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +12,10 @@ namespace CanvasDragNDrop
 {
     public class FlowInterconnectLine : NotifyPropertyChangedClass
     {
+        public FlowConnector InputFlowConnector => _inputFlowConnector;
         private FlowConnector _inputFlowConnector = null;
+
+        public FlowConnector OutputFlowConnector => _outputFlowConnector;
         private FlowConnector _outputFlowConnector = null;
 
         public double InputPointX

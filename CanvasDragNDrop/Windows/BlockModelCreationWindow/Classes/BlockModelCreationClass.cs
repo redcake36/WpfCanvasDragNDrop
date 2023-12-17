@@ -257,7 +257,8 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                         count++;
                     }
                 }
-                if (count < 2)
+                //FIX BACK
+                if (count != OutFlow.FlowParameters.Count)
                 {
                     throw new Exception($"В выходном потоке №{OutFlow.FlowVariableIndex} определено менее двух параметров");
                 }
@@ -270,7 +271,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
         {
             foreach (var expBlock in Expressions)
             {
-                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.Expression)
+                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
                 {
                     Expression e = new Expression(expBlock.Expression);
                     e.disableImpliedMultiplicationMode();
@@ -284,7 +285,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                         throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
                     }
                 }
-                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.PropSI)
+                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
                 {
                     //List<BlockInstanceVariable> Variables = new();
                     //foreach (var var in expBlock.NeededVariables)
@@ -431,7 +432,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 
                 double result = 0;
 
-                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.Expression)
+                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
                 {
                     Expression e = new Expression(expBlock.Expression);
                     e.disableImpliedMultiplicationMode();
@@ -447,7 +448,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                     }
                 }
 
-                if (expBlock.ExpressionType == ExpressionClass.ExpresionTypes.PropSI)
+                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
                 {
                     try
                     {

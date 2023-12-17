@@ -17,19 +17,19 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 
         private RegenerateCustomParametersHandler regenerateCustomParameters;
 
-        public enum ExpresionTypes : int
-        {
-            Expression,
-            PropSI
-        }
+        //public enum ExpressionTypes : int
+        //{
+        //    Expression,
+        //    PropSI
+        //}
 
-        [JsonIgnore]
-        /// <summary> Словарь возможных типов выражений </summary>
-        public static Dictionary<ExpresionTypes, (string UIName, string PropertyName)> ExpressionTypesNames { get; private set; } = new()
-        {
-            { ExpresionTypes.Expression,("Формула","Expression") },
-            { ExpresionTypes.PropSI, ("Функция PropSI", "PropSI") }
-        };
+        //[JsonIgnore]
+        ///// <summary> Словарь возможных типов выражений </summary>
+        //public static Dictionary<ExpressionTypes, (string UIName, string PropertyName)> ExpressionTypesNames { get; private set; } = new()
+        //{
+        //    { ExpressionTypes.Expression,("Формула","Expression") },
+        //    { ExpressionTypes.PropSI, ("Функция PropSI", "PropSI") }
+        //};
 
         [JsonIgnore]
         /// <summary> Отображаемый тип расчётного выражения </summary>
@@ -47,12 +47,12 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
         }
         private string _expressionTypeName;
 
-        public ExpresionTypes ExpressionType
+        public GlobalTypes.ExpressionTypes ExpressionType
         {
             get { return _expressionType; }
-            set { _expressionType = value; UIExpressionType = ExpressionTypesNames[value].UIName; ExpressionTypeName = ExpressionTypesNames[value].PropertyName; }
+            set { _expressionType = value; UIExpressionType = GlobalTypes.ExpressionTypesNames[value].UIName; ExpressionTypeName = GlobalTypes.ExpressionTypesNames[value].PropertyName; }
         }
-        private ExpresionTypes _expressionType;
+        private GlobalTypes.ExpressionTypes _expressionType;
 
 
         /// <summary> Порядковый номер расчётного выражения в общем списке </summary>
@@ -103,7 +103,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
             Order = order;
             Expression = expression;
             DefinedVariable = definedVariable;
-            ExpressionType = ExpresionTypes.Expression;
+            ExpressionType = GlobalTypes.ExpressionTypes.Expression;
             ExtractNeededVariables();
         }
 
@@ -119,7 +119,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 
             if (Regex.IsMatch(ClearedExpression, CalcUtilitiesClass.PropSICheckPattern))
             {
-                ExpressionType = ExpresionTypes.PropSI;
+                ExpressionType = GlobalTypes.ExpressionTypes.PropSI;
                 List<string> Params = ClearedExpression.Split(';').ToList();
                 if (!CalcUtilitiesClass.CheckStringIsFiniteDouble(Params[2]))
                 {
@@ -132,7 +132,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
             }
             else
             {
-                ExpressionType = ExpresionTypes.Expression;
+                ExpressionType = GlobalTypes.ExpressionTypes.Expression;
                 Expression exp = new Expression(_expression);
                 exp.disableImpliedMultiplicationMode();
                 List<string> varsInExp = exp.getMissingUserDefinedArguments().ToList();

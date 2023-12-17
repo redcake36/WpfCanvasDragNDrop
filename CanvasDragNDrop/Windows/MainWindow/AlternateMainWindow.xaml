@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AlternateMainWindow" Height="450" Width="800"
         xmlns:local="clr-namespace:CanvasDragNDrop"
+                         KeyDown="ViewportKeyDown"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,6 +21,7 @@
                 <MenuItem Header="Создать модель блока"/>
                 <MenuItem Header="Создать составной блок"/>
                 <MenuItem Header="Добавить поток" Click="StartInterconnectCreation"/>
+                <MenuItem Header="Расчитать схему" Click="CalculateScheme"/>
             </MenuItem>
             <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему">
                 <MenuItem.ItemContainerStyle>

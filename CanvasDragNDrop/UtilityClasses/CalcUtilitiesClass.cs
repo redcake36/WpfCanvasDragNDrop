@@ -1,11 +1,10 @@
-﻿using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
-using CanvasDragNDrop.Windows.MainWindow.Classes;
+﻿using CanvasDragNDrop.Windows.MainWindow.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows;
+using org.mariuszgromada.math.mxparser;
 
 namespace CanvasDragNDrop.UtilityClasses
 {
@@ -64,7 +63,15 @@ namespace CanvasDragNDrop.UtilityClasses
                 SecondPassesValue = FoundVariable.Value;
             }
 
-            return CoolProp.PropsSI(ReturnValueType, FirstPassedValueType, FirstPassedValue, SecondPassesValueType, SecondPassesValue, FlowType);
+            try
+            {
+                return CoolProp.PropsSI(ReturnValueType, FirstPassedValueType, FirstPassedValue, SecondPassesValueType, SecondPassesValue, FlowType);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("АХТУНГ", $"PropSI вызов не удался: {ex.Message}");
+                return 0;
+            }
         }
 
 
@@ -76,6 +83,27 @@ namespace CanvasDragNDrop.UtilityClasses
         public static bool CheckStringIsFiniteDouble(string variable)
         {
             return double.TryParse(variable, out double value) && double.IsFinite(value);
+        }
+
+        public static org.mariuszgromada.math.mxparser.Expression ConstructMathExpression(string expression, List<BlockInstanceVariable> vars)
+        {
+            org.mariuszgromada.math.mxparser.Expression ex = new(expression);
+            ex.disableImpliedMultiplicationMode();
+            ex.defineArguments(vars.Select(x => x.VariableName).ToArray());
+            if (ex.checkSyntax() == false)
+            {
+                MessageBox.Show("АХТУНГ, Создание выражения провалилось");
+            }
+            return ex;
+        }
+
+        public static double calcMathExpression(org.mariuszgromada.math.mxparser.Expression ex, List<BlockInstanceVariable> vars)
+        {
+            foreach (var var in vars)
+            {
+                ex.setArgumentValue(var.VariableName, var.Value);
+            }
+            return ex.calculate();
         }
     }
 }

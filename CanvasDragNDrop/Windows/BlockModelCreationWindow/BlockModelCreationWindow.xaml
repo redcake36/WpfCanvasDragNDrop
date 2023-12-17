@@ -246,70 +246,76 @@
                     <TextBlock Margin="3">Расчёт модели</TextBlock>
                 </TabItem.Header>
                 <TabItem.Content>
-                    <ScrollViewer>
-                        <Border Padding="5">
-                            <StackPanel>
-                                <Label Content="Задаваемые значения" FontSize="18" VerticalAlignment="Center"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer Grid.Row="0">
+                            <Border Padding="5">
+                                <StackPanel>
+                                    <Label Content="Задаваемые значения" FontSize="18" VerticalAlignment="Center"/>
 
-                                <ItemsControl ItemsSource="{Binding FilledCalcVariables}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Padding="10,0,10,5">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="175"/>
-                                                        <ColumnDefinition Width="30"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label Content="{Binding Variable}" HorizontalAlignment="Right" Grid.Column="0"/>
-                                                    <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
-                                                    <TextBox Text="{Binding Value, Mode=TwoWay}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                    <ItemsControl ItemsSource="{Binding FilledCalcVariables}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Padding="10,0,10,5">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="175"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Content="{Binding Variable}" HorizontalAlignment="Right" Grid.Column="0"/>
+                                                        <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
+                                                        <TextBox Text="{Binding Value, Mode=TwoWay}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
 
-                                <Label Content="Рассчитанные значения" FontSize="18" VerticalAlignment="Center"/>
+                                    <Label Content="Рассчитанные значения" FontSize="18" VerticalAlignment="Center"/>
 
-                                <ItemsControl ItemsSource="{Binding CalcedCalcVariables}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Padding="10,0,10,5">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="175"/>
-                                                        <ColumnDefinition Width="30"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label Content="{Binding Variable}" Grid.Column="0" HorizontalAlignment="Right"/>
-                                                    <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
-                                                    <Label Content="{Binding Value}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                    <ItemsControl ItemsSource="{Binding CalcedCalcVariables}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Padding="10,0,10,5">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="175"/>
+                                                            <ColumnDefinition Width="30"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Content="{Binding Variable}" Grid.Column="0" HorizontalAlignment="Right"/>
+                                                        <Label Content="=" HorizontalContentAlignment="Center" Grid.Column="1"/>
+                                                        <Label Content="{Binding Value}" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
 
-                                <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
+                                    <Label Content="Выражения для расчёта" FontSize="18" VerticalAlignment="Center"/>
 
-                                <ItemsControl ItemsSource="{Binding Expressions}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Padding="10,0,10,5">
-                                                <UserItems:BaseExpressionViewer 
+                                    <ItemsControl ItemsSource="{Binding Expressions}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Padding="10,0,10,5">
+                                                    <UserItems:BaseExpressionViewer 
                                         Exp="{Binding Expression, Mode=TwoWay}"
                                         ExpOrder="{Binding Order,Mode=TwoWay}"
                                         DefinedVariable="{Binding DefinedVariable,Mode=TwoWay}"
                                         NeededVars="{Binding NeededVariables,Mode=TwoWay}"/>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                                <Button Name="CalcBTN" Background="#E7E7E7" Content="{Binding CalcButtonText}" IsEnabled="{Binding CalcButtonAvailable}" Click="CalculateModel" Margin="10,10,10,0" Padding="3" FontSize="16" FontWeight="Bold"/>
-                            </StackPanel>
-                        </Border>
-                    </ScrollViewer>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                        <Button Name="CalcBTN" Background="#E7E7E7" Content="{Binding CalcButtonText}" IsEnabled="{Binding CalcButtonAvailable}" Click="CalculateModel" Margin="10,10,10,0" Padding="3" FontSize="16" FontWeight="Bold" Grid.Row="1"/>
+                    </Grid>
                 </TabItem.Content>
             </TabItem>
         </TabControl>

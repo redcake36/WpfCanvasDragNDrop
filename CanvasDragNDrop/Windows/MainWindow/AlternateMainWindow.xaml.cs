@@ -1,6 +1,9 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.UtilityClasses;
+using CanvasDragNDrop.Windows;
+using CanvasDragNDrop.Windows.CalculationResultWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -62,8 +65,6 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
             GetFromServerElemList(this, new());
-            //CanvasOverseer = new CanvasOverseerClass();
-            //_canvasOverseer.PropertyChanged += CanvasOverseerPropertyChanged;
         }
 
         /// <summary> Метод обновления списка моделей блоков с сервера </summary>
@@ -144,12 +145,20 @@ namespace CanvasDragNDrop
             matrix.ScaleAt(scale, scale, pos.X, pos.Y);
             transform.Matrix = matrix;
         }
+        private void ViewportKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                _canvasOverseer.ExitFlowInterconnectionMode();
+            }
+        }
 
         /// <summary> Выбор блока для операции </summary>
         private void BlockLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int BlockIndex = (int)((BlockInstanseControl)sender).Tag;
-            _canvasOverseer.BlockLeftMouseDown(BlockIndex);
+            _canvasOverseer.BlockLeftMouseDown(BlockIndex, e.ClickCount);
+            OpenBlockProperties();
             if (e.OriginalSource is Ellipse)
             {
                 int FlowConnectorIndex = (int)((Ellipse)e.OriginalSource).Tag;
@@ -229,5 +238,55 @@ namespace CanvasDragNDrop
         {
             _canvasOverseer.EnterFlowInterconnectMode();
         }
+
+        private void CalculateScheme(object sender, RoutedEventArgs e)
+        {
+            CalculationResultWindow resultWindow = new(BlockInstanses);
+            resultWindow.Show();
+
+            if (!_canvasOverseer.CanCalcScheme)
+            {
+                return;
+            }
+            foreach (var block in BlockInstanses)
+            {
+                foreach (var item in block.InputConnectors)
+                {
+                    if (item.InterconnectLine == null)
+                    {
+                        MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
+                    }
+                }
+            }
+
+            MessageBoxResult Result = MessageBox.Show("Calc?","", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (Result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            BlockInstance currentBlock = BlockInstanses.First(x => x.BlockModel.ModelId == 36);
+
+            for (int i = 0; i < BlockInstanses.Count*500; i++)
+            {
+                currentBlock.CalculateBlockInstance();
+                if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
+                {
+                    currentBlock = BlockInstanses.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
+                }
+            }
+        }
+
+        private void OpenBlockProperties()
+        {
+            if (_canvasOverseer.CanOpenBlockProperties)
+            {
+                BlockInstancePropertiesWindow PropertiesWindow = new(BlockInstanses[_canvasOverseer.SelectedBlockIndex]);
+                PropertiesWindow.Show();
+                _canvasOverseer.BlockPropertiesOpened();
+            }
+        }
+
     }
 }

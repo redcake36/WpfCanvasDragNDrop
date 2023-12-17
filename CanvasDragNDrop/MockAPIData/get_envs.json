@@ -4,19 +4,19 @@
       "ParameterId": 1,
       "Symbol": "p",
       "Title": "Давление",
-      "Units": "Pa"
+      "Units": "Па"
     },
     {
       "ParameterId": 2,
       "Symbol": "T",
       "Title": "Температура",
-      "Units": "K"
+      "Units": "К"
     },
     {
       "ParameterId": 3,
       "Symbol": "h",
       "Title": "Энтальпия",
-      "Units": "J"
+      "Units": "Дж/кг"
     },
     {
       "ParameterId": 4,
@@ -27,14 +27,14 @@
     {
       "ParameterId": 5,
       "Symbol": "s",
-      "Title": "Полная мощность",
-      "Units": "ВА"
+      "Title": "Энтропия",
+      "Units": "Дж/кг*К"
     },
     {
       "ParameterId": 6,
       "Symbol": "G",
-      "Title": "Некое обозначение",
-      "Units": "Вт"
+      "Title": "Расход",
+      "Units": "кг/с"
     }
   ],
   "FlowEnvironments": [
