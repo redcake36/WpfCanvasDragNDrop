@@ -22,6 +22,7 @@
                 <MenuItem Header="Создать составной блок"/>
                 <MenuItem Header="Добавить поток" Click="StartInterconnectCreation"/>
                 <MenuItem Header="Расчитать схему" Click="CalculateScheme"/>
+                <MenuItem Header="Браузер моделей" Click="OpenModelsBrowser"/>
             </MenuItem>
             <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему">
                 <MenuItem.ItemContainerStyle>

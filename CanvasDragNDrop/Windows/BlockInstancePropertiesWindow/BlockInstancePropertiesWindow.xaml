@@ -9,7 +9,7 @@
         Title="Задайте начальные значения для циклического расчёта" Height="200" Width="550">
     <StackPanel>
         <Label Content="{Binding ElementName=BlockInstancePropertiesWindowUI,Path=BlockInstance.BlockModel.Title}"/>
-        <DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.DefaultVariables}" AutoGenerateColumns="False">
+        <DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.InputConnectors[0].CalculationVariables}" AutoGenerateColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Copy" />

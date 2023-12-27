@@ -34,7 +34,7 @@
       "ParameterId": 6,
       "Symbol": "G",
       "Title": "Расход",
-      "Units": "кг/с"
+      "Units": "кг/c"
     }
   ],
   "FlowEnvironments": [

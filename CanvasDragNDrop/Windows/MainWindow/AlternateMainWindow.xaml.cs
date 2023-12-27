@@ -3,6 +3,7 @@ using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows;
 using CanvasDragNDrop.Windows.CalculationResultWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
+using CanvasDragNDrop.Windows.ModelsExplorer;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -244,38 +245,38 @@ namespace CanvasDragNDrop
             CalculationResultWindow resultWindow = new(BlockInstanses);
             resultWindow.Show();
 
-            if (!_canvasOverseer.CanCalcScheme)
-            {
-                return;
-            }
-            foreach (var block in BlockInstanses)
-            {
-                foreach (var item in block.InputConnectors)
-                {
-                    if (item.InterconnectLine == null)
-                    {
-                        MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
-                    }
-                }
-            }
+            //if (!_canvasOverseer.CanCalcScheme)
+            //{
+            //    return;
+            //}
+            //foreach (var block in BlockInstanses)
+            //{
+            //    foreach (var item in block.InputConnectors)
+            //    {
+            //        if (item.InterconnectLine == null)
+            //        {
+            //            MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
+            //        }
+            //    }
+            //}
 
-            MessageBoxResult Result = MessageBox.Show("Calc?","", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            //MessageBoxResult Result = MessageBox.Show("Calc?","", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (Result == MessageBoxResult.No)
-            {
-                return;
-            }
+            //if (Result == MessageBoxResult.No)
+            //{
+            //    return;
+            //}
 
-            BlockInstance currentBlock = BlockInstanses.First(x => x.BlockModel.ModelId == 36);
+            //BlockInstance currentBlock = BlockInstanses.First(x => x.BlockModel.ModelId == 36);
 
-            for (int i = 0; i < BlockInstanses.Count*500; i++)
-            {
-                currentBlock.CalculateBlockInstance();
-                if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
-                {
-                    currentBlock = BlockInstanses.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
-                }
-            }
+            //for (int i = 0; i < BlockInstanses.Count*500; i++)
+            //{
+            //    currentBlock.CalculateBlockInstance();
+            //    if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
+            //    {
+            //        currentBlock = BlockInstanses.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
+            //    }
+            //}
         }
 
         private void OpenBlockProperties()
@@ -288,5 +289,10 @@ namespace CanvasDragNDrop
             }
         }
 
+        private void OpenModelsBrowser(object sender, RoutedEventArgs e)
+        {
+            ModelsExplorer ModelsExplorer = new();
+            ModelsExplorer.Show();
+        }
     }
 }
