@@ -22,6 +22,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
         public ModelsExplorer()
         {
             InitializeComponent();
+            var a = API.GetCatalogs();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace CanvasDragNDrop
     public static class API
     {
 
-        public static string rootServer = "https://3b5b-79-111-219-20.ngrok-free.app";
+        public static string rootServer = "https://3369-81-177-58-204.ngrok-free.app";
 
         public static bool AutomotiveWork = true;
 
@@ -82,6 +82,18 @@ namespace CanvasDragNDrop
 
         }
 
+        /// <summary> Запрос получения каталога моделей блоков </summary>
+        public static (List<APIDirBlockModelClass> catalogModels, bool isSuccess) GetCatalogs()
+        {
+            if (AutomotiveWork)
+            {
+                return GenerateResponse<List<APIDirBlockModelClass>>(File.ReadAllText(MockDataFolder + "get_catalogs.json"), true);
+            }
+
+            var requestResult = GetRequest("/get_model_catalog");
+            return GenerateResponse<List<APIDirBlockModelClass>>(requestResult.data, requestResult.isSuccess);
+        }
+
         /// <summary> Запрос получения моделей блоков </summary>
         public static (List<APIBlockModelClass> blockModels, bool isSuccess) GetBlockModels()
         {
@@ -93,6 +105,7 @@ namespace CanvasDragNDrop
             var requestResult = GetRequest("/get_models");
             return GenerateResponse<List<APIBlockModelClass>>(requestResult.data, requestResult.isSuccess);
         }
+
 
         /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
         public static (APIGetEnvsResponseClass environments, bool isSuccess) GetEnvironments()
