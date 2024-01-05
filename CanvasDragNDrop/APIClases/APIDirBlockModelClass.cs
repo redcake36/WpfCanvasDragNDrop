@@ -1,6 +1,7 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,19 +33,20 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Массив моделей блока </summary>
         public List<APIBlockModelClass> Models;
 
-        //public APIDirBlockModelClass()
-        //{
-        //    Models = new List<APIBlockModelClass>();
-        //}
+        public ObservableCollection<APIDirBlockModelClass> Childs
+        {
+            get { return _childs; }
+            set { _childs = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<APIDirBlockModelClass> _childs = new();
 
-        public List<APIDirBlockModelClass> DirModel;
 
-        public APIDirBlockModelClass(int catalogId, string catalogName, List<APIBlockModelClass> models, List<APIDirBlockModelClass> dirModel)
+        public APIDirBlockModelClass(int catalogId, string catalogName, List<APIBlockModelClass> models, ObservableCollection<APIDirBlockModelClass> childs)
             {
                CatalogId = catalogId;
                CatalogName = catalogName;
                Models = models;
-               DirModel = dirModel;
+               Childs = childs;
             }
 
     }

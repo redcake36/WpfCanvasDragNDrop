@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer"
         mc:Ignorable="d"
-        Title="Каталог моделей" Height="450" Width="300">
+        Title="Каталог моделей" Height="450" Width="300"
+        Name="ModelExplorerWindow">
     <Grid>
-        <TreeView>
+        <TreeView  ItemsSource="{Binding ElementName=ModelExplorerWindow, Path=AvailableCatalogModels}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/folder.png" Width="15"/>
+                        <Label Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+
+
+            <!--
             <TreeViewItem>
                 <TreeViewItem.Header>
                 <StackPanel Orientation="Horizontal">
@@ -71,7 +83,7 @@
                         </StackPanel>
                     </TreeViewItem.Header>
                 </TreeViewItem>
-            </TreeViewItem>
+            </TreeViewItem> -->
         </TreeView>
     </Grid>
 </Window>
