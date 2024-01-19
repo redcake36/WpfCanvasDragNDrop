@@ -20,6 +20,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 			Custom
 		}
 
+		/// <summary> Тип переменной </summary>
 		public Types Type
 		{
 			get { return _type; }
@@ -27,6 +28,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private Types _type = 0;
 
+		/// <summary> Id переменной </summary>
 		public int VariableId
 		{
 			get { return _variableId; }
@@ -34,6 +36,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private int _variableId = 0;
 
+		/// <summary> Id базового параметра переменной </summary>
 		public int VariablePrototypeId
 		{
 			get { return _variablePrototypeId; }
@@ -41,6 +44,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private int _variablePrototypeId = 0;
 
+		/// <summary> Имя переменной (p2) </summary>
 		public string VariableName
 		{
 			get { return _variableName; }
@@ -48,6 +52,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private string _variableName;
 
+		/// <summary> Значкение переменной </summary>
 		public double Value
 		{
 			get { return _value; }
@@ -55,6 +60,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private double _value;
 
+		/// <summary> Название параметра переменной (Давление) </summary>
 		public string Title
 		{
 			get { return _title; }
@@ -62,6 +68,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
 		}
 		private string _title = "";
 
+		/// <summary> Единицы измерения переменной </summary>
 		public string Units
 		{
 			get { return _units; }

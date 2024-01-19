@@ -4,7 +4,9 @@ using CanvasDragNDrop.Windows;
 using CanvasDragNDrop.Windows.CalculationResultWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -29,6 +31,13 @@ namespace CanvasDragNDrop
         }
         private CanvasOverseerClass _canvasOverseer = new();
 
+        public SchemaClass Schema
+        {
+            get => _schema;
+            set { _schema = value; OnPropertyChanged(); }
+        }
+        private SchemaClass _schema = new();
+
         public Brush TestBrush
         {
             get { return _testBrush; }
@@ -37,12 +46,12 @@ namespace CanvasDragNDrop
         private Brush _testBrush = new SolidColorBrush(Colors.BlueViolet);
 
 
-        public ObservableCollection<BlockInstance> BlockInstanses
-        {
-            get { return _blockInstanses; }
-            set { _blockInstanses = value; OnPropertyChanged(); }
-        }
-        private ObservableCollection<BlockInstance> _blockInstanses = new();
+        //public ObservableCollection<BlockInstance> BlockInstances
+        //{
+        //    get { return _blockInstances; }
+        //    set { _blockInstances = value; OnPropertyChanged(); }
+        //}
+        //private ObservableCollection<BlockInstance> _blockInstances = new();
 
 
         /// <summary> Коллекция доступных к соззданию блоков </summary>
@@ -53,12 +62,12 @@ namespace CanvasDragNDrop
         }
         private ObservableCollection<APIBlockModelClass> _availableBlockModels = new();
 
-        public ObservableCollection<FlowInterconnectLine> BlockInterconnections
-        {
-            get { return _blockInterconnections; }
-            set { _blockInterconnections = value; OnPropertyChanged(); }
-        }
-        private ObservableCollection<FlowInterconnectLine> _blockInterconnections = new();
+        //public ObservableCollection<FlowInterconnectLine> BlockInterconnections
+        //{
+        //    get { return _blockInterconnections; }
+        //    set { _blockInterconnections = value; OnPropertyChanged(); }
+        //}
+        //private ObservableCollection<FlowInterconnectLine> _blockInterconnections = new();
 
         private IncrementingIndexGenerator _instanceIdGenerator = new();
 
@@ -127,13 +136,13 @@ namespace CanvasDragNDrop
             if (_canvasOverseer.CanDragBlock)
             {
                 var matrix = transform.Matrix;
-                BlockInstanses[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
-                BlockInstanses[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
+                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
+                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
             }
             //Обновляем точку соединительного потока при его создании
             if (_canvasOverseer.CanUpdateLiveInterconnectionPoint)
             {
-                BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
+                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
             }
         }
 
@@ -171,15 +180,15 @@ namespace CanvasDragNDrop
                         FlowInterconnectLine newInterconnectLine = new();
                         if (IsInputConnector)
                         {
-                            newInterconnectLine.SetFlowConnector(BlockInstanses[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         else
                         {
-                            newInterconnectLine.SetFlowConnector(BlockInstanses[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         newInterconnectLine.UpdateLiveInterconnectPoint(_canvasOverseer.AreaMousePosition);
-                        BlockInterconnections.Add(newInterconnectLine);
-                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(BlockInterconnections.Count - 1);
+                        Schema.BlockInterconnections.Add(newInterconnectLine);
+                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(Schema.BlockInterconnections.Count - 1);
                     }
                     catch { }
                 }
@@ -191,11 +200,11 @@ namespace CanvasDragNDrop
                         {
                             if (IsInputConnector)
                             {
-                                BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(BlockInstanses[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             else
                             {
-                                BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(BlockInstanses[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             _canvasOverseer.ConnectSecondFlowInterconnectPoint();
                         }
@@ -215,11 +224,11 @@ namespace CanvasDragNDrop
         {
             var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == (int)((MenuItem)sender).Tag);
 
-            _blockInstanses.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
+            Schema.BlockInstances.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
 
             ////TEST
             //_blockInterconnections.Add(new FlowInterconnectLine());
-            //_blockInterconnections[0].SetFlowConnector(_blockInstanses[0].OutputConnectors[0], true);
+            //_blockInterconnections[0].SetFlowConnector(_blockInstances[0].OutputConnectors[0], true);
 
         }
 
@@ -242,48 +251,64 @@ namespace CanvasDragNDrop
 
         private void CalculateScheme(object sender, RoutedEventArgs e)
         {
-            CalculationResultWindow resultWindow = new(BlockInstanses);
+            CalculationResultWindow resultWindow = new(Schema.BlockInstances);
+            var results = JsonConvert.SerializeObject(Schema);
             resultWindow.Show();
 
-            //if (!_canvasOverseer.CanCalcScheme)
-            //{
-            //    return;
-            //}
-            //foreach (var block in BlockInstanses)
-            //{
-            //    foreach (var item in block.InputConnectors)
-            //    {
-            //        if (item.InterconnectLine == null)
-            //        {
-            //            MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
-            //        }
-            //    }
-            //}
+            //PrecompiledCalcExpressionClass CheckExp = new("2*sin(x)");
 
-            //MessageBoxResult Result = MessageBox.Show("Calc?","", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            //Dictionary<string, BlockInstanceVariable> args = new();
+            //args.Add("x", new("x", 1));
+            //args.Add("y", new("y", 2));
 
-            //if (Result == MessageBoxResult.No)
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            //for (int i = 0; i < 100000; i++)
             //{
-            //    return;
+            //    args["x"].Value = i;
+            //    CheckExp.Calc(args);
             //}
+            //watch.Stop();
+            //MessageBox.Show(watch.ElapsedMilliseconds.ToString());
 
-            //BlockInstance currentBlock = BlockInstanses.First(x => x.BlockModel.ModelId == 36);
+            if (!_canvasOverseer.CanCalcScheme)
+            {
+                return;
+            }
+            foreach (var block in Schema.BlockInstances)
+            {
+                foreach (var item in block.InputConnectors)
+                {
+                    if (item.InterconnectLine == null)
+                    {
+                        MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
+                    }
+                }
+            }
 
-            //for (int i = 0; i < BlockInstanses.Count*500; i++)
-            //{
-            //    currentBlock.CalculateBlockInstance();
-            //    if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
-            //    {
-            //        currentBlock = BlockInstanses.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
-            //    }
-            //}
+            MessageBoxResult Result = MessageBox.Show("Calc?", "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (Result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            BlockInstance currentBlock = Schema.BlockInstances.First(x => x.BlockModel.ModelId == 3);
+
+            for (int i = 0; i < Schema.BlockInstances.Count * 500; i++)
+            {
+                currentBlock.CalculateBlockInstance();
+                if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
+                {
+                    currentBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
+                }
+            }
         }
 
         private void OpenBlockProperties()
         {
             if (_canvasOverseer.CanOpenBlockProperties)
             {
-                BlockInstancePropertiesWindow PropertiesWindow = new(BlockInstanses[_canvasOverseer.SelectedBlockIndex]);
+                BlockInstancePropertiesWindow PropertiesWindow = new(Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
                 PropertiesWindow.Show();
                 _canvasOverseer.BlockPropertiesOpened();
             }
@@ -293,6 +318,12 @@ namespace CanvasDragNDrop
         {
             ModelsExplorer ModelsExplorer = new();
             ModelsExplorer.Show();
+        }
+
+        private void OpenBlockModelCreationWindow(object sender, RoutedEventArgs e)
+        {
+            BlockModelCreationWindow BlockModelCreationWindow = new BlockModelCreationWindow();
+            BlockModelCreationWindow.ShowDialog();
         }
     }
 }

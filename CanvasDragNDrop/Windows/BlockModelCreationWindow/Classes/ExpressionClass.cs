@@ -17,20 +17,6 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 
         private RegenerateCustomParametersHandler regenerateCustomParameters;
 
-        //public enum ExpressionTypes : int
-        //{
-        //    Expression,
-        //    PropSI
-        //}
-
-        //[JsonIgnore]
-        ///// <summary> Словарь возможных типов выражений </summary>
-        //public static Dictionary<ExpressionTypes, (string UIName, string PropertyName)> ExpressionTypesNames { get; private set; } = new()
-        //{
-        //    { ExpressionTypes.Expression,("Формула","Expression") },
-        //    { ExpressionTypes.PropSI, ("Функция PropSI", "PropSI") }
-        //};
-
         [JsonIgnore]
         /// <summary> Отображаемый тип расчётного выражения </summary>
         public string UIExpressionType
@@ -117,7 +103,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                 return;
             }
 
-            if (Regex.IsMatch(ClearedExpression, CalcUtilitiesClass.PropSICheckPattern))
+            if (Regex.IsMatch(ClearedExpression, PrecompiledCalcExpressionClass.PropSICheckPattern))
             {
                 ExpressionType = GlobalTypes.ExpressionTypes.PropSI;
                 List<string> Params = ClearedExpression.Split(';').ToList();

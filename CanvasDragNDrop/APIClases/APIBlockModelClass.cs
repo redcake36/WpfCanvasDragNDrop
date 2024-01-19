@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CanvasDragNDrop.UtilityClasses;
+using Newtonsoft.Json;
 
 namespace CanvasDragNDrop.APIClases
 {
@@ -26,21 +27,27 @@ namespace CanvasDragNDrop.APIClases
         }
         private string _title;
 
+        [JsonIgnore]
         /// <summary> Описание модели блока </summary>
         public string Description;
 
+        [JsonIgnore]
         /// <summary> Массив входных потоков </summary>
         public List<APIBlockModelFlowClass> InputFlows;
 
+        [JsonIgnore]
         /// <summary> Массив выходных потоков </summary>
         public List<APIBlockModelFlowClass> OutputFlows;
 
+        [JsonIgnore]
         /// <summary> Массив параметров по умолчанию </summary>
         public List<APIBlockModelParameterClass> DefaultParameters;
 
+        [JsonIgnore]
         /// <summary> Массив дополнительных параметров </summary>
         public List<APIBlockModelParameterClass> CustomParameters;
 
+        [JsonIgnore]
         /// <summary> Массив расчётных выражений </summary>
         public List<APIBlockModelExpressionClass> Expressions;
 

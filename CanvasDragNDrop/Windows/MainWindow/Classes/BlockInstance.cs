@@ -1,14 +1,19 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.UserItems;
 using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
 namespace CanvasDragNDrop
 {
@@ -21,12 +26,13 @@ namespace CanvasDragNDrop
             Calculated
         }
 
+        [JsonIgnore]
         public BlockInstanceStatuses BlockInstanceStatus
         {
-            get { return _blockInstanceStatus; }
-            set { _blockInstanceStatus = value; OnPropertyChanged(); }
+            get { return _blockInstancestatus; }
+            set { _blockInstancestatus = value; OnPropertyChanged(); }
         }
-        private BlockInstanceStatuses _blockInstanceStatus = BlockInstanceStatuses.NotCalculated;
+        private BlockInstanceStatuses _blockInstancestatus = BlockInstanceStatuses.NotCalculated;
 
 
         public int BlockInstanceId
@@ -43,6 +49,7 @@ namespace CanvasDragNDrop
         }
         private APIBlockModelClass _blockModel;
 
+        [JsonIgnore]
         public int BlockHeight
         {
             get { return _blockHeight; }
@@ -50,6 +57,7 @@ namespace CanvasDragNDrop
         }
         private int _blockHeight = 200;
 
+        [JsonIgnore]
         public int BlockWidth
         {
             get { return _blockWidth; }
@@ -71,6 +79,7 @@ namespace CanvasDragNDrop
         }
         private double _offsetLeft = 0;
 
+        [JsonIgnore]
         public Brush BackgroundColor
         {
             get { return _backgroundColor; }
@@ -78,6 +87,7 @@ namespace CanvasDragNDrop
         }
         private Brush _backgroundColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#61789C"));
 
+        [JsonIgnore]
         public ObservableCollection<FlowConnector> InputConnectors
         {
             get { return _inputConnectors; }
@@ -85,6 +95,7 @@ namespace CanvasDragNDrop
         }
         private ObservableCollection<FlowConnector> _inputConnectors = new();
 
+        [JsonIgnore]
         public ObservableCollection<FlowConnector> OutputConnectors
         {
             get { return _outputConnectors; }
@@ -99,15 +110,30 @@ namespace CanvasDragNDrop
         }
         private ObservableCollection<BlockInstanceVariable> _defaultVariables = new();
 
-
+        [JsonIgnore]
         public int ConnectorSize { get; set; } = 30;
 
         private const int _flowConnectorsStep = 10;
+
+        private List<(PrecompiledCalcExpressionClass PreparedExpression, APIBlockModelExpressionClass OriginalExpression)> _preparedCalcExpressions = new();
 
         public BlockInstance(APIBlockModelClass BlockModel, int blockInstanceId)
         {
             _blockModel = BlockModel;
             BlockInstanceId = blockInstanceId;
+            PrepareInputFlowConnectors();
+            PrepareOutputFlowConnectors();
+
+            PrepareDefaultParameters();
+            PrepareCalcExpressions();
+
+            BlockHeight = Math.Max(_blockModel.InputFlows.Count, _blockModel.OutputFlows.Count) * (ConnectorSize + _flowConnectorsStep) + _flowConnectorsStep;
+            OffsetLeft = OffsetTop = 10;
+        }
+
+        /// <summary> Метод подготовки входных коннекторов потоков </summary>
+        private void PrepareInputFlowConnectors()
+        {
             for (int i = 0; i < _blockModel.InputFlows.Count; i++)
             {
                 ObservableCollection<BlockInstanceVariable> variables = new();
@@ -123,6 +149,11 @@ namespace CanvasDragNDrop
                 PropertyChanged += InputFlowConnector.ParentPropertyChangedEventHandler;
                 InputConnectors.Add(InputFlowConnector);
             }
+        }
+
+        /// <summary> Метод подготовки выходных коннекторов потоков </summary>
+        private void PrepareOutputFlowConnectors()
+        {
             for (int i = 0; i < _blockModel.OutputFlows.Count; i++)
             {
                 ObservableCollection<BlockInstanceVariable> variables = new();
@@ -138,67 +169,72 @@ namespace CanvasDragNDrop
                 PropertyChanged += OutputFlowConnector.ParentPropertyChangedEventHandler;
                 OutputConnectors.Add(OutputFlowConnector);
             }
+        }
 
+        /// <summary> Метод подоговки параметров по умолчанию для отображения </summary>
+        private void PrepareDefaultParameters()
+        {
             foreach (var item in _blockModel.DefaultParameters)
             {
                 DefaultVariables.Add(new(BlockInstanceVariable.Types.Default, item.ParameterId, -1, item.VariableName, 0, item.Title, item.Units));
             }
+        }
 
-            BlockHeight = Math.Max(_blockModel.InputFlows.Count, _blockModel.OutputFlows.Count) * (ConnectorSize + _flowConnectorsStep) + _flowConnectorsStep;
-            OffsetLeft = OffsetTop = 10;
+        private void PrepareCalcExpressions()
+        {
+            List<APIBlockModelExpressionClass> SortedExpressions = BlockModel.Expressions.OrderBy(x => x.Order).ToList();
+            foreach (var expression in SortedExpressions)
+            {
+                _preparedCalcExpressions.Add((new(expression.Expression), expression));
+            }
         }
 
         public void CalculateBlockInstance()
         {
-            //Наполнение списка всех переменных
-            List<BlockInstanceVariable> AllVariables = new List<BlockInstanceVariable>();
+            //Наполнение списка всех переменных с ключём по Id переменной
+            Dictionary<int,BlockInstanceVariable> AllVariables = new();
             foreach (var flow in InputConnectors)
             {
-                AllVariables.AddRange(flow.CalculationVariables);
+                AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
             }
             foreach (var flow in OutputConnectors)
             {
-                AllVariables.AddRange(flow.CalculationVariables);
+                AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
             }
-            AllVariables.AddRange(DefaultVariables);
-            foreach (var variable in BlockModel.CustomParameters) 
+            AllVariables = AllVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+            foreach (var variable in BlockModel.CustomParameters)
             {
-                AllVariables.Add(new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
+                AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
             }
 
+            //FIX перенос не работае для нескольких потоков
             //перенос значений с выходных потоков предыдущих блоков
-            foreach(var flow in InputConnectors)
+            foreach (var inputFlow in InputConnectors)
             {
-                foreach (var item in flow.InterconnectLine.OutputFlowConnector.CalculationVariables)
+                foreach (var outputVar in inputFlow.InterconnectLine.OutputFlowConnector.CalculationVariables)
                 {
-                    AllVariables.Find(x => x.VariablePrototypeId == item.VariablePrototypeId).Value = item.Value;
+                    AllVariables[inputFlow.CalculationVariables.First(inputVar => inputVar.VariablePrototypeId == outputVar.VariablePrototypeId).VariableId].Value = outputVar.Value;
                 }
             }
 
             //расчёт выражений
-            foreach (var expression in BlockModel.Expressions)
+            foreach (var expression in _preparedCalcExpressions)
             {
-                var definedVar = AllVariables.Find(x => x.VariableId == expression.DefinedVariable[0]);
-                var neededVars = AllVariables.FindAll(x => expression.NeededVariables.Contains(x.VariableId));
-                if (expression.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
-                {
-                    definedVar.Value = CalcUtilitiesClass.CallPropSIFromString(expression.Expression, neededVars);
-                }
-                else
-                {
-                    var expr = CalcUtilitiesClass.ConstructMathExpression(expression.Expression, neededVars);
-                    definedVar.Value = CalcUtilitiesClass.calcMathExpression(expr, neededVars);
-                }
+                BlockInstanceVariable definedVar = AllVariables[expression.OriginalExpression.DefinedVariable];
+                Dictionary<string,BlockInstanceVariable> neededVars = AllVariables.Where(x => expression.OriginalExpression.NeededVariables.Contains(x.Key)).ToDictionary(x => x.Value.VariableName, y => y.Value);
+                   
+                definedVar.Value = expression.PreparedExpression.Calc(neededVars);
             }
 
+            //FIX ? 
             //Кладём новые значения в выходные потоки блока
-            foreach (var flow in OutputConnectors)
-            {
-                foreach (var item in flow.CalculationVariables)
-                {
-                    item.Value = AllVariables.Find(x => x.VariableName == item.VariableName).Value;
-                }
-            }
+            //foreach (var flow in OutputConnectors)
+            //{
+            //    foreach (var item in flow.CalculationVariables)
+            //    {
+            //        item.Value = AllVariables.Find(x => x.VariableName == item.VariableName).Value;
+            //    }
+            //}
 
             BlockInstanceStatus = BlockInstanceStatuses.Calculated;
         }

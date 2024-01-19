@@ -58,6 +58,6 @@
         <Rectangle Width="{Binding ElementName=BlockInstanse, Path=BlockWidth}" 
             Height="{Binding ElementName=BlockInstanse, Path=BlockHeight}" 
             Fill="{Binding ElementName=BlockInstanse, Path=BlockBackgroundColor}" RadiusX="5" RadiusY="5"/>
-        <Label Content="{Binding ElementName=BlockInstanse, Path=Title}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding ElementName=BlockInstanse, Path=BlockWidth}" Height="{Binding ElementName=BlockInstanse, Path=BlockHeight}"/>
+        <Label Content="{Binding ElementName=BlockInstanse, Path=Title}" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="{Binding ElementName=BlockInstanse, Path=BlockWidth}" Height="{Binding ElementName=BlockInstanse, Path=BlockHeight}"/>
     </Canvas>
 </UserControl>

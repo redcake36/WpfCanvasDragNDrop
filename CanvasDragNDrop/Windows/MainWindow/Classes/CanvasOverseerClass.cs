@@ -150,8 +150,9 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             if (CanFinishInterconnection)
             {
                 SelectedFlowInterconnectLineIndex = -1;
-                OperationState = OperationStates.Idle;
-                CursorType = Cursors.Cross;
+                OperationState = OperationStates.FlowInterconnectingStarted;
+                //OperationState = OperationStates.Idle;
+                //CursorType = Cursors.Cross;
             }
         }
 

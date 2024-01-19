@@ -414,7 +414,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
             }
         }
 
-        /// <summary> Метод расчёта модели на зажанных значениях </summary>
+        /// <summary> Метод расчёта модели на заданных значениях </summary>
         public void CalculateModel()
         {
             foreach (var expBlock in Expressions)
@@ -430,35 +430,53 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                     PreparedNeededVars.Add(new(Var.Variable, Var.Value));
                 }
 
+                PrecompiledCalcExpressionClass Expression = new(expBlock.Expression);
                 double result = 0;
 
-                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
+                try
                 {
-                    Expression e = new Expression(expBlock.Expression);
-                    e.disableImpliedMultiplicationMode();
-                    PreparedNeededVars.ForEach(x => e.defineArgument(x.VariableName, x.Value));
-                    if (e.checkSyntax() == false)
+                    result = Expression.Calc(PreparedNeededVars.ToDictionary(x => x.VariableName));
+                }
+                catch (Exception e)
+                {
+                    if (Expression.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
                     {
-                        var error = e.getErrorMessage();
-                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{Expression.PrecompiledExpression.getErrorMessage()}");
                     }
-                    else
+
+                    if(Expression.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
                     {
-                        result = e.calculate();
+                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{e.Message}");
                     }
                 }
 
-                if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
-                {
-                    try
-                    {
-                        result = CalcUtilitiesClass.CallPropSIFromString(expBlock.Expression, PreparedNeededVars);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{ex.Message}");
-                    }
-                }
+                //if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
+                //{
+                //    Expression e = new Expression(expBlock.Expression);
+                //    e.disableImpliedMultiplicationMode();
+                //    PreparedNeededVars.ForEach(x => e.defineArgument(x.VariableName, x.Value));
+                //    if (e.checkSyntax() == false)
+                //    {
+                //        var error = e.getErrorMessage();
+                //        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
+                //    }
+                //    else
+                //    {
+                //        result = e.calculate();
+                //    }
+                //}
+
+                //if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
+                //{
+                //    try
+                //    {
+                //        result = CalcUtilitiesClass.CallPropSIFromString(expBlock.Expression, PreparedNeededVars);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{ex.Message}");
+                //    }
+                //}
                 CalcedCalcVariables[CalcedCalcVariables.IndexOf(CalcedCalcVariables.FirstOrDefault(x => x.Variable == expBlock.DefinedVariable))].Value = result;
             }
         }

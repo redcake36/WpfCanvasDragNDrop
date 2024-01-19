@@ -15,9 +15,6 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Id расчётного выражения </summary>
         public int ExpressionId { get; set; }
 
-        /// <summary> Id определяемой переменной </summary>
-        public int DefinedVariableId { get; set; }
-
         /// <summary> Расчтное выражение </summary>
         public string Expression { get; set; }
 
@@ -27,14 +24,16 @@ namespace CanvasDragNDrop.APIClases
         /// <summary> Порядковый номер выражения </summary>
         public int Order { get; set; }
 
-        public List<int> DefinedVariable {  get; set; }
+        //FIX list to int
+        /// <summary> ID определеяемой выражением переменной </summary>
+        public int DefinedVariable {  get; set; }
 
+        /// <summary> Тип выражения (формула, обращение к CoolProp) </summary>
         public GlobalTypes.ExpressionTypes ExpressionType { get; set; }
 
-        public APIBlockModelExpressionClass(int expressionId, int definedVariableId, string expression, List<int> neededVariables, int order, List<int> definedVariable)
+        public APIBlockModelExpressionClass(int expressionId, string expression, List<int> neededVariables, int order, int definedVariable)
         {
             ExpressionId = expressionId;
-            DefinedVariableId = definedVariableId;
             Expression = expression;
             NeededVariables = neededVariables;
             Order = order;

@@ -25,9 +25,7 @@
     "Description": "Повышает давление",
     "Expressions": [
       {
-        "DefinedVariable": [
-          12
-        ],
+        "DefinedVariable": 12,
         "Expression": "PEnd",
         "ExpressionId": 1,
         "ExpressionType": 0,
@@ -37,9 +35,7 @@
         "Order": 1
       },
       {
-        "DefinedVariable": [
-          4
-        ],
+        "DefinedVariable": 4,
         "Expression": "PropSI(H ; P; p2; S; s1; Water)",
         "ExpressionId": 2,
         "ExpressionType": 1,
@@ -50,9 +46,7 @@
         "Order": 2
       },
       {
-        "DefinedVariable": [
-          14
-        ],
+        "DefinedVariable": 14,
         "Expression": "h1 - (h1 - hEndTeor)/KPDNasos",
         "ExpressionId": 3,
         "ExpressionType": 0,
@@ -64,9 +58,7 @@
         "Order": 3
       },
       {
-        "DefinedVariable": [
-          13
-        ],
+        "DefinedVariable": 13,
         "Expression": "PropSI( T ; P; p2; H; h2; Water)",
         "ExpressionId": 4,
         "ExpressionType": 1,
@@ -77,9 +69,7 @@
         "Order": 4
       },
       {
-        "DefinedVariable": [
-          15
-        ],
+        "DefinedVariable": 15,
         "Expression": "PropSI( S ; P; p2; H; h2; Water)",
         "ExpressionId": 5,
         "ExpressionType": 1,
@@ -90,9 +80,7 @@
         "Order": 5
       },
       {
-        "DefinedVariable": [
-          16
-        ],
+        "DefinedVariable": 16,
         "Expression": "G1",
         "ExpressionId": 6,
         "ExpressionType": 0,
@@ -260,9 +248,7 @@
     "Description": "Вырабатывает энергию",
     "Expressions": [
       {
-        "DefinedVariable": [
-          25
-        ],
+        "DefinedVariable": 25,
         "Expression": "PEnd",
         "ExpressionId": 7,
         "ExpressionType": 0,
@@ -272,9 +258,7 @@
         "Order": 1
       },
       {
-        "DefinedVariable": [
-          28
-        ],
+        "DefinedVariable": 28,
         "Expression": "s1",
         "ExpressionId": 8,
         "ExpressionType": 0,
@@ -284,9 +268,7 @@
         "Order": 2
       },
       {
-        "DefinedVariable": [
-          17
-        ],
+        "DefinedVariable": 17,
         "Expression": "PropSI(H ; P; p2; S; s2; Water)",
         "ExpressionId": 9,
         "ExpressionType": 1,
@@ -297,9 +279,7 @@
         "Order": 3
       },
       {
-        "DefinedVariable": [
-          27
-        ],
+        "DefinedVariable": 27,
         "Expression": "h1 - KPDoi*(h1-hEndTeor)",
         "ExpressionId": 10,
         "ExpressionType": 0,
@@ -311,9 +291,7 @@
         "Order": 4
       },
       {
-        "DefinedVariable": [
-          26
-        ],
+        "DefinedVariable": 26,
         "Expression": "PropSI(T ; P; p2; H; h2; Water)",
         "ExpressionId": 11,
         "ExpressionType": 1,
@@ -324,9 +302,7 @@
         "Order": 5
       },
       {
-        "DefinedVariable": [
-          28
-        ],
+        "DefinedVariable": 28,
         "Expression": "PropSI(S ; P; p2; H; h2; Water)",
         "ExpressionId": 12,
         "ExpressionType": 1,
@@ -337,9 +313,7 @@
         "Order": 6
       },
       {
-        "DefinedVariable": [
-          29
-        ],
+        "DefinedVariable": 29,
         "Expression": "G1",
         "ExpressionId": 13,
         "ExpressionType": 0,
@@ -506,9 +480,7 @@
     "Description": "Задаёт начальные значения потока",
     "Expressions": [
       {
-        "DefinedVariable": [
-          33
-        ],
+        "DefinedVariable": 33,
         "Expression": "P",
         "ExpressionId": 14,
         "ExpressionType": 0,
@@ -518,9 +490,7 @@
         "Order": 1
       },
       {
-        "DefinedVariable": [
-          34
-        ],
+        "DefinedVariable": 34,
         "Expression": "T + 273.15",
         "ExpressionId": 15,
         "ExpressionType": 0,
@@ -530,9 +500,7 @@
         "Order": 2
       },
       {
-        "DefinedVariable": [
-          35
-        ],
+        "DefinedVariable": 35,
         "Expression": "PropSI(H ; P; P; T; T1; Water)",
         "ExpressionId": 16,
         "ExpressionType": 1,
@@ -543,9 +511,7 @@
         "Order": 3
       },
       {
-        "DefinedVariable": [
-          36
-        ],
+        "DefinedVariable": 36,
         "Expression": "PropSI(S ; P; P; T; T1; Water)",
         "ExpressionId": 17,
         "ExpressionType": 1,
@@ -556,9 +522,7 @@
         "Order": 4
       },
       {
-        "DefinedVariable": [
-          37
-        ],
+        "DefinedVariable": 37,
         "Expression": "G",
         "ExpressionId": 18,
         "ExpressionType": 0,
@@ -656,9 +620,7 @@
     "Description": "Конденсирует пар",
     "Expressions": [
       {
-        "DefinedVariable": [
-          46
-        ],
+        "DefinedVariable": 46,
         "Expression": "TEnd + 273.15",
         "ExpressionId": 19,
         "ExpressionType": 0,
@@ -668,9 +630,7 @@
         "Order": 1
       },
       {
-        "DefinedVariable": [
-          45
-        ],
+        "DefinedVariable": 45,
         "Expression": "p1 * dpCond",
         "ExpressionId": 20,
         "ExpressionType": 0,
@@ -681,9 +641,7 @@
         "Order": 2
       },
       {
-        "DefinedVariable": [
-          47
-        ],
+        "DefinedVariable": 47,
         "Expression": "PropSI(H ; P; p2; T; T2; Water)",
         "ExpressionId": 21,
         "ExpressionType": 1,
@@ -694,9 +652,7 @@
         "Order": 3
       },
       {
-        "DefinedVariable": [
-          48
-        ],
+        "DefinedVariable": 48,
         "Expression": "PropSI(S ; P; p2; T; T2; Water)",
         "ExpressionId": 22,
         "ExpressionType": 1,
@@ -707,9 +663,7 @@
         "Order": 4
       },
       {
-        "DefinedVariable": [
-          49
-        ],
+        "DefinedVariable": 49,
         "Expression": "G1",
         "ExpressionId": 23,
         "ExpressionType": 0,
@@ -870,9 +824,7 @@
     "Description": "Нагревает воду",
     "Expressions": [
       {
-        "DefinedVariable": [
-          58
-        ],
+        "DefinedVariable": 58,
         "Expression": "TEnd + 273.15",
         "ExpressionId": 24,
         "ExpressionType": 0,
@@ -882,9 +834,7 @@
         "Order": 1
       },
       {
-        "DefinedVariable": [
-          57
-        ],
+        "DefinedVariable": 57,
         "Expression": "p1 * dpKotel",
         "ExpressionId": 25,
         "ExpressionType": 0,
@@ -895,9 +845,7 @@
         "Order": 2
       },
       {
-        "DefinedVariable": [
-          59
-        ],
+        "DefinedVariable": 59,
         "Expression": "PropSI(H ; P; p2; T; T2; Water)",
         "ExpressionId": 26,
         "ExpressionType": 1,
@@ -908,9 +856,7 @@
         "Order": 3
       },
       {
-        "DefinedVariable": [
-          60
-        ],
+        "DefinedVariable": 60,
         "Expression": "PropSI(S ; P; p2; T; T2; Water)",
         "ExpressionId": 27,
         "ExpressionType": 1,
@@ -921,9 +867,7 @@
         "Order": 4
       },
       {
-        "DefinedVariable": [
-          61
-        ],
+        "DefinedVariable": 61,
         "Expression": "G1",
         "ExpressionId": 28,
         "ExpressionType": 0,

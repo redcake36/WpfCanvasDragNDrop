@@ -1,7 +1,7 @@
 ﻿<Window x:Class="CanvasDragNDrop.AlternateMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="AlternateMainWindow" Height="450" Width="800"
+        Title="ThermalUp Редактор" Height="450" Width="800"
         xmlns:local="clr-namespace:CanvasDragNDrop"
                          KeyDown="ViewportKeyDown"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -18,13 +18,13 @@
                 <MenuItem Header="Синхронизировать данные" Click="GetFromServerElemList"/>
             </MenuItem>
             <MenuItem Header="Инструменты" >
-                <MenuItem Header="Создать модель блока"/>
+                <MenuItem Header="Создать модель блока" Click="OpenBlockModelCreationWindow"/>
                 <MenuItem Header="Создать составной блок"/>
                 <MenuItem Header="Добавить поток" Click="StartInterconnectCreation"/>
                 <MenuItem Header="Расчитать схему" Click="CalculateScheme"/>
-                <MenuItem Header="Браузер моделей" Click="OpenModelsBrowser"/>
+                <MenuItem Header="Каталог моделей" Click="OpenModelsBrowser"/>
             </MenuItem>
-            <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему">
+            <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему" Visibility="Visible">
                 <MenuItem.ItemContainerStyle>
                     <Style>
                         <Setter Property="MenuItem.Header" Value="{Binding Title}"/>
@@ -38,7 +38,7 @@
                 <MenuItem Header="Посмотреть доступный проекты"/>
                 <MenuItem Header="Выйти"/>
             </MenuItem>
-            <!-- Test meny items -->
+             <!--Test meny items--> 
             <!--<MenuItem Name="TestMenu" Header="{Binding _state}"/>-->
         </Menu>
 
@@ -57,7 +57,7 @@
                 <Canvas.RenderTransform>
                     <MatrixTransform x:Name="transform"/>
                 </Canvas.RenderTransform>
-                <ItemsControl ItemsSource="{Binding BlockInstanses}" AlternationCount="{Binding BlockInstanses.Count}">
+                <ItemsControl ItemsSource="{Binding Schema.BlockInstances}" AlternationCount="{Binding Schema.BlockInstances.Count}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -85,7 +85,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <ItemsControl ItemsSource="{Binding BlockInterconnections}">
+                <ItemsControl ItemsSource="{Binding Schema.BlockInterconnections}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>

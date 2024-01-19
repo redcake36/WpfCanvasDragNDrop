@@ -1,4 +1,5 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,12 +13,14 @@ namespace CanvasDragNDrop
 {
     public class FlowInterconnectLine : NotifyPropertyChangedClass
     {
+
         public FlowConnector InputFlowConnector => _inputFlowConnector;
         private FlowConnector _inputFlowConnector = null;
 
         public FlowConnector OutputFlowConnector => _outputFlowConnector;
         private FlowConnector _outputFlowConnector = null;
 
+        [JsonIgnore]
         public double InputPointX
         {
             get { return _inputPointX; }
@@ -25,6 +28,7 @@ namespace CanvasDragNDrop
         }
         private double _inputPointX = 0;
 
+        [JsonIgnore]
         public double InputPointY
         {
             get { return _inputPointY; }
@@ -32,6 +36,7 @@ namespace CanvasDragNDrop
         }
         private double _inputPointY = 0;
 
+        [JsonIgnore]
         public double OutputPointX
         {
             get { return _outputPointX; }
@@ -39,6 +44,7 @@ namespace CanvasDragNDrop
         }
         private double _outputPointX = 0;
 
+        [JsonIgnore]
         public double OutputPointY
         {
             get { return _outputPointY; }

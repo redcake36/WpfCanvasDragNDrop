@@ -6,10 +6,14 @@
         xmlns:local="clr-namespace:CanvasDragNDrop.Windows"
         mc:Ignorable="d"
         Name="BlockInstancePropertiesWindowUI"
-        Title="Задайте начальные значения для циклического расчёта" Height="200" Width="550">
+        Title="Свойства блока"
+        Height="200" Width="550">
+        <!--Title="Задайте начальные значения для циклического расчёта"--> 
     <StackPanel>
-        <Label Content="{Binding ElementName=BlockInstancePropertiesWindowUI,Path=BlockInstance.BlockModel.Title}"/>
-        <DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.InputConnectors[0].CalculationVariables}" AutoGenerateColumns="False">
+        <Label Content="{Binding ElementName=BlockInstancePropertiesWindowUI,Path=BlockInstance.BlockModel.Title}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Center"/>
+        <Label Content="Параметры по умолчанию" FontWeight="Bold"/>
+        <!--<DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.InputConnectors[0].CalculationVariables}" AutoGenerateColumns="False">-->
+        <DataGrid x:Name="Grid" ItemsSource="{Binding ElementName=BlockInstancePropertiesWindowUI, Path=BlockInstance.DefaultVariables}" AutoGenerateColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Copy" />

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Результаты расчёта" Height="450" Width="550">
     <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding ElementName=CalcualtionResultWindowUI,Path=Instances}">
+        <ItemsControl ItemsSource="{Binding ElementName=CalcualtionResultWindowUI,Path=Instances}" Name="scroll_viewer">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -16,8 +16,8 @@
                         <ItemsControl ItemsSource="{Binding OutputConnectors}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <DataGrid ItemsSource="{Binding CalculationVariables}" AutoGenerateColumns="False">
+                                    <!--<StackPanel>-->
+                                    <DataGrid ItemsSource="{Binding CalculationVariables}" AutoGenerateColumns="False" PreviewMouseWheel="DataGridMouseWheel">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Идентификатор" Binding="{Binding VariableId}" IsReadOnly="True"/>
                                                 <DataGridTextColumn Header="Название" Binding="{Binding Title}" IsReadOnly="True"/>
@@ -26,7 +26,7 @@
                                                 <DataGridTextColumn Header="Ед. изм." Binding="{Binding Units}" IsReadOnly="True"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
-                                    </StackPanel>
+                                    <!--</StackPanel>-->
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

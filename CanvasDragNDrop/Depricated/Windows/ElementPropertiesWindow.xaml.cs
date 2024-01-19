@@ -88,7 +88,7 @@ namespace CanvasDragNDrop
         public void AddExpression(APIBlockModelExpressionClass expr)
         {
             TextBlock exprVar = new TextBlock(); exprVar.Margin = new Thickness(4);
-            exprVar.Text = expr.DefinedVariableId.ToString();
+            exprVar.Text = expr.DefinedVariable.ToString();
             TextBlock exprStr = new TextBlock(); exprStr.Margin = new Thickness(4);
             exprStr.Text = expr.Expression;
 

@@ -1,5 +1,6 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,16 +12,18 @@ namespace CanvasDragNDrop
 		public int FlowTypeID { get; private set; }
 		public int BlockInstanceID { get; private set; }
 		public int FlowID { get; private set; }
+		[JsonIgnore]
 		public FlowInterconnectLine? InterconnectLine { get; set; } = null;
 
-
-		public ObservableCollection<BlockInstanceVariable> CalculationVariables
+        [JsonIgnore]
+        public ObservableCollection<BlockInstanceVariable> CalculationVariables
 		{
 			get => _calculationVariables;
 			set { _calculationVariables = value; OnPropertyChanged(); }
 		}
 		private ObservableCollection<BlockInstanceVariable> _calculationVariables;
 
+        [JsonIgnore]
         public double ConnectorOffsetTop
 		{
 			get { return _connectorOffsetTop; }
@@ -28,28 +31,32 @@ namespace CanvasDragNDrop
 		}
 		private double _connectorOffsetTop = 0;
 
-		public double ConnectorOffsetLeft
+        [JsonIgnore]
+        public double ConnectorOffsetLeft
 		{
 			get { return _connectorOffsetLeft; }
 			set { _connectorOffsetLeft = value; OnPropertyChanged(); }
 		}
 		private double _connectorOffsetLeft = 0;
 
-		public bool IsInputConnector
+        [JsonIgnore]
+        public bool IsInputConnector
 		{
 			get { return _isInputConnector; }
 			set { _isInputConnector = value; OnPropertyChanged(); }
 		}
 		private bool _isInputConnector = true;
 
-		public double FlowPointOffsetTop
+        [JsonIgnore]
+        public double FlowPointOffsetTop
 		{
 			get { return _flowPointOffsetTop; }
 			set { _flowPointOffsetTop = value; OnPropertyChanged(); }
 		}
 		private double _flowPointOffsetTop;
 
-		public double FlowPointOffsetLeft
+        [JsonIgnore]
+        public double FlowPointOffsetLeft
         {
 			get { return _flowPointOffsetLeft; }
 			set { _flowPointOffsetLeft = value; OnPropertyChanged(); }
