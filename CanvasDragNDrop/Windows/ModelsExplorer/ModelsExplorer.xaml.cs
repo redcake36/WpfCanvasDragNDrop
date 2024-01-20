@@ -29,6 +29,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             set { _availableCatalogModels = value; OnPropertyChanged(); }
         }
         private ObservableCollection<APIDirBlockModelClass> _availableCatalogModels = new();
+
         public ModelsExplorer()
         {
             InitializeComponent();
@@ -61,12 +62,12 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             //};
 
             //DataContext = this;
-            GetFromServerCatalogList(this, new());
+            GetFromServerCatalogList();
         }
 
        
 
-        void GetFromServerCatalogList(object sender, RoutedEventArgs e)
+        void GetFromServerCatalogList()
         {
             var GettingCatalogModelsResult = API.GetCatalogs();
             if (GettingCatalogModelsResult.isSuccess)
@@ -85,6 +86,18 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
         public void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void FolderDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Folder selected" + ((ContentControl)sender).Tag.ToString());
+            e.Handled = true;
+        }
+
+        private void ModelDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Folder selected" + ((ContentControl)sender).Tag.ToString());
+            e.Handled = true;
         }
     }
 }

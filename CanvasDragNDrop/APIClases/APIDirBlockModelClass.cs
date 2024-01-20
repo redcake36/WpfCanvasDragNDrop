@@ -12,6 +12,7 @@ namespace CanvasDragNDrop.APIClases
     /// <summary> Класс каталога моделей блока </summary>
     public class APIDirBlockModelClass : NotifyPropertyChangedClass
     {
+
         /// <summary> ID каталога блока </summary>
         public int CatalogId
         {
@@ -31,7 +32,12 @@ namespace CanvasDragNDrop.APIClases
         private string _catalogName;
 
         /// <summary> Массив моделей блока </summary>
-        public List<APIBlockModelClass> Models;
+        public ObservableCollection<APIBlockModelClass> Models
+        {
+            get { return _models; }
+            set { _models = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<APIBlockModelClass> _models;
 
         public ObservableCollection<APIDirBlockModelClass> Childs
         {
@@ -40,8 +46,18 @@ namespace CanvasDragNDrop.APIClases
         }
         private ObservableCollection<APIDirBlockModelClass> _childs = new();
 
+        public IEnumerable<object> Items
+        {
+            get {
+                foreach (var group in Childs)
+                    yield return group;
+                foreach (var entry in Models)
+                    yield return entry;
+            }
+        }
 
-        public APIDirBlockModelClass(int catalogId, string catalogName, List<APIBlockModelClass> models, ObservableCollection<APIDirBlockModelClass> childs)
+
+        public APIDirBlockModelClass(int catalogId, string catalogName, ObservableCollection<APIBlockModelClass> models, ObservableCollection<APIDirBlockModelClass> childs)
             {
                CatalogId = catalogId;
                CatalogName = catalogName;

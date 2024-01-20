@@ -5,11 +5,11 @@
     "Models": [
       {
         "ModelId": 4,
-        "ModelName": "Повышает давление"
+        "Title": "Повышает давление"
       },
       {
         "ModelId": 5,
-        "ModelName": "Вырабатывает энергию"
+        "Title": "Вырабатывает энергию"
       }
     ],
     "Childs": [
@@ -19,11 +19,11 @@
         "Models": [
           {
             "ModelId": 1,
-            "ModelName": "Конденсатор"
+            "Title": "Конденсатор"
           },
           {
             "ModelId": 3,
-            "ModelName": "Котёл (V2)"
+            "Title": "Котёл (V2)"
           }
         ],
         "Childs": []
@@ -36,7 +36,7 @@
     "Models": [
       {
         "ModelId": 2,
-        "ModelName": "Генератор потока"
+        "Title": "Генератор потока"
       }
     ],
     "Childs": []
