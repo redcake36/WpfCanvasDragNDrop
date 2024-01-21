@@ -21,9 +21,11 @@ namespace CanvasDragNDrop
     {
         public enum BlockInstanceStatuses : int
         {
-            NotCalculated,
-            Seen,
-            Calculated
+            UnSeen,
+            UnCalc,
+            InCycle,
+            WaitingCycle,
+            Ready
         }
 
         [JsonIgnore]
@@ -32,7 +34,7 @@ namespace CanvasDragNDrop
             get { return _blockInstancestatus; }
             set { _blockInstancestatus = value; OnPropertyChanged(); }
         }
-        private BlockInstanceStatuses _blockInstancestatus = BlockInstanceStatuses.NotCalculated;
+        private BlockInstanceStatuses _blockInstancestatus = BlockInstanceStatuses.UnSeen;
 
 
         public int BlockInstanceId
@@ -117,6 +119,8 @@ namespace CanvasDragNDrop
 
         private List<(PrecompiledCalcExpressionClass PreparedExpression, APIBlockModelExpressionClass OriginalExpression)> _preparedCalcExpressions = new();
 
+        private Dictionary<int, BlockInstanceVariable> _allCalcVariables = new();
+
         public BlockInstance(APIBlockModelClass BlockModel, int blockInstanceId)
         {
             _blockModel = BlockModel;
@@ -126,6 +130,7 @@ namespace CanvasDragNDrop
 
             PrepareDefaultParameters();
             PrepareCalcExpressions();
+            PrepareCalcVariablesList();
 
             BlockHeight = Math.Max(_blockModel.InputFlows.Count, _blockModel.OutputFlows.Count) * (ConnectorSize + _flowConnectorsStep) + _flowConnectorsStep;
             OffsetLeft = OffsetTop = 10;
@@ -189,42 +194,84 @@ namespace CanvasDragNDrop
             }
         }
 
-        public void CalculateBlockInstance()
+        private void PrepareCalcVariablesList()
         {
             //Наполнение списка всех переменных с ключём по Id переменной
-            Dictionary<int,BlockInstanceVariable> AllVariables = new();
+
+            //Переменные входных потоков
             foreach (var flow in InputConnectors)
             {
-                AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
-            }
-            foreach (var flow in OutputConnectors)
-            {
-                AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
-            }
-            AllVariables = AllVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
-            foreach (var variable in BlockModel.CustomParameters)
-            {
-                AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
+                _allCalcVariables = _allCalcVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
             }
 
-            //FIX перенос не работае для нескольких потоков
+            //Переменные выходных потоков
+            foreach (var flow in OutputConnectors)
+            {
+                _allCalcVariables = _allCalcVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            //Переменные по умолчанию
+            _allCalcVariables = _allCalcVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+
+            //Кастомные переменные
+            foreach (var variable in BlockModel.CustomParameters)
+            {
+                _allCalcVariables.Add(variable.ParameterId, new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
+            }
+        }
+
+        public bool CalculateBlockInstance()
+        {
+            ////Наполнение списка всех переменных с ключём по Id переменной
+            //Dictionary<int,BlockInstanceVariable> AllVariables = new();
+            //foreach (var flow in InputConnectors)
+            //{
+            //    AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+            //}
+            //foreach (var flow in OutputConnectors)
+            //{
+            //    AllVariables = AllVariables.Concat(flow.CalculationVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+            //}
+            //AllVariables = AllVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
+            //foreach (var variable in BlockModel.CustomParameters)
+            //{
+            //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
+            //}
+
+            
             //перенос значений с выходных потоков предыдущих блоков
             foreach (var inputFlow in InputConnectors)
             {
-                foreach (var outputVar in inputFlow.InterconnectLine.OutputFlowConnector.CalculationVariables)
+                if (inputFlow.InterconnectLine.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.Ready && inputFlow.InterconnectLine.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle)
                 {
-                    AllVariables[inputFlow.CalculationVariables.First(inputVar => inputVar.VariablePrototypeId == outputVar.VariablePrototypeId).VariableId].Value = outputVar.Value;
+                    throw new Exception($"Ахтунг!! Ошибка алгоритма. Блок {BlockInstanceId} не может быть рассчитан");
                 }
+                inputFlow.InterconnectLine.TransferValuesToInputConnector();
             }
 
             //расчёт выражений
+            double maxRelativeDdifference = 0;
             foreach (var expression in _preparedCalcExpressions)
             {
-                BlockInstanceVariable definedVar = AllVariables[expression.OriginalExpression.DefinedVariable];
-                Dictionary<string,BlockInstanceVariable> neededVars = AllVariables.Where(x => expression.OriginalExpression.NeededVariables.Contains(x.Key)).ToDictionary(x => x.Value.VariableName, y => y.Value);
-                   
+                BlockInstanceVariable definedVar = _allCalcVariables[expression.OriginalExpression.DefinedVariable];
+                Dictionary<string,BlockInstanceVariable> neededVars = _allCalcVariables.Where(x => expression.OriginalExpression.NeededVariables.Contains(x.Key)).ToDictionary(x => x.Value.VariableName, y => y.Value);
+
+                double relativeDdifference = definedVar.Value;
                 definedVar.Value = expression.PreparedExpression.Calc(neededVars);
+                relativeDdifference = Math.Abs((relativeDdifference - definedVar.Value) / relativeDdifference);
+                //FIX Exit Criteria
+                if(maxRelativeDdifference < relativeDdifference)
+                {
+                    maxRelativeDdifference = relativeDdifference;
+                }
             }
+
+            if (maxRelativeDdifference <= 0.05)
+            {
+                return true;
+            }
+
+            return false;
 
             //FIX ? 
             //Кладём новые значения в выходные потоки блока
@@ -236,7 +283,12 @@ namespace CanvasDragNDrop
             //    }
             //}
 
-            BlockInstanceStatus = BlockInstanceStatuses.Calculated;
+            //BlockInstanceStatus = BlockInstanceStatuses.Ready;
+        }
+
+        private void MakeOutputConnectorsReady()
+        {
+
         }
     }
 }

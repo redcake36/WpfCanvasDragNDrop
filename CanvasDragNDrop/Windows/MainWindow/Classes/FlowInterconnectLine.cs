@@ -13,6 +13,22 @@ namespace CanvasDragNDrop
 {
     public class FlowInterconnectLine : NotifyPropertyChangedClass
     {
+        public enum FlowInterconnectStatuses : int
+        {
+            UnSeen,
+            UnCalc,
+            InCycle,
+            WaitingCycle,
+            Ready
+        }
+
+        [JsonIgnore]
+        public FlowInterconnectStatuses FlowInterconnectStatus
+        {
+            get { return _flowInterconnectStatus; }
+            set { _flowInterconnectStatus = value; OnPropertyChanged(); }
+        }
+        private FlowInterconnectStatuses _flowInterconnectStatus = FlowInterconnectStatuses.UnSeen;
 
         public FlowConnector InputFlowConnector => _inputFlowConnector;
         private FlowConnector _inputFlowConnector = null;
@@ -97,19 +113,19 @@ namespace CanvasDragNDrop
 
         public bool CheckInterconnectionPossibility(FlowConnector inputConnector, FlowConnector outputConnector)
         {
-            if ( _inputFlowConnector == null && _outputFlowConnector == null)
+            if (_inputFlowConnector == null && _outputFlowConnector == null)
             {
                 return true;
             }
 
-            if(inputConnector == null || outputConnector == null)
+            if (inputConnector == null || outputConnector == null)
             {
                 return false;
             }
 
             bool DifferentInstancesCondition = inputConnector.BlockInstanceID != outputConnector.BlockInstanceID;
             bool FlowTypesCondition = inputConnector.FlowTypeID == outputConnector.FlowTypeID;
-            if (DifferentInstancesCondition  && FlowTypesCondition)
+            if (DifferentInstancesCondition && FlowTypesCondition)
             {
                 return true;
             }
@@ -156,6 +172,32 @@ namespace CanvasDragNDrop
                 case nameof(FlowConnector.FlowPointOffsetTop):
                     RecalculateFlowPoints();
                     break;
+            }
+        }
+
+        public void TransferValuesToInputConnector()
+        {
+            if (InputFlowConnector == null || OutputFlowConnector == null)
+            {
+                throw new Exception("Фхтунг!! Поток не соединён с обоими коннекторами");
+            }
+
+            foreach (var outputVar in OutputFlowConnector.CalculationVariables)
+            {
+                InputFlowConnector.CalculationVariables.First(inputVar => inputVar.VariablePrototypeId == outputVar.VariablePrototypeId).Value = outputVar.Value;
+            }
+        }
+
+        public void TransferValuesToOutputConnector()
+        {
+            if (InputFlowConnector == null || OutputFlowConnector == null)
+            {
+                throw new Exception("Фхтунг!! Поток не соединён с обоими коннекторами");
+            }
+
+            foreach (var inputVar in InputFlowConnector.CalculationVariables)
+            {
+                OutputFlowConnector.CalculationVariables.First(outputVar => outputVar.VariablePrototypeId == inputVar.VariablePrototypeId).Value = inputVar.Value;
             }
         }
 

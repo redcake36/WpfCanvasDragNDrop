@@ -2,6 +2,7 @@
 using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows;
 using CanvasDragNDrop.Windows.CalculationResultWindow;
+using CanvasDragNDrop.Windows.CycleCalcStartParamsEnterWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace CanvasDragNDrop
         }
         private CanvasOverseerClass _canvasOverseer = new();
 
-        public SchemaClass Schema
+        public SchemaClass Scheme
         {
             get => _schema;
             set { _schema = value; OnPropertyChanged(); }
@@ -136,13 +137,13 @@ namespace CanvasDragNDrop
             if (_canvasOverseer.CanDragBlock)
             {
                 var matrix = transform.Matrix;
-                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
-                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
+                Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
+                Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
             }
             //Обновляем точку соединительного потока при его создании
             if (_canvasOverseer.CanUpdateLiveInterconnectionPoint)
             {
-                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
+                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
             }
         }
 
@@ -180,15 +181,15 @@ namespace CanvasDragNDrop
                         FlowInterconnectLine newInterconnectLine = new();
                         if (IsInputConnector)
                         {
-                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Scheme.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         else
                         {
-                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Scheme.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         newInterconnectLine.UpdateLiveInterconnectPoint(_canvasOverseer.AreaMousePosition);
-                        Schema.BlockInterconnections.Add(newInterconnectLine);
-                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(Schema.BlockInterconnections.Count - 1);
+                        Scheme.BlockInterconnections.Add(newInterconnectLine);
+                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(Scheme.BlockInterconnections.Count - 1);
                     }
                     catch { }
                 }
@@ -200,11 +201,11 @@ namespace CanvasDragNDrop
                         {
                             if (IsInputConnector)
                             {
-                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Scheme.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             else
                             {
-                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Scheme.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             _canvasOverseer.ConnectSecondFlowInterconnectPoint();
                         }
@@ -224,7 +225,7 @@ namespace CanvasDragNDrop
         {
             var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == (int)((MenuItem)sender).Tag);
 
-            Schema.BlockInstances.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
+            Scheme.BlockInstances.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
 
             ////TEST
             //_blockInterconnections.Add(new FlowInterconnectLine());
@@ -251,9 +252,9 @@ namespace CanvasDragNDrop
 
         private void CalculateScheme(object sender, RoutedEventArgs e)
         {
-            CalculationResultWindow resultWindow = new(Schema.BlockInstances);
-            var results = JsonConvert.SerializeObject(Schema);
-            resultWindow.Show();
+            var results = JsonConvert.SerializeObject(Scheme);
+            //var calcWind = new CycleCalcStartParamsEnterWindow(Scheme.BlockInstances.ToList());
+            //calcWind.ShowDialog();
 
             //PrecompiledCalcExpressionClass CheckExp = new("2*sin(x)");
 
@@ -270,17 +271,28 @@ namespace CanvasDragNDrop
             //watch.Stop();
             //MessageBox.Show(watch.ElapsedMilliseconds.ToString());
 
+
+            // Проверка схемы на корректность
+
             if (!_canvasOverseer.CanCalcScheme)
             {
                 return;
             }
-            foreach (var block in Schema.BlockInstances)
+
+            if (Scheme.BlockInstances.Count == 0)
+            {
+                MessageBox.Show("На схеме нет ни одного блока", "Ошибка при расчёте");
+                return;
+            }
+
+            foreach (var block in Scheme.BlockInstances)
             {
                 foreach (var item in block.InputConnectors)
                 {
                     if (item.InterconnectLine == null)
                     {
-                        MessageBox.Show($"Не все входные потоки блока {block.BlockModel.Title} подключены", "Ошибка при расёте");
+                        MessageBox.Show($"Не все входные потоки блока {block.BlockInstanceId}:{block.BlockModel.Title} подключены", "Ошибка при расчёте");
+                        return;
                     }
                 }
             }
@@ -292,23 +304,189 @@ namespace CanvasDragNDrop
                 return;
             }
 
-            BlockInstance currentBlock = Schema.BlockInstances.First(x => x.BlockModel.ModelId == 3);
-
-            for (int i = 0; i < Schema.BlockInstances.Count * 500; i++)
+            //Сброс статусов схемы
+            foreach (var instance in Scheme.BlockInstances)
             {
-                currentBlock.CalculateBlockInstance();
-                if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
+                instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnSeen;
+            }
+            foreach (var interconnect in Scheme.BlockInterconnections)
+            {
+                interconnect.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen;
+            }
+
+            //Первичный анализ схемы - ищем циклы
+            BlockInstance currentBlockInstance;
+            List<int> visitedInstances = new List<int>();
+            List<List<int>> foundedCycles = new List<List<int>>();
+
+            //Выполняем обход пока не кончатся блоки, до которых не добрался алгоритм
+            while (Scheme.BlockInstances.Any(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen))
+            {
+                visitedInstances.Clear();
+                visitedInstances.Add(Scheme.BlockInstances.First(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen).BlockInstanceId);
+                //Пока обход не вернётся в точку своего начала обрабатываем блоки
+                while (visitedInstances.Count > 0)
                 {
-                    currentBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
+                    //Подкладываем новый текущий блок когда вышли из какого-то блока
+                    currentBlockInstance = Scheme.BlockInstances.First(x => x.BlockInstanceId == visitedInstances.Last());
+                    //Пока у текущего блока есть выходные потоки, которые не были обойдены, то обрабатываем его
+                    while (currentBlockInstance.OutputConnectors.Any(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen))
+                    {
+                        //Выбираем новый поток, по которому ещё не ходили
+                        FlowInterconnectLine nextInterconnection = currentBlockInstance.OutputConnectors.First(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen).InterconnectLine;
+                        //Выбираем следующий блок
+                        BlockInstance nextBlock = Scheme.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
+                        //Если блок уже встречался нам, то это цикл - надо промаркировать потоки и блоки в цепи
+                        var foundedIndex = visitedInstances.FindIndex(x => x == nextBlock.BlockInstanceId);
+                        if (foundedIndex >= 0)
+                        {
+                            //Цикл найден, помещаем его последовательность в массив циклов
+                            List<int> foundedCycle = visitedInstances.Skip(foundedIndex).ToList();
+                            foundedCycles.Add(foundedCycle);
+                            //Помечаем все блоки и потоки, связывающие их как цикличные
+                            for (int i = 0; i < foundedCycle.Count; i++)
+                            {
+                                //Выбираем индексы источников потоков и их приёмников
+                                int sourceInstanceId = foundedCycle[i];
+                                int destinationInstanceId = foundedCycle[(i + 1) % foundedCycle.Count];
+                                //Меняяем статус блока
+                                Scheme.BlockInstances.First(x => x.BlockInstanceId == sourceInstanceId).BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.InCycle;
+                                //Меняем статус всех соединяющих потоков
+                                Scheme.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == sourceInstanceId && x.InputFlowConnector.BlockInstanceID == destinationInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.InCycle);
+                            }
+                            //Завершаем обработку этого потока
+                            continue;
+                        }
+                        //Если блок уже посещён и все его потоки обработаны или он ведёт к блоку цикла и не входит в него, то цикла быть не может - маркируем ведущий к нему поток как просмотернный
+                        if (nextBlock.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc || nextBlock.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.InCycle)
+                        {
+                            nextInterconnection.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnCalc;
+                            continue;
+                        }
+                        //Если блок ещё не посещался или находится в цикле, то надо пойти в него для обработки
+                        currentBlockInstance = nextBlock;
+                        visitedInstances.Add(nextBlock.BlockInstanceId);
+                    }
+                    //Когда в текущем блоке не осталось необработанных выходных потоков, то уходим из него и помечаем как обработанный, если он не в цикле
+                    if (currentBlockInstance.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen)
+                    {
+                        currentBlockInstance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnCalc;
+                    }
+                    //Убираем из списка Id блока, из которого вышли
+                    visitedInstances.RemoveAt(visitedInstances.Count - 1);
                 }
             }
+
+            //Если циклов больше двух, то приплыли - пока не можем
+            if (foundedCycles.Count > 1)
+            {
+                MessageBox.Show("Данная схема содержит более одного цикла - расчёт не возможен", "Ошибка при расчёте");
+                return;
+            }
+
+            //Подготовка всех остальных блоков, не находящихся в циклах к расчёту
+            List<BlockInstance> cycledInstances = new();
+            foundedCycles[0].ForEach(x => cycledInstances.Add(Scheme.BlockInstances.First(y => y.BlockInstanceId == x)));
+            //Обозначаем все выходные потоки этих блоков, не участвующие в цикле как ожидающие результатов цикла
+            List<FlowInterconnectLine> waitingCyclesInterconnects = Scheme.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
+            foreach (var item in waitingCyclesInterconnects)
+            {
+                item.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.WaitingCycle;
+            }
+
+            //Расчёт блоков, у которых на входе все потоки готовы к расчёту
+            while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
+            {
+                BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
+                instanceForCalculation.CalculateBlockInstance();
+                instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                foreach (var outputConnector in instanceForCalculation.OutputConnectors)
+                {
+                    if (outputConnector.InterconnectLine != null)
+                    {
+                        outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                    }
+                }
+            }
+
+            if (foundedCycles.Count > 0)
+            {
+                //MessageBox.Show($"Найден цикл {foundedCycles[0].Aggregate("",(string accum, int id) => $"{accum} {id}")}");
+                CycleCalcStartParamsEnterWindow cycleParamsWindow = new(cycledInstances);
+                cycleParamsWindow.ShowDialog();
+                int startInstanseIndex = cycleParamsWindow.SelectedInstanceIndex;
+                //Перекладываем значения на выходы потоков для начального блока цикла
+                foreach (var inputConnector in cycledInstances[startInstanseIndex].InputConnectors)
+                {
+                    if (inputConnector.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.InCycle)
+                    {
+                        inputConnector.InterconnectLine.TransferValuesToOutputConnector();
+                    }
+                }
+                //Начинаем расчёт цикла
+                bool neededPresisionFounded = false;
+                for (int i = 0; i < 10000 && !neededPresisionFounded; i++)
+                {
+                    neededPresisionFounded = true;
+                    for (int j = 0; j < cycledInstances.Count; j++)
+                    {
+                        neededPresisionFounded &= cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].CalculateBlockInstance();
+                    }
+                    if (neededPresisionFounded)
+                    {
+                        MessageBox.Show($"Estimated {i}");
+                    }
+                }
+                //Обновляем все блоки цикла как расчитанные
+                foreach (var instance in cycledInstances)
+                {
+                    instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                    foreach (var outputConnector in instance.OutputConnectors)
+                    {
+                        if (outputConnector.InterconnectLine != null)
+                        {
+                            outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                        }
+                    }
+                }
+
+                //Дорасчитываем все блоки, которые не посчитали раньше из за цикла
+                while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
+                {
+                    BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
+                    instanceForCalculation.CalculateBlockInstance();
+                    instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                    foreach (var outputConnector in instanceForCalculation.OutputConnectors)
+                    {
+                        if (outputConnector.InterconnectLine != null)
+                        {
+                            outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                        }
+                    }
+                }
+            }
+
+            CalculationResultWindow resultWindow = new(Scheme.BlockInstances);
+            resultWindow.Show();
+
+
+            //BlockInstance currentBlock = Scheme.BlockInstances.First(x => x.BlockModel.ModelId == 3);
+
+            //for (int i = 0; i < Scheme.BlockInstances.Count * 500; i++)
+            //{
+            //    currentBlock.CalculateBlockInstance();
+            //    if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
+            //    {
+            //        currentBlock = Scheme.BlockInstances.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
+            //    }
+            //}
         }
 
         private void OpenBlockProperties()
         {
             if (_canvasOverseer.CanOpenBlockProperties)
             {
-                BlockInstancePropertiesWindow PropertiesWindow = new(Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
+                BlockInstancePropertiesWindow PropertiesWindow = new(Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
                 PropertiesWindow.Show();
                 _canvasOverseer.BlockPropertiesOpened();
             }
