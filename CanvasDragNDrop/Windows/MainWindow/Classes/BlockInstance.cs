@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.OleDb;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
@@ -121,6 +122,9 @@ namespace CanvasDragNDrop
 
         private Dictionary<int, BlockInstanceVariable> _allCalcVariables = new();
 
+        //Словарь всех переменных, значения которых вычисляются по формулам. Для расчёта изменений значений.
+        private Dictionary<int, double> _allChangingVaraibles = new();
+
         public BlockInstance(APIBlockModelClass BlockModel, int blockInstanceId)
         {
             _blockModel = BlockModel;
@@ -218,6 +222,15 @@ namespace CanvasDragNDrop
             {
                 _allCalcVariables.Add(variable.ParameterId, new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
             }
+
+            //Формирование словаря для расчёта относительного изменения значений
+            foreach (var equation in _preparedCalcExpressions)
+            {
+                if (_allChangingVaraibles.ContainsKey(equation.OriginalExpression.DefinedVariable) == false)
+                {
+                    _allChangingVaraibles.Add(equation.OriginalExpression.DefinedVariable, 0);
+                }
+            }
         }
 
         public bool CalculateBlockInstance()
@@ -238,7 +251,7 @@ namespace CanvasDragNDrop
             //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
             //}
 
-            
+
             //перенос значений с выходных потоков предыдущих блоков
             foreach (var inputFlow in InputConnectors)
             {
@@ -250,22 +263,27 @@ namespace CanvasDragNDrop
             }
 
             //расчёт выражений
-            double maxRelativeDdifference = 0;
             foreach (var expression in _preparedCalcExpressions)
             {
                 BlockInstanceVariable definedVar = _allCalcVariables[expression.OriginalExpression.DefinedVariable];
-                Dictionary<string,BlockInstanceVariable> neededVars = _allCalcVariables.Where(x => expression.OriginalExpression.NeededVariables.Contains(x.Key)).ToDictionary(x => x.Value.VariableName, y => y.Value);
-
-                double relativeDdifference = definedVar.Value;
+                Dictionary<string, BlockInstanceVariable> neededVars = _allCalcVariables.Where(x => expression.OriginalExpression.NeededVariables.Contains(x.Key)).ToDictionary(x => x.Value.VariableName, y => y.Value);
                 definedVar.Value = expression.PreparedExpression.Calc(neededVars);
-                relativeDdifference = Math.Abs((relativeDdifference - definedVar.Value) / relativeDdifference);
-                //FIX Exit Criteria
-                if(maxRelativeDdifference < relativeDdifference)
+            }
+
+            //расчёт максимального отклонения значения после расчёта
+            double maxRelativeDdifference = 0;
+            foreach (var oldVariable in _allChangingVaraibles)
+            {
+                double relativeDdifference = oldVariable.Value;
+                double newValue = _allCalcVariables[oldVariable.Key].Value;
+                relativeDdifference = Math.Abs((relativeDdifference - newValue) / newValue);
+                _allChangingVaraibles[oldVariable.Key] = newValue;
+
+                if (maxRelativeDdifference < relativeDdifference)
                 {
                     maxRelativeDdifference = relativeDdifference;
                 }
             }
-
             if (maxRelativeDdifference <= 0.05)
             {
                 return true;

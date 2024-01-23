@@ -386,19 +386,30 @@ namespace CanvasDragNDrop
 
             //Подготовка всех остальных блоков, не находящихся в циклах к расчёту
             List<BlockInstance> cycledInstances = new();
-            foundedCycles[0].ForEach(x => cycledInstances.Add(Scheme.BlockInstances.First(y => y.BlockInstanceId == x)));
-            //Обозначаем все выходные потоки этих блоков, не участвующие в цикле как ожидающие результатов цикла
-            List<FlowInterconnectLine> waitingCyclesInterconnects = Scheme.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
-            foreach (var item in waitingCyclesInterconnects)
+            if (foundedCycles.Count > 0)
             {
-                item.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.WaitingCycle;
+                foundedCycles[0].ForEach(x => cycledInstances.Add(Scheme.BlockInstances.First(y => y.BlockInstanceId == x)));
+                //Обозначаем все выходные потоки этих блоков, не участвующие в цикле как ожидающие результатов цикла
+                List<FlowInterconnectLine> waitingCyclesInterconnects = Scheme.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
+                foreach (var item in waitingCyclesInterconnects)
+                {
+                    item.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.WaitingCycle;
+                }
             }
 
             //Расчёт блоков, у которых на входе все потоки готовы к расчёту
             while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
             {
                 BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
-                instanceForCalculation.CalculateBlockInstance();
+                try
+                {
+                    instanceForCalculation.CalculateBlockInstance();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {instanceForCalculation.BlockInstanceId}: {instanceForCalculation.BlockModel.Title}");
+                    return;
+                }
                 instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
                 foreach (var outputConnector in instanceForCalculation.OutputConnectors)
                 {
@@ -430,7 +441,15 @@ namespace CanvasDragNDrop
                     neededPresisionFounded = true;
                     for (int j = 0; j < cycledInstances.Count; j++)
                     {
-                        neededPresisionFounded &= cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].CalculateBlockInstance();
+                        try
+                        {
+                            neededPresisionFounded &= cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].CalculateBlockInstance();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockInstanceId}: {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockModel.Title}");
+                            return;
+                        }
                     }
                     if (neededPresisionFounded)
                     {
@@ -454,7 +473,15 @@ namespace CanvasDragNDrop
                 while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
                 {
                     BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
-                    instanceForCalculation.CalculateBlockInstance();
+                    try
+                    {
+                        instanceForCalculation.CalculateBlockInstance();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {instanceForCalculation.BlockInstanceId}: {instanceForCalculation.BlockModel.Title}");
+                        return;
+                    }
                     instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
                     foreach (var outputConnector in instanceForCalculation.OutputConnectors)
                     {
