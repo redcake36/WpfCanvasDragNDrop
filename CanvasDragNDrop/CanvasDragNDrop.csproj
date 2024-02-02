@@ -53,6 +53,9 @@
     <None Update="libCoolProp.dll.a">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="MockAPIData\get_catalogs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="MockAPIData\get_envs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
