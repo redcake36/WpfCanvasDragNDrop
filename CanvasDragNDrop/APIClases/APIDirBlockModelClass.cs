@@ -35,35 +35,55 @@ namespace CanvasDragNDrop.APIClases
         public ObservableCollection<APIBlockModelClass> Models
         {
             get { return _models; }
-            set { _models = value; OnPropertyChanged(); }
+            set { _models = value; OnPropertyChanged(); OnPropertyChanged(nameof(Items)); }
         }
         private ObservableCollection<APIBlockModelClass> _models;
 
         public ObservableCollection<APIDirBlockModelClass> Childs
         {
             get { return _childs; }
-            set { _childs = value; OnPropertyChanged(); }
+            set { _childs = value; OnPropertyChanged(); OnPropertyChanged(nameof(Items)); }
         }
         private ObservableCollection<APIDirBlockModelClass> _childs = new();
 
+        public bool IsModelsVisible
+        {
+            get { return _isModelsVisible; }
+            set { _isModelsVisible = value; setModelsVisibility(value); OnPropertyChanged(); OnPropertyChanged(nameof(Items)); }
+        }
+        private bool _isModelsVisible = true;
+
+
         public IEnumerable<object> Items
         {
-            get {
+            get
+            {
                 foreach (var group in Childs)
                     yield return group;
-                foreach (var entry in Models)
-                    yield return entry;
+                if (IsModelsVisible == true)
+                {
+                    foreach (var entry in Models)
+                        yield return entry;
+                }
             }
         }
 
 
         public APIDirBlockModelClass(int catalogId, string catalogName, ObservableCollection<APIBlockModelClass> models, ObservableCollection<APIDirBlockModelClass> childs)
+        {
+            CatalogId = catalogId;
+            CatalogName = catalogName;
+            Models = models;
+            Childs = childs;
+        }
+
+        private void setModelsVisibility(bool visibility)
+        {
+            foreach (var child in Childs)
             {
-               CatalogId = catalogId;
-               CatalogName = catalogName;
-               Models = models;
-               Childs = childs;
+                child.IsModelsVisible = visibility;
             }
+        }
 
     }
 }

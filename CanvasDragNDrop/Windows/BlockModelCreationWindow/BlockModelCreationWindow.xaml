@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CanvasDragNDrop"
-        xmlns:classes="clr-namespace:CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes"
+        xmlns:classes="clr-namespace:CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes" xmlns:useritems="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer.UserItems"
         mc:Ignorable="d"
         x:Name="Window1"
         Title="Создание модели блока" Width="800" Height="800">
@@ -235,34 +235,11 @@
                                 </ItemsControl>
                                 <Button Background="#E7E7E7" Content="Добавить выражение" Margin="10,0,10,0" Padding="3" Click="AddExpression"/>
                                 <Button Background="#E7E7E7" Content="Проверить модель блока" Margin="10,10,10,0" Padding="3" Click="CheckBlock" FontSize="16"/>
-                                <TreeView Margin="10,10,10,0">
-                                    <TreeViewItem>
-                                        <TreeViewItem.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="/Resources/folder.png" Width="15"/>
-                                                <Label Content="Сквозные однопоточные элементы" Padding="0" Margin="5,0,0,0"/>
-                                            </StackPanel>
-                                        </TreeViewItem.Header>
-                                        <TreeViewItem>
-                                            <TreeViewItem.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="/Resources/folder.png" Width="15"/>
-                                                    <Label Content="Конденсаторы и котлы" Padding="0" Margin="5,0,0,0"/>
-                                                </StackPanel>
-                                            </TreeViewItem.Header>
-
-                                        </TreeViewItem>
-                                    </TreeViewItem>
-                                    <TreeViewItem>
-                                        <TreeViewItem.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="/Resources/folder.png" Width="15" Height="15"/>
-                                                <Label Content="Генераторы потоков" Padding="0" Margin="5,0,0,0"/>
-                                            </StackPanel>
-                                        </TreeViewItem.Header>
-                                        
-                                    </TreeViewItem>
-                                </TreeView>
+                                <useritems:ModelsTreeControl Padding="10,10,10,0"
+                                    
+                                    AvailableCatalogModels="{Binding AvailableDirs}" 
+                                    FolderSelected="ChangeSaveDir" 
+                                    />
                                 <Button Background="#E7E7E7" Content="Сохранить модель блока" Margin="10,10,10,0" Padding="3" Click="SaveBlock" FontSize="16" FontWeight="Bold"/>
                             </StackPanel>
                         </Border>

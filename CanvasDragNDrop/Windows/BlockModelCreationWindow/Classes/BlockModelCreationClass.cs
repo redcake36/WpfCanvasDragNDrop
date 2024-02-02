@@ -120,6 +120,25 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
         }
         private ObservableCollection<CalcVariableClass> _calcedCalcVariables = new ObservableCollection<CalcVariableClass>();
 
+        /// <summary> Массив дирректорий для выбора места сохранения новой модели </summary>
+        [JsonIgnore]
+        public ObservableCollection<APIDirBlockModelClass> AvailableDirs
+        {
+            get { return _availableDirs; }
+            set { _availableDirs = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<APIDirBlockModelClass> _availableDirs;
+
+        /// <summary> Id директории для сохранения новой модели </summary>
+        public int SaveDirId
+        {
+            get { return _saveDirId; }
+            set { _saveDirId = value; }
+        }
+        private int _saveDirId = -1;
+
+
+
         public BlockModelCreationClass()
         {
             _inputFlows.CollectionChanged += new NotifyCollectionChangedEventHandler(RegenerateCustomParameters);

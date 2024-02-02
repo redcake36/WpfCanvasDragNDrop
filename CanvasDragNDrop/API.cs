@@ -61,7 +61,7 @@ namespace CanvasDragNDrop
 
         }
 
-        /// <summary> Метод GET запроса к серверу </summary>
+        /// <summary> Метод POST запроса к серверу </summary>
         public static (string data, bool isSuccess) PostRequest(string path, string data)
         {
             try

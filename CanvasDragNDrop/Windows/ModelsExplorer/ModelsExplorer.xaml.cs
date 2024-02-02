@@ -33,39 +33,8 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
         public ModelsExplorer()
         {
             InitializeComponent();
-
-            //AvailableCatalogModels = new ObservableCollection<APIDirBlockModelClass>
-            //{
-            //    new APIDirBlockModelClass(1, "Node 1", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ })
-            //    {
-            //        CatalogId = 1,
-            //        CatalogName = "Node 1",
-            //        Models = new List<APIBlockModelClass>{ },
-            //        Childs = new List<APIDirBlockModelClass>
-            //        {
-            //            new APIDirBlockModelClass(2, "Node 1.1", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ }){ CatalogId = 2, CatalogName = "Node1.1"},
-            //            new APIDirBlockModelClass(3, "Node 1.2", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ }){ CatalogId = 3, CatalogName = "Node1.2"},
-            //        }
-            //    },
-
-            //    new APIDirBlockModelClass(4, "Node 2", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ })
-            //    {
-            //        CatalogId = 4,
-            //        CatalogName = "Node 2",
-            //        Models = new List<APIBlockModelClass>{ },
-            //        Childs = new List<APIDirBlockModelClass>
-            //        {
-            //            new APIDirBlockModelClass(5, "Node 2.1", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ }){ CatalogId = 5, CatalogName = "Node2.1"},
-            //            new APIDirBlockModelClass(6, "Node 2.2", new List<APIBlockModelClass>{ }, new List<APIDirBlockModelClass>{ }){ CatalogId = 6, CatalogName = "Node2.2"},
-            //        }
-            //    }
-            //};
-
-            //DataContext = this;
             GetFromServerCatalogList();
-        }
-
-       
+        }    
 
         void GetFromServerCatalogList()
         {
@@ -88,16 +57,14 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private void FolderDoubleClicked(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("Folder selected" + ((ContentControl)sender).Tag.ToString());
-            e.Handled = true;
-        }
+        public delegate void ModelSelected(int ModelId);
+
+        public ModelSelected ModelSelectedHandler;
 
         private void ModelDoubleClicked(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Folder selected" + ((ContentControl)sender).Tag.ToString());
-            e.Handled = true;
+            int ModelId = (int)((ContentControl)sender).Tag;
+            ModelSelectedHandler?.Invoke(ModelId);
         }
     }
 }

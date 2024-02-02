@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="CanvasDragNDrop.Windows.ModelsExplorer.UserItems.ModelsTreeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer.UserItems"
+             xmlns:src="clr-namespace:CanvasDragNDrop.APIClases" 
+             mc:Ignorable="d" 
+             x:Name="ModelsTreeControlUI"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <TreeView  ItemsSource="{Binding ElementName=ModelsTreeControlUI, Path=AvailableCatalogModels}">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type src:APIDirBlockModelClass}" ItemsSource="{Binding Items}">
+                    <ContentControl MouseDoubleClick="FolderDoubleClicked" Tag="{Binding CatalogId}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/folder.png" Width="15"/>
+                            <Label Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </ContentControl>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type src:APIBlockModelClass}">
+                    <ContentControl MouseDoubleClick="ModelDoubleClicked" Tag="{Binding ModelId}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/model.png" Width="15"/>
+                            <Label Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </ContentControl>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+</UserControl>

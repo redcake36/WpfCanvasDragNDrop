@@ -3,98 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer"
-        xmlns:src="clr-namespace:CanvasDragNDrop.APIClases" 
+        xmlns:src="clr-namespace:CanvasDragNDrop.APIClases" xmlns:useritems="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer.UserItems"
         mc:Ignorable="d"
         Title="Каталог моделей" Height="450" Width="300"
         Name="ModelExplorerWindow">
     <Grid>
-        <TreeView  ItemsSource="{Binding ElementName=ModelExplorerWindow, Path=AvailableCatalogModels}">
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type src:APIDirBlockModelClass}" ItemsSource="{Binding Items}">
-                    <ContentControl MouseDoubleClick="FolderDoubleClicked" Tag="{Binding CatalogId}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/folder.png" Width="15"/>
-                            <Label Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </ContentControl>
-                </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type src:APIBlockModelClass}">
-                    <ContentControl MouseDoubleClick="ModelDoubleClicked" Tag="{Binding ModelId}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/model.png" Width="15"/>
-                            <Label Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </ContentControl>
-                </DataTemplate>
-            </TreeView.Resources>
-
-
-            <!--
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/folder.png" Width="15"/>
-                    <Label Content="Сквозные однопоточные элементы" Padding="0" Margin="5,0,0,0"/>
-                </StackPanel>
-                </TreeViewItem.Header>
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/folder.png" Width="15"/>
-                            <Label Content="Конденсаторы и котлы" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                    <TreeViewItem >
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/model.png" Width="15"/>
-                                <Label Content="Конденсатор (V2)" Padding="0" Margin="5,0,0,0"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem >
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/model.png" Width="15"/>
-                                <Label Content="Котёл (V2)" Padding="0" Margin="5,0,0,0"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                </TreeViewItem>
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/model.png" Width="15"/>
-                            <Label Content="Турбина (V2)" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/model.png" Width="15"/>
-                            <Label Content="Насос (V2)" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-            </TreeViewItem>
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/folder.png" Width="15" Height="15"/>
-                        <Label Content="Генераторы потоков" Padding="0" Margin="5,0,0,0"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/model.png" Width="15"/>
-                            <Label Content="Генератор потока" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-            </TreeViewItem> -->
-        </TreeView>
+        <useritems:ModelsTreeControl 
+            AvailableCatalogModels="{Binding ElementName=ModelExplorerWindow, Path=AvailableCatalogModels}"
+            ModelSelected="ModelDoubleClicked"/>
     </Grid>
 </Window>

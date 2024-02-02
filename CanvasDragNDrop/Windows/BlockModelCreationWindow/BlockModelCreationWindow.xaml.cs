@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace CanvasDragNDrop
 {
@@ -24,6 +25,21 @@ namespace CanvasDragNDrop
             {
                 context.BaseParameters.AddRange(RequestResult.environments.BaseParameters);
                 context.FlowTypes.AddRange(RequestResult.environments.FlowEnvironments);
+            }
+            else
+            {
+                MessageBox.Show("Не удалось получить данные с сервера");
+                this.Close();
+            }
+            //Получаем массив дирректорий для сохранения новой модели
+            var ModelsDirs = API.GetCatalogs();
+            if (ModelsDirs.isSuccess)
+            {
+                context.AvailableDirs = new(ModelsDirs.catalogModels);
+                foreach (var dir in context.AvailableDirs)
+                {
+                    dir.IsModelsVisible = false;
+                }
             }
             else
             {
@@ -63,14 +79,11 @@ namespace CanvasDragNDrop
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (context.CheckBlock() == false) { return; }
-
-            //JObject rss = JObject.FromObject(context);
-            //JArray expressions = (JArray)rss["Expressions"];
-            //foreach (JObject expression in expressions)
-            //{
-            //    string needed = (string)expression["NeededVariables"];
-            //    expression["NeededVariables"] = new JArray(needed.Split(" ").ToArray());
-            //}
+            if (context.SaveDirId < 0)
+            {
+                MessageBox.Show("Вы не указали папку для сохранения новой модели (выбор по двойному клику)");
+                return;
+            }
 
             var Result = API.CreateBlockModel(context);
             if (Result.isSuccess)
@@ -81,27 +94,6 @@ namespace CanvasDragNDrop
             {
                 MessageBox.Show(Result.response, "Не удалось выполнить запрос");
             }
-
-
-            //HttpClient httpClient = new HttpClient();
-            //try
-            //{
-            //    var JSON = JsonConvert.SerializeObject(rss);
-            //    var request = new StringContent(JSON, Encoding.Unicode, "application/json");
-            //    MessageBox.Show(JSON);
-            //    var response = httpClient.PostAsync($"{API.rootServer}/create_model", request);
-            //    response.Wait();
-            //    if (!response.Result.IsSuccessStatusCode)
-            //    {
-            //        throw new Exception("Не удалось установить соединение с сервером");
-            //    }
-            //    this.Close();
-            //}
-            //catch (Exception err)
-            //{
-            //    MessageBox.Show(err.Message, "Не удалось выполнить запрос");
-
-            //}
         }
 
         private void CheckBlock(object sender, RoutedEventArgs e)
@@ -175,6 +167,13 @@ namespace CanvasDragNDrop
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.DefaultParameters.RemoveAt((int)((sender as Image).Tag));
+        }
+
+        private void ChangeSaveDir(object sender, MouseButtonEventArgs e)
+        {
+            int DirId = (int)((ContentControl)sender).Tag;
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
+            context.SaveDirId = DirId;
         }
     }
 }

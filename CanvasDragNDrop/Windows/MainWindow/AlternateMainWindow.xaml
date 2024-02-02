@@ -24,15 +24,15 @@
                 <MenuItem Header="Расчитать схему" Click="CalculateScheme"/>
                 <MenuItem Header="Каталог моделей" Click="OpenModelsBrowser"/>
             </MenuItem>
-            <MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему" Visibility="Visible">
+            <!--<MenuItem ItemsSource="{Binding AvailableBlockModels}" Header="Добавить блок на схему" Visibility="Visible">
                 <MenuItem.ItemContainerStyle>
                     <Style>
                         <Setter Property="MenuItem.Header" Value="{Binding Title}"/>
                         <Setter Property="MenuItem.Tag" Value="{Binding ModelId}"/>
-                        <EventSetter Event="MenuItem.Click" Handler="CreateBlockInstanse"/>
+                        --><!--<EventSetter Event="MenuItem.Click" Handler="CreateBlockInstanse"/>--><!--
                     </Style>
                 </MenuItem.ItemContainerStyle>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem Header="Меню пользователя" >
                 <MenuItem Header="Изменить логин/пароль"/>
                 <MenuItem Header="Посмотреть доступный проекты"/>

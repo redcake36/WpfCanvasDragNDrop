@@ -46,15 +46,6 @@ namespace CanvasDragNDrop
         }
         private Brush _testBrush = new SolidColorBrush(Colors.BlueViolet);
 
-
-        //public ObservableCollection<BlockInstance> BlockInstances
-        //{
-        //    get { return _blockInstances; }
-        //    set { _blockInstances = value; OnPropertyChanged(); }
-        //}
-        //private ObservableCollection<BlockInstance> _blockInstances = new();
-
-
         /// <summary> Коллекция доступных к соззданию блоков </summary>
         public ObservableCollection<APIBlockModelClass> AvailableBlockModels
         {
@@ -62,13 +53,6 @@ namespace CanvasDragNDrop
             set { _availableBlockModels = value; OnPropertyChanged(); }
         }
         private ObservableCollection<APIBlockModelClass> _availableBlockModels = new();
-
-        //public ObservableCollection<FlowInterconnectLine> BlockInterconnections
-        //{
-        //    get { return _blockInterconnections; }
-        //    set { _blockInterconnections = value; OnPropertyChanged(); }
-        //}
-        //private ObservableCollection<FlowInterconnectLine> _blockInterconnections = new();
 
         private IncrementingIndexGenerator _instanceIdGenerator = new();
 
@@ -221,16 +205,11 @@ namespace CanvasDragNDrop
             _canvasOverseer.BlockLeftMouseUp();
         }
 
-        private void CreateBlockInstanse(object sender, RoutedEventArgs e)
+        private void CreateBlockInstanse(int BlockModelId)
         {
-            var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == (int)((MenuItem)sender).Tag);
+            var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == BlockModelId);
 
             Scheme.BlockInstances.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
-
-            ////TEST
-            //_blockInterconnections.Add(new FlowInterconnectLine());
-            //_blockInterconnections[0].SetFlowConnector(_blockInstances[0].OutputConnectors[0], true);
-
         }
 
         //private Point GetElemenyPositionOnCanvas(object sender)
@@ -252,26 +231,6 @@ namespace CanvasDragNDrop
 
         private void CalculateScheme(object sender, RoutedEventArgs e)
         {
-            var results = JsonConvert.SerializeObject(Scheme);
-            //var calcWind = new CycleCalcStartParamsEnterWindow(Scheme.BlockInstances.ToList());
-            //calcWind.ShowDialog();
-
-            //PrecompiledCalcExpressionClass CheckExp = new("2*sin(x)");
-
-            //Dictionary<string, BlockInstanceVariable> args = new();
-            //args.Add("x", new("x", 1));
-            //args.Add("y", new("y", 2));
-
-            //var watch = System.Diagnostics.Stopwatch.StartNew();
-            //for (int i = 0; i < 100000; i++)
-            //{
-            //    args["x"].Value = i;
-            //    CheckExp.Calc(args);
-            //}
-            //watch.Stop();
-            //MessageBox.Show(watch.ElapsedMilliseconds.ToString());
-
-
             // Проверка схемы на корректность
 
             if (!_canvasOverseer.CanCalcScheme)
@@ -495,18 +454,6 @@ namespace CanvasDragNDrop
 
             CalculationResultWindow resultWindow = new(Scheme.BlockInstances);
             resultWindow.Show();
-
-
-            //BlockInstance currentBlock = Scheme.BlockInstances.First(x => x.BlockModel.ModelId == 3);
-
-            //for (int i = 0; i < Scheme.BlockInstances.Count * 500; i++)
-            //{
-            //    currentBlock.CalculateBlockInstance();
-            //    if (currentBlock.OutputConnectors.Count > 0 && currentBlock.OutputConnectors[0].InterconnectLine != null)
-            //    {
-            //        currentBlock = Scheme.BlockInstances.First(x => x.BlockInstanceId == currentBlock.OutputConnectors[0].InterconnectLine.InputFlowConnector.BlockInstanceID);
-            //    }
-            //}
         }
 
         private void OpenBlockProperties()
@@ -522,6 +469,7 @@ namespace CanvasDragNDrop
         private void OpenModelsBrowser(object sender, RoutedEventArgs e)
         {
             ModelsExplorer ModelsExplorer = new();
+            ModelsExplorer.ModelSelectedHandler += CreateBlockInstanse;
             ModelsExplorer.Show();
         }
 
