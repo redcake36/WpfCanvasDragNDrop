@@ -10,11 +10,14 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static CanvasDragNDrop.UtilityClasses.GlobalTypes;
 
 namespace CanvasDragNDrop
 {
     public partial class BlockModelCreationWindow : Window
     {
+
+        public bool IsSuccsessInitialisation { get; private set; } = true;
         public BlockModelCreationWindow()
         {
             InitializeComponent();
@@ -30,6 +33,7 @@ namespace CanvasDragNDrop
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
                 this.Close();
+                IsSuccsessInitialisation = false;
             }
             //Получаем массив дирректорий для сохранения новой модели
             var ModelsDirs = API.GetCatalogs();
@@ -45,8 +49,10 @@ namespace CanvasDragNDrop
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
                 this.Close();
+                IsSuccsessInitialisation = false;
             }
         }
+
         private void AddExpression(object sender, RoutedEventArgs e)
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;

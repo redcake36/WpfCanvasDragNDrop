@@ -17,6 +17,14 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
         }
         private string _title = "";
 
+        public int SchemaId
+        {
+            get { return _schemaId; }
+            set { _schemaId = value; }
+        }
+        private int _schemaId = -1;
+
+
         public ObservableCollection<BlockInstance> BlockInstances
         {
             get { return _blockInstances; }

@@ -16,9 +16,10 @@ namespace CanvasDragNDrop
     public static class API
     {
 
-        public static string rootServer = "https://3369-81-177-58-204.ngrok-free.app";
+        //public static string rootServer = "https://3369-81-177-58-204.ngrok-free.app";
+        public static string rootServer = "http://91.103.252.95:3101";
 
-        public static bool AutomotiveWork = true;
+        public static bool AutomotiveWork = false;
 
         public static string MockDataFolder = "MockAPIData/";
 
@@ -50,7 +51,8 @@ namespace CanvasDragNDrop
                 using (HttpClient httpClient = new HttpClient())
                 {
                     var response = httpClient.GetStringAsync(rootServer + path);
-                    return (response.GetAwaiter().GetResult(), true);
+                    var data = response.GetAwaiter().GetResult();
+                    return (data, true);
                 }
 
             }
@@ -119,6 +121,18 @@ namespace CanvasDragNDrop
             return GenerateResponse<APIGetEnvsResponseClass>(requestResult.data, requestResult.isSuccess);
         }
 
+        /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
+        public static (List<APISchemeClass> Schemes, bool isSuccess) GetAllSchemes()
+        {
+            if (AutomotiveWork)
+            {
+                return GenerateResponse<List<APISchemeClass>>(File.ReadAllText(MockDataFolder + "show_all_schemes.json"), true);
+            }
+
+            var requestResult = GetRequest("/show_all_schemes");
+            return GenerateResponse<List<APISchemeClass>>(requestResult.data, requestResult.isSuccess);
+        }
+
         /// <summary> Запрос на создание модели блока </summary>
         public static (string response, bool isSuccess) CreateBlockModel(BlockModelCreationClass BlockModel)
         {
@@ -126,6 +140,8 @@ namespace CanvasDragNDrop
             //MessageBox.Show(JSON);
             return PostRequest("/create_model", JSON);
         }
+
+
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CanvasDragNDrop.APIClases
 {
-    internal class APISchemeClass
+    public class APISchemeClass
     {
 
     }

@@ -475,8 +475,17 @@ namespace CanvasDragNDrop
 
         private void OpenBlockModelCreationWindow(object sender, RoutedEventArgs e)
         {
-            BlockModelCreationWindow BlockModelCreationWindow = new BlockModelCreationWindow();
-            BlockModelCreationWindow.ShowDialog();
+            BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow();
+            if (CreationWindow.IsSuccsessInitialisation)
+            {
+                CreationWindow.ShowDialog();
+            }
+        }
+
+        private void SaveScheme(object sender, RoutedEventArgs e)
+        {
+            var parsed = JsonConvert.SerializeObject(_schema);
+
         }
     }
 }

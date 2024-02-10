@@ -14,7 +14,7 @@
         <Menu DockPanel.Dock="Top" Grid.Row="0">
             <MenuItem Header="Проект">
                 <MenuItem Header="Создать новый проект"/>
-                <MenuItem Header="Сохранить изменения"/>
+                <MenuItem Header="Сохранить схему" Click="SaveScheme"/>
                 <MenuItem Header="Синхронизировать данные" Click="GetFromServerElemList"/>
             </MenuItem>
             <MenuItem Header="Инструменты" >
