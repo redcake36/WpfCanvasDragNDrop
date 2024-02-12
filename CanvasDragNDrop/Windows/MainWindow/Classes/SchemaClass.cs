@@ -13,7 +13,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
         public string Title
         {
             get => _title;
-            set { Title = value; OnPropertyChanged(); }
+            set { _title = value; OnPropertyChanged(); }
         }
         private string _title = "";
 

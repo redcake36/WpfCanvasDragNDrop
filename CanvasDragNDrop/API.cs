@@ -1,5 +1,6 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+using CanvasDragNDrop.Windows.MainWindow.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -139,6 +140,13 @@ namespace CanvasDragNDrop
             string JSON = JsonConvert.SerializeObject(BlockModel);
             //MessageBox.Show(JSON);
             return PostRequest("/create_model", JSON);
+        }
+
+        public static (string response, bool isSuccess) SaveSchema(SchemaClass schemaClass)
+        {
+            string JSON = JsonConvert.SerializeObject(schemaClass);
+            //MessageBox.Show(JSON);
+            return PostRequest("/create_scheme", JSON);
         }
 
 

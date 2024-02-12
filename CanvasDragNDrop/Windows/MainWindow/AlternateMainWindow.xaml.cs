@@ -1,8 +1,10 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.CalculationResultWindow;
 using CanvasDragNDrop.Windows.CycleCalcStartParamsEnterWindow;
+using CanvasDragNDrop.Windows.ErrorSavingSchemaWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer;
 using Newtonsoft.Json;
@@ -484,8 +486,23 @@ namespace CanvasDragNDrop
 
         private void SaveScheme(object sender, RoutedEventArgs e)
         {
-            var parsed = JsonConvert.SerializeObject(_schema);
-
+            if (_schema.SchemaId < 0)
+            {
+                ErrorSaveSchema errorSaveSchema = new ErrorSaveSchema();
+                errorSaveSchema.ShowDialog();
+                _schema.Title = errorSaveSchema.Title1;
+            }
+            var Result = API.SaveSchema(_schema);
+            if (Result.isSuccess)
+            {
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show(Result.response, "Не удалось выполнить запрос");
+            }
+            //var parsed = JsonConvert.SerializeObject(_schema);
+            //MessageBox.Show(parsed);
         }
     }
 }
