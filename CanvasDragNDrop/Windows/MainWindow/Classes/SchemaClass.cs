@@ -20,7 +20,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
         public int SchemaId
         {
             get { return _schemaId; }
-            set { _schemaId = value; }
+            set { _schemaId = value; OnPropertyChanged(); }
         }
         private int _schemaId = -1;
 
