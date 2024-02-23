@@ -17,7 +17,9 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <!--<StackPanel>-->
-                                    <DataGrid ItemsSource="{Binding CalculationVariables}" AutoGenerateColumns="False" PreviewMouseWheel="DataGridMouseWheel">
+                                    <DataGrid ItemsSource="{Binding CalculationVariables}" 
+                                              AutoGenerateColumns="False"
+                                              PreviewMouseWheel="DataGridMouseWheel">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Идентификатор" Binding="{Binding VariableId}" IsReadOnly="True"/>
                                                 <DataGridTextColumn Header="Название" Binding="{Binding Title}" IsReadOnly="True"/>

@@ -62,11 +62,6 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             get => OperationState == OperationStates.FlowInterconnectionFinishing && ViewportState == ViewportStates.Idle;
         }
 
-        public bool CanCalculateScheme
-        {
-            get => OperationState == OperationStates.Idle;
-        }
-
         public bool CanOpenBlockProperties
         {
             get => OperationState == OperationStates.OpeningBlockProperties && ViewportState == ViewportStates.Idle;

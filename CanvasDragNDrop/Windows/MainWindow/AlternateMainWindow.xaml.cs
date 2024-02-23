@@ -7,6 +7,7 @@ using CanvasDragNDrop.Windows.CycleCalcStartParamsEnterWindow;
 using CanvasDragNDrop.Windows.ErrorSavingSchemaWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer;
+using CanvasDragNDrop.Windows.SchemeSelectionWindow;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -478,10 +479,7 @@ namespace CanvasDragNDrop
         private void OpenBlockModelCreationWindow(object sender, RoutedEventArgs e)
         {
             BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow();
-            if (CreationWindow.IsSuccsessInitialisation)
-            {
-                CreationWindow.ShowDialog();
-            }
+            CreationWindow.ShowDialog();
         }
 
         private void SaveScheme(object sender, RoutedEventArgs e)
@@ -492,10 +490,10 @@ namespace CanvasDragNDrop
                 errorSaveSchema.ShowDialog();
                 _schema.Title = errorSaveSchema.Title1;
             }
-            var Result = API.SaveSchema(_schema);
+            var Result = API.CreateSchema(_schema);
             if (Result.isSuccess)
             {
-                this.Close();
+                MessageBox.Show("Схема успешно сохранена");
             }
             else
             {

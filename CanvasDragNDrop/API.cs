@@ -51,6 +51,7 @@ namespace CanvasDragNDrop
             {
                 using (HttpClient httpClient = new HttpClient())
                 {
+                    httpClient.Timeout = TimeSpan.FromSeconds(5);
                     var response = httpClient.GetStringAsync(rootServer + path);
                     var data = response.GetAwaiter().GetResult();
                     return (data, true);
@@ -123,14 +124,14 @@ namespace CanvasDragNDrop
         }
 
         /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
-        public static (List<APISchemeClass> Schemes, bool isSuccess) GetAllSchemes()
+        public static (List<APISchemeClass> Schemas, bool isSuccess) GetAllSchemas()
         {
             if (AutomotiveWork)
             {
                 return GenerateResponse<List<APISchemeClass>>(File.ReadAllText(MockDataFolder + "show_all_schemes.json"), true);
             }
 
-            var requestResult = GetRequest("/show_all_schemes");
+            var requestResult = GetRequest("/show_all_schemas");
             return GenerateResponse<List<APISchemeClass>>(requestResult.data, requestResult.isSuccess);
         }
 
@@ -142,11 +143,11 @@ namespace CanvasDragNDrop
             return PostRequest("/create_model", JSON);
         }
 
-        public static (string response, bool isSuccess) SaveSchema(SchemaClass schemaClass)
+        public static (string response, bool isSuccess) CreateSchema(SchemaClass schemaClass)
         {
             string JSON = JsonConvert.SerializeObject(schemaClass);
             //MessageBox.Show(JSON);
-            return PostRequest("/create_scheme", JSON);
+            return PostRequest("/create_schema", JSON);
         }
 
 

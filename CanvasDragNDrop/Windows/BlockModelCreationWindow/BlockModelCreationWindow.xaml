@@ -8,6 +8,7 @@
         xmlns:classes="clr-namespace:CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes" xmlns:useritems="clr-namespace:CanvasDragNDrop.Windows.ModelsExplorer.UserItems"
         mc:Ignorable="d"
         x:Name="Window1"
+        Loaded="WindowsLoaded"
         Title="Создание модели блока" Width="800" Height="800">
     <Window.DataContext>
         <classes:BlockModelCreationClass/>

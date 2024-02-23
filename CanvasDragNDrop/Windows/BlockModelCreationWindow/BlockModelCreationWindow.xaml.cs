@@ -16,24 +16,32 @@ namespace CanvasDragNDrop
 {
     public partial class BlockModelCreationWindow : Window
     {
-
-        public bool IsSuccsessInitialisation { get; private set; } = true;
         public BlockModelCreationWindow()
         {
             InitializeComponent();
+        }
+
+        /// <summary> Метод при загрузке данных с сервера </summary>
+        private void WindowsLoaded(object sender, RoutedEventArgs e)
+        {
+            LoadDataFromServer();
+        }
+
+        private void LoadDataFromServer()
+        {
             // получаем типы сред и массив базовых параметров
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             var RequestResult = API.GetEnvironments();
             if (RequestResult.isSuccess)
             {
-                context.BaseParameters.AddRange(RequestResult.environments.BaseParameters);
-                context.FlowTypes.AddRange(RequestResult.environments.FlowEnvironments);
+                context.BaseParameters = new(RequestResult.environments.BaseParameters);
+                context.FlowTypes = new(RequestResult.environments.FlowEnvironments);
             }
             else
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
                 this.Close();
-                IsSuccsessInitialisation = false;
+                return;
             }
             //Получаем массив дирректорий для сохранения новой модели
             var ModelsDirs = API.GetCatalogs();
@@ -49,7 +57,7 @@ namespace CanvasDragNDrop
             {
                 MessageBox.Show("Не удалось получить данные с сервера");
                 this.Close();
-                IsSuccsessInitialisation = false;
+                return;
             }
         }
 
@@ -181,5 +189,6 @@ namespace CanvasDragNDrop
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             context.SaveDirId = DirId;
         }
+
     }
 }
