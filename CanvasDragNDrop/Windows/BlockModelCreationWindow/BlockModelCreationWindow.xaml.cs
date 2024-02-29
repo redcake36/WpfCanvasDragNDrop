@@ -47,7 +47,7 @@ namespace CanvasDragNDrop
             var ModelsDirs = API.GetCatalogs();
             if (ModelsDirs.isSuccess)
             {
-                context.AvailableDirs = new(ModelsDirs.catalogModels);
+                context.AvailableDirs = new(ModelsDirs.catalogModels.Children);
                 foreach (var dir in context.AvailableDirs)
                 {
                     dir.IsModelsVisible = false;

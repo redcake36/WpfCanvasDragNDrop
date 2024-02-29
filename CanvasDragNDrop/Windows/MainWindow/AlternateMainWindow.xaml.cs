@@ -456,6 +456,7 @@ namespace CanvasDragNDrop
             }
 
             CalculationResultWindow resultWindow = new(Scheme.BlockInstances);
+            resultWindow.Owner = this;
             resultWindow.Show();
         }
 
@@ -464,6 +465,7 @@ namespace CanvasDragNDrop
             if (_canvasOverseer.CanOpenBlockProperties)
             {
                 BlockInstancePropertiesWindow PropertiesWindow = new(Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
+                PropertiesWindow.Owner = this;
                 PropertiesWindow.Show();
                 _canvasOverseer.BlockPropertiesOpened();
             }
@@ -473,6 +475,7 @@ namespace CanvasDragNDrop
         {
             ModelsExplorer ModelsExplorer = new();
             ModelsExplorer.ModelSelectedHandler += CreateBlockInstanse;
+            ModelsExplorer.Owner = this;
             ModelsExplorer.Show();
         }
 

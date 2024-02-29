@@ -39,7 +39,7 @@ namespace CanvasDragNDrop.APIClases
         }
         private ObservableCollection<APIBlockModelClass> _models;
 
-        public ObservableCollection<APIDirBlockModelClass> Childs
+        public ObservableCollection<APIDirBlockModelClass> Children
         {
             get { return _childs; }
             set { _childs = value; OnPropertyChanged(); OnPropertyChanged(nameof(Items)); }
@@ -58,7 +58,7 @@ namespace CanvasDragNDrop.APIClases
         {
             get
             {
-                foreach (var group in Childs)
+                foreach (var group in Children)
                     yield return group;
                 if (IsModelsVisible == true)
                 {
@@ -74,12 +74,12 @@ namespace CanvasDragNDrop.APIClases
             CatalogId = catalogId;
             CatalogName = catalogName;
             Models = models;
-            Childs = childs;
+            Children = childs;
         }
 
         private void setModelsVisibility(bool visibility)
         {
-            foreach (var child in Childs)
+            foreach (var child in Children)
             {
                 child.IsModelsVisible = visibility;
             }

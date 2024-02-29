@@ -87,15 +87,15 @@ namespace CanvasDragNDrop
         }
 
         /// <summary> Запрос получения каталога моделей блоков </summary>
-        public static (List<APIDirBlockModelClass> catalogModels, bool isSuccess) GetCatalogs()
+        public static (APIDirBlockModelClass catalogModels, bool isSuccess) GetCatalogs()
         {
             if (AutomotiveWork)
             {
-                return GenerateResponse<List<APIDirBlockModelClass>>(File.ReadAllText(MockDataFolder + "get_catalogs.json"), true);
+                return GenerateResponse<APIDirBlockModelClass>(File.ReadAllText(MockDataFolder + "get_catalogs.json"), true);
             }
 
             var requestResult = GetRequest("/get_model_catalog");
-            return GenerateResponse<List<APIDirBlockModelClass>>(requestResult.data, requestResult.isSuccess);
+            return GenerateResponse<APIDirBlockModelClass>(requestResult.data, requestResult.isSuccess);
         }
 
         /// <summary> Запрос получения моделей блоков </summary>

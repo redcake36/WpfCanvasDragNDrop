@@ -41,7 +41,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             var GettingCatalogModelsResult = API.GetCatalogs();
             if (GettingCatalogModelsResult.isSuccess)
             {
-                AvailableCatalogModels = new ObservableCollection<APIDirBlockModelClass>(GettingCatalogModelsResult.catalogModels);
+                AvailableCatalogModels = new ObservableCollection<APIDirBlockModelClass>(GettingCatalogModelsResult.catalogModels.Children);
             }
             else
             {
