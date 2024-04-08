@@ -1,6 +1,7 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
+using CanvasDragNDrop.Windows.ModelsExplorer.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,13 @@ namespace CanvasDragNDrop
             string JSON = JsonConvert.SerializeObject(BlockModel);
             //MessageBox.Show(JSON);
             return PostRequest("/create_model", JSON);
+        }
+        /// <summary> Запрос на перемещение модели между папками </summary>
+        public static (string response, bool isSuccess) MovingBlockModel(ModelAndCatalogId macId)
+        {
+            string JSON = JsonConvert.SerializeObject(macId);
+            MessageBox.Show(JSON);
+            return PostRequest("/??", JSON);
         }
 
         public static (string response, bool isSuccess) CreateSchema(SchemaClass schemaClass)

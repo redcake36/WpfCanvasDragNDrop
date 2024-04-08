@@ -10,6 +10,10 @@
     <Grid>
         <useritems:ModelsTreeControl 
             AvailableCatalogModels="{Binding ElementName=ModelExplorerWindow, Path=AvailableCatalogModels}"
-            ModelSelected="ModelDoubleClicked"/>
+            ModelSelected="ModelDoubleClicked"
+            x:Name="MyTreeView" AllowDrop="True"
+            PreviewMouseLeftButtonDown="MyTreeView_PreviewMouseLeftButtonDown"
+            PreviewMouseMove="MyTreeView_PreviewMouseMove"
+            Drop="MyTreeView_Drop"/>
     </Grid>
 </Window>

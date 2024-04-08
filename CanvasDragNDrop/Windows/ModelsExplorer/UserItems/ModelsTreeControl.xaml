@@ -9,22 +9,34 @@
              x:Name="ModelsTreeControlUI"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TreeView  ItemsSource="{Binding ElementName=ModelsTreeControlUI, Path=AvailableCatalogModels}">
+        <TreeView ItemsSource="{Binding ElementName=ModelsTreeControlUI, Path=AvailableCatalogModels}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type src:APIDirBlockModelClass}" ItemsSource="{Binding Items}">
-                    <ContentControl MouseDoubleClick="FolderDoubleClicked" Tag="{Binding CatalogId}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/folder.png" Width="15"/>
-                            <Label Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
+                    <ContentControl MaxWidth="1000" MouseDoubleClick="FolderDoubleClicked" Tag="{Binding CatalogId}">
+                        <Grid IsSharedSizeScope="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="ColWidth" />
+                                <ColumnDefinition MinWidth="50" Width="*"/>
+                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Image  Grid.Column="0" Source="/Resources/folder.png" Width="15"/>
+                            <Label  Grid.Column="1" Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right" Width="15" Margin="0,2,0,0"/>
+                        </Grid>
                     </ContentControl>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type src:APIBlockModelClass}">
                     <ContentControl MouseDoubleClick="ModelDoubleClicked" Tag="{Binding ModelId}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/model.png" Width="15"/>
-                            <Label Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
-                        </StackPanel>
+                        <Grid IsSharedSizeScope="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="ColWidth" />
+                                <ColumnDefinition MinWidth="50" Width="*"/>
+                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="/Resources/model.png" Width="15"/>
+                            <Label Grid.Column="1" Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+                        </Grid>
                     </ContentControl>
                 </DataTemplate>
             </TreeView.Resources>
