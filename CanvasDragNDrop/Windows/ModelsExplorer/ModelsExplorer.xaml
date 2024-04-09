@@ -11,6 +11,9 @@
         <useritems:ModelsTreeControl 
             AvailableCatalogModels="{Binding ElementName=ModelExplorerWindow, Path=AvailableCatalogModels}"
             ModelSelected="ModelDoubleClicked"
+            ModelDelete="Image_MouseLeftButtonDownDeleteModel"
+            CatalogDelete="Image_MouseLeftButtonDownDeleteCatalog"
+            CatalogAdd="Image_MouseLeftButtonDownAddCatalog"
             x:Name="MyTreeView" AllowDrop="True"
             PreviewMouseLeftButtonDown="MyTreeView_PreviewMouseLeftButtonDown"
             PreviewMouseMove="MyTreeView_PreviewMouseMove"

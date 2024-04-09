@@ -34,12 +34,12 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
 
         private bool isDragging = false;
         private Point startPoint;
-        public ModelAndCatalogId modelAndCatalogId
+        public DropAndTargetId dropAndTargetId
         {
             get { return _modelAndCatalogId; }
             set { _modelAndCatalogId = value; }
         }
-        private ModelAndCatalogId _modelAndCatalogId = new();
+        private DropAndTargetId _modelAndCatalogId = new();
 
         public ModelsExplorer()
         {
@@ -78,10 +78,27 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             ModelSelectedHandler?.Invoke(ModelId);
         }
 
-        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Image_MouseLeftButtonDownDeleteModel(object sender, MouseButtonEventArgs e)
         {
-            int ModelId = (int)((ContentControl)sender).Tag;
-            ModelSelectedHandler?.Invoke(ModelId);
+            var idProperty = ((Image)sender).DataContext.GetType().GetProperty("ModelId");
+            dropAndTargetId.DropId = (int)idProperty.GetValue(((Image)sender).DataContext);
+            dropAndTargetId.TargetId = 0;
+            API.DeleteBlockModel(dropAndTargetId);
+        }
+        private void Image_MouseLeftButtonDownDeleteCatalog(object sender, MouseButtonEventArgs e)
+        {
+            var idProperty = ((Image)sender).DataContext.GetType().GetProperty("CatalogId");
+            dropAndTargetId.TargetId = (int)idProperty.GetValue(((Image)sender).DataContext);
+            dropAndTargetId.DropId = 0;
+            API.DeleteBlockModel(dropAndTargetId);
+        }
+
+        private void Image_MouseLeftButtonDownAddCatalog(object sender, MouseButtonEventArgs e)
+        {
+            var idProperty = ((Image)sender).DataContext.GetType().GetProperty("CatalogId");
+            dropAndTargetId.TargetId = (int)idProperty.GetValue(((Image)sender).DataContext);
+            dropAndTargetId.DropId = 0;
+            API.AddNewCatalog(dropAndTargetId);
         }
 
         private void MyTreeView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -117,14 +134,17 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             {
                 return;
             }
-
             TreeViewItem droppedItem = (TreeViewItem)e.Data.GetData(typeof(TreeViewItem));
             var idProperty = droppedItem.DataContext.GetType().GetProperty("ModelId");
-            modelAndCatalogId.ModelId = (int)idProperty.GetValue(droppedItem.DataContext);
+            if (idProperty == null)
+            {
+                idProperty = droppedItem.DataContext.GetType().GetProperty("CatalogId");
+            }
+            dropAndTargetId.DropId = (int)idProperty.GetValue(droppedItem.DataContext);
             TreeViewItem targetItem = FindAncestor<TreeViewItem>((DependencyObject)e.OriginalSource);
             var idProperty1 = targetItem.DataContext.GetType().GetProperty("CatalogId");
-            modelAndCatalogId.CatalogId = (int)idProperty1.GetValue(targetItem.DataContext);
-            API.MovingBlockModel(modelAndCatalogId);
+            dropAndTargetId.TargetId = (int)idProperty1.GetValue(targetItem.DataContext);
+            API.MovingBlockModel(dropAndTargetId);
             //if (droppedItem != null && targetItem != null && !ReferenceEquals(droppedItem, targetItem))
             //{
             //    if (droppedItem.Parent is TreeView)

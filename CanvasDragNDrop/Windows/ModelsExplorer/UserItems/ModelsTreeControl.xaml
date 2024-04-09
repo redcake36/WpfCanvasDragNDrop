@@ -18,10 +18,17 @@
                                 <ColumnDefinition SharedSizeGroup="ColWidth" />
                                 <ColumnDefinition MinWidth="50" Width="*"/>
                                 <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
+                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
                             </Grid.ColumnDefinitions>
                             <Image  Grid.Column="0" Source="/Resources/folder.png" Width="15"/>
                             <Label  Grid.Column="1" Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
-                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right" Width="15" Margin="0,2,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/addfolder.png"
+                                   HorizontalAlignment="Right" Width="15"
+                                   Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDownAddCatalog"/>
+                            <Image Grid.Column="3" Source="/Resources/garbage.png"
+                                   HorizontalAlignment="Right" Width="15"
+                                   Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteCatalog"/>
+                            
                         </Grid>
                     </ContentControl>
                 </HierarchicalDataTemplate>
@@ -35,7 +42,9 @@
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="0" Source="/Resources/model.png" Width="15"/>
                             <Label Grid.Column="1" Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
-                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right"
+                                   Width="15" Margin="0,2,0,0"
+                                   MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
                         </Grid>
                     </ContentControl>
                 </DataTemplate>

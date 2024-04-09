@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="element.json" />
+    <None Remove="Resources\addfolder.png" />
     <None Remove="Resources\arrow_down.png" />
     <None Remove="Resources\Arrow_Up.png" />
     <None Remove="Resources\delete.png" />
@@ -28,6 +29,9 @@
     <Content Include="MockAPIData\element.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\addfolder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\arrow_down.png" />
     <Resource Include="Resources\arrow_up.png" />
     <Resource Include="Resources\delete.png" />

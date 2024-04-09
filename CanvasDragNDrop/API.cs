@@ -144,10 +144,26 @@ namespace CanvasDragNDrop
             return PostRequest("/create_model", JSON);
         }
         /// <summary> Запрос на перемещение модели между папками </summary>
-        public static (string response, bool isSuccess) MovingBlockModel(ModelAndCatalogId macId)
+        public static (string response, bool isSuccess) MovingBlockModel(DropAndTargetId macId)
         {
             string JSON = JsonConvert.SerializeObject(macId);
-            MessageBox.Show(JSON);
+            MessageBox.Show("Перемещение " + JSON);
+            return PostRequest("/??", JSON);
+        }
+
+        /// <summary> Запрос на удаление модели или каталога </summary>
+        public static (string response, bool isSuccess) DeleteBlockModel(DropAndTargetId macId)
+        {
+            string JSON = JsonConvert.SerializeObject(macId);
+            MessageBox.Show("Удаление " + JSON);
+            return PostRequest("/??", JSON);
+        }
+
+        /// <summary> Запрос на создание нового каталога </summary>
+        public static (string response, bool isSuccess) AddNewCatalog(DropAndTargetId macId)
+        {
+            string JSON = JsonConvert.SerializeObject(macId);
+            MessageBox.Show("Создание папки в " + JSON);
             return PostRequest("/??", JSON);
         }
 
