@@ -1,4 +1,5 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,6 +66,14 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
         private void CreateNewSchema(object sender, RoutedEventArgs e)
         {
             AlternateMainWindow mainWindow = new AlternateMainWindow();
+            mainWindow.Show();
+            Close();
+        }
+
+        private void LeftButtonDownGoSetupWindow(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new Windows.LoginWindow();
+            LoginWindow loginWindow = new LoginWindow();
             mainWindow.Show();
             Close();
         }

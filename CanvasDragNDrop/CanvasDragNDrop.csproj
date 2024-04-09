@@ -16,6 +16,7 @@
     <None Remove="Resources\folder.png" />
     <None Remove="Resources\garbage.png" />
     <None Remove="Resources\model.png" />
+    <None Remove="Resources\setup.png" />
     <None Remove="Resources\светлая стрелка.png" />
     <None Remove="Resources\стре.png" />
   </ItemGroup>
@@ -44,6 +45,9 @@
     <Resource Include="Resources\model.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\setup.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\светлая стрелка.png" />
     <Resource Include="Resources\стре.png" />
   </ItemGroup>
@@ -70,6 +74,10 @@
     <None Update="MockAPIData\get_models.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Windows\LoginWindow\Classes\" />
   </ItemGroup>
 
 </Project>

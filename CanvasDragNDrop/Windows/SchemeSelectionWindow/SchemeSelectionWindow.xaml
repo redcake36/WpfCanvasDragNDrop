@@ -14,8 +14,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
-        <Label Content="Выберите существующую схему или создайте новую" Grid.Row="0" FontWeight="Bold" FontSize="18" HorizontalContentAlignment="Center"/>
-        <ListView Grid.Row="1" 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Выберите существующую схему или создайте новую" Grid.Row="0" Grid.Column="0" FontWeight="Bold" FontSize="18" HorizontalContentAlignment="Center"/>
+        <Image Source="/Resources/setup.png" MouseLeftButtonDown="LeftButtonDownGoSetupWindow" Grid.Column="1" Width="25" HorizontalAlignment="Right"/>
+        <ListView Grid.Row="1" Grid.ColumnSpan="2" 
                   ItemsSource="{Binding ElementName=StartWindowView, Path=AvailableSchemas}" 
                   DisplayMemberPath="SchemaName" 
                   SelectedIndex="{Binding ElementName=StartWindowView,Path=SelectedSchemaIndex}" 
@@ -23,6 +28,6 @@
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   SelectionChanged="OpenSchema"/>
-        <Button Content="Создать новую схему" Grid.Row="2" FontSize="16" Click="CreateNewSchema"/>
+        <Button Content="Создать новую схему" Grid.Row="2" Grid.ColumnSpan="2" FontSize="16" Click="CreateNewSchema"/>
     </Grid>
 </Window>
