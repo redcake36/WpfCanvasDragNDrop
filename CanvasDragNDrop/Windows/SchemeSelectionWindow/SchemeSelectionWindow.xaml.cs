@@ -1,5 +1,6 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.Windows;
+using CanvasDragNDrop.Windows.LoginWindow;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -72,9 +73,8 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
 
         private void LeftButtonDownGoSetupWindow(object sender, RoutedEventArgs e)
         {
-            LoginWindow loginWindow = new Windows.LoginWindow();
-            LoginWindow loginWindow = new LoginWindow();
-            mainWindow.Show();
+            SetupWindow setupWindow = new SetupWindow();
+            setupWindow.Show();
             Close();
         }
 

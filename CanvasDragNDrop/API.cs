@@ -18,7 +18,7 @@ namespace CanvasDragNDrop
     public static class API
     {
 
-        //public static string rootServer = "https://3369-81-177-58-204.ngrok-free.app";
+        //public static string http://91.103.252.95:3101 rootServer = "https://3369-81-177-58-204.ngrok-free.app";
         public static string rootServer = "http://91.103.252.95:3101";
 
         public static bool AutomotiveWork = false;
