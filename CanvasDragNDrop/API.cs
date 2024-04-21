@@ -1,13 +1,17 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,13 +21,64 @@ namespace CanvasDragNDrop
 {
     public static class API
     {
+        public const string SettingsFile = "Settings.json";
+        public struct StoreDataFormat
+        {
+            public string Address;
+            public int Port;
+            public string UserName;
+            public string Password;
+        }
 
-        //public static string http://91.103.252.95:3101 rootServer = "https://3369-81-177-58-204.ngrok-free.app";
-        public static string rootServer = "http://91.103.252.95:3101";
+        public static string Address { get; set; } = "http://91.103.252.95";
+        public static int Port { get; set; } = 3101;
+        public static string Username { get; set; } = string.Empty;
+        public static string Password { get; set; } = string.Empty;
+
+        private static StoreDataFormat Settings = new StoreDataFormat() {};
+
+        //public static string rootServer = "https://4805-79-111-219-20.ngrok-free.app";
+        //public static string rootServer = "http://91.103.252.95:3101";
+
+        public static string rootServer { get => $"{Address}:{Port}"; } 
 
         public static bool AutomotiveWork = false;
 
         public static string MockDataFolder = "MockAPIData/";
+
+        public const int Timeout = 10;
+
+
+
+        static API()
+        {
+            LoadSettings();
+        }
+
+        static void LoadSettings()
+        {
+            if (File.Exists(SettingsFile))
+            {
+                string readSettings = File.ReadAllText(SettingsFile);
+                StoreDataFormat Parsed = JsonConvert.DeserializeObject<StoreDataFormat>(readSettings);
+                Address = Parsed.Address;
+                Port = Parsed.Port;
+                Username = Parsed.UserName;
+                Password = Parsed.Password;
+                return;
+            }
+            StoreSettings();
+        }
+
+        public static void StoreSettings()
+        {
+            StoreDataFormat defaultData = new StoreDataFormat();
+            defaultData.Address = Address;
+            defaultData.Port = Port;
+            defaultData.UserName = Username;
+            defaultData.Password = Password;
+            File.WriteAllText(SettingsFile, JsonConvert.SerializeObject(defaultData));
+        }
 
         /// <summary> Метод парсинга ответа от сервера и формирования объекта данных </summary>
         public static (T? data, bool isSuccess) GenerateResponse<T>(string json, bool isSuccess)
@@ -52,7 +107,7 @@ namespace CanvasDragNDrop
             {
                 using (HttpClient httpClient = new HttpClient())
                 {
-                    httpClient.Timeout = TimeSpan.FromSeconds(5);
+                    httpClient.Timeout = TimeSpan.FromSeconds(Timeout);
                     var response = httpClient.GetStringAsync(rootServer + path);
                     var data = response.GetAwaiter().GetResult();
                     return (data, true);
@@ -95,20 +150,21 @@ namespace CanvasDragNDrop
                 return GenerateResponse<APIDirBlockModelClass>(File.ReadAllText(MockDataFolder + "get_catalogs.json"), true);
             }
 
-            var requestResult = GetRequest("/get_model_catalog");
+            //var requestResult = GetRequest("/get_model_catalog");
+            var requestResult = GetRequest("/get_version_catalog");
             return GenerateResponse<APIDirBlockModelClass>(requestResult.data, requestResult.isSuccess);
         }
 
         /// <summary> Запрос получения моделей блоков </summary>
-        public static (List<APIBlockModelClass> blockModels, bool isSuccess) GetBlockModels()
+        public static (List<APIBlockModelVersionClass> blockModels, bool isSuccess) GetBlockModels()
         {
             if (AutomotiveWork)
             {
-                return GenerateResponse<List<APIBlockModelClass>>(File.ReadAllText(MockDataFolder + "get_models.json"), true);
+                return GenerateResponse<List<APIBlockModelVersionClass>>(File.ReadAllText(MockDataFolder + "get_models.json"), true);
             }
 
             var requestResult = GetRequest("/get_models");
-            return GenerateResponse<List<APIBlockModelClass>>(requestResult.data, requestResult.isSuccess);
+            return GenerateResponse<List<APIBlockModelVersionClass>>(requestResult.data, requestResult.isSuccess);
         }
 
 
@@ -167,13 +223,20 @@ namespace CanvasDragNDrop
             return PostRequest("/??", JSON);
         }
 
+        /// <summary> Запрос на создание новой схемы </summary>
         public static (string response, bool isSuccess) CreateSchema(SchemaClass schemaClass)
         {
             string JSON = JsonConvert.SerializeObject(schemaClass);
-            //MessageBox.Show(JSON);
+            MessageBox.Show(JSON);
             return PostRequest("/create_schema", JSON);
         }
 
+        /// <summary> Запрос на получени еверсии модели по е id </summary>
+        public static (APIBlockModelVersionClass response, bool isSuccess) GetModelVersion(int VersionId)
+        {
+            var requestResult = GetRequest($"/get_model/{VersionId}");
+            return GenerateResponse<APIBlockModelVersionClass>(requestResult.data, requestResult.isSuccess);
+        }
 
 
     }

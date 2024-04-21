@@ -35,6 +35,12 @@
       "Symbol": "G",
       "Title": "Расход",
       "Units": "кг/c"
+    },
+    {
+      "ParameterId": 7,
+      "Symbol": "",
+      "Title": "R32 Компонент",
+      "Units": "%"
     }
   ],
   "FlowEnvironments": [
@@ -44,10 +50,11 @@
         5,
         3,
         2,
-        1
+        1,
+        7
       ],
       "FlowEnvironmentId": 1,
-      "FlowEnvironmentType": "вода"
+      "FlowEnvironmentType": "HEOS::R32&R125"
     },
     {
       "BaseParameters": [

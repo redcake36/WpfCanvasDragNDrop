@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,40 +28,19 @@ namespace CanvasDragNDrop.APIClases
         }
         private string _title;
 
-        [JsonIgnore]
-        /// <summary> Описание модели блока </summary>
-        public string Description;
+        /// <summary> Массив версий модели </summary>
+        public ObservableCollection<APIBlockModelVersionClass> Versions
+        {
+            get { return _versions; }
+            set { _versions = value; OnPropertyChanged(); }
+        }
+        private ObservableCollection<APIBlockModelVersionClass> _versions;
 
-        [JsonIgnore]
-        /// <summary> Массив входных потоков </summary>
-        public List<APIBlockModelFlowClass> InputFlows;
-
-        [JsonIgnore]
-        /// <summary> Массив выходных потоков </summary>
-        public List<APIBlockModelFlowClass> OutputFlows;
-
-        [JsonIgnore]
-        /// <summary> Массив параметров по умолчанию </summary>
-        public List<APIBlockModelParameterClass> DefaultParameters;
-
-        [JsonIgnore]
-        /// <summary> Массив дополнительных параметров </summary>
-        public List<APIBlockModelParameterClass> CustomParameters;
-
-        [JsonIgnore]
-        /// <summary> Массив расчётных выражений </summary>
-        public List<APIBlockModelExpressionClass> Expressions;
-
-        public APIBlockModelClass(int modelID, string title, string description,List<APIBlockModelFlowClass> inputFlows, List<APIBlockModelFlowClass> outputFlows, List<APIBlockModelParameterClass> customParameters, List<APIBlockModelParameterClass> defaultParameters, List<APIBlockModelExpressionClass> expressions)
+        public APIBlockModelClass(int modelID, string title, string description, List<APIBlockModelFlowClass> inputFlows, List<APIBlockModelFlowClass> outputFlows, List<APIBlockModelParameterClass> customParameters, List<APIBlockModelParameterClass> defaultParameters, List<APIBlockModelExpressionClass> expressions)
         {
             ModelId = modelID;
             Title = title;
-            Description = description;
-            InputFlows = inputFlows;
-            OutputFlows = outputFlows;
-            CustomParameters = customParameters;
-            DefaultParameters = defaultParameters;
-            Expressions = expressions;
+
         }
     }
 }

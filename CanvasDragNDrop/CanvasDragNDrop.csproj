@@ -9,14 +9,14 @@
 
   <ItemGroup>
     <None Remove="element.json" />
-    <None Remove="Resources\addfolder.png" />
+    <None Remove="Resources\add_folder.png" />
     <None Remove="Resources\arrow_down.png" />
     <None Remove="Resources\Arrow_Up.png" />
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\folder.png" />
-    <None Remove="Resources\garbage.png" />
     <None Remove="Resources\model.png" />
     <None Remove="Resources\setup.png" />
+    <None Remove="Resources\version.png" />
     <None Remove="Resources\светлая стрелка.png" />
     <None Remove="Resources\стре.png" />
   </ItemGroup>
@@ -30,7 +30,7 @@
     <Content Include="MockAPIData\element.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\addfolder.png">
+    <Resource Include="Resources\add_folder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\arrow_down.png" />
@@ -39,13 +39,13 @@
     <Resource Include="Resources\folder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\garbage.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\model.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\setup.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\version.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\светлая стрелка.png" />
@@ -63,6 +63,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="libCoolProp.dll.a">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MockAPIData\show_all_schemes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="MockAPIData\get_catalogs.json">

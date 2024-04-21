@@ -49,7 +49,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer.UserItems
             e.Handled = true;
         }
 
-        private void ModelDoubleClicked(object sender, MouseButtonEventArgs e)
+        private void VersionDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             ModelSelected?.Invoke(sender, e);
             e.Handled = true;

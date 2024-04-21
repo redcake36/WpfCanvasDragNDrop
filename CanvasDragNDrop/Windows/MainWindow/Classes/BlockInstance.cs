@@ -45,12 +45,12 @@ namespace CanvasDragNDrop
         }
         private int _blockInstanceId;
 
-        public APIBlockModelClass BlockModel
+        public APIBlockModelVersionClass BlockModel
         {
             get { return _blockModel; }
             set { _blockModel = value; OnPropertyChanged(); }
         }
-        private APIBlockModelClass _blockModel;
+        private APIBlockModelVersionClass _blockModel;
 
         [JsonIgnore]
         public int BlockHeight
@@ -125,7 +125,7 @@ namespace CanvasDragNDrop
         //Словарь всех переменных, значения которых вычисляются по формулам. Для расчёта изменений значений.
         private Dictionary<int, double> _allChangingVaraibles = new();
 
-        public BlockInstance(APIBlockModelClass BlockModel, int blockInstanceId)
+        public BlockInstance(APIBlockModelVersionClass BlockModel, int blockInstanceId)
         {
             _blockModel = BlockModel;
             BlockInstanceId = blockInstanceId;

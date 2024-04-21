@@ -22,5 +22,11 @@ namespace CanvasDragNDrop.APIClases
 		}
 		private string _schemaName;
 
+		public APISchemeClass(int schemaId, string schemaName)
+		{
+			_schemaId = schemaId;
+			_schemaName = schemaName;
+		}
+
 	}
 }

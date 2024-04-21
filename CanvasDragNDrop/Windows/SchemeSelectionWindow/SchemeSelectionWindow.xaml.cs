@@ -1,22 +1,10 @@
 ﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.Windows;
 using CanvasDragNDrop.Windows.LoginWindow;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
 {
@@ -50,18 +38,14 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
             var response = API.GetAllSchemas();
             if (response.isSuccess == false)
             {
-                MessageBox.Show("Ошибка при загрузки схем с сервера");
-                Application.Current.Shutdown();
+                MessageBox.Show("Ошибка при загрузки схем с сервера. Проверьте настройки подключения.");
+                SetupWindow loginWindow = new();
+                loginWindow.ShowDialog();
                 return;
             }
             AvailableSchemas = new(response.Schemas);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            //AvailableSchemas.Add(new(1, "Цикл ренкина"));
+            //AvailableSchemas.Add(new(2, "Цикл ренкина 2"));
         }
 
         private void CreateNewSchema(object sender, RoutedEventArgs e)
@@ -74,13 +58,19 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
         private void LeftButtonDownGoSetupWindow(object sender, RoutedEventArgs e)
         {
             SetupWindow setupWindow = new SetupWindow();
-            setupWindow.Show();
-            Close();
+            setupWindow.ShowDialog();
         }
 
         private void OpenSchema(object sender, SelectionChangedEventArgs e)
         {
             MessageBox.Show(AvailableSchemas[SelectedSchemaIndex].SchemaName);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

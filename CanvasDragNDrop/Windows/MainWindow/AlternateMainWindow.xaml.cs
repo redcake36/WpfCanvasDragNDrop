@@ -50,12 +50,12 @@ namespace CanvasDragNDrop
         private Brush _testBrush = new SolidColorBrush(Colors.BlueViolet);
 
         /// <summary> Коллекция доступных к соззданию блоков </summary>
-        public ObservableCollection<APIBlockModelClass> AvailableBlockModels
+        public ObservableCollection<APIBlockModelVersionClass> AvailableBlockModels
         {
             get { return _availableBlockModels; }
             set { _availableBlockModels = value; OnPropertyChanged(); }
         }
-        private ObservableCollection<APIBlockModelClass> _availableBlockModels = new();
+        private ObservableCollection<APIBlockModelVersionClass> _availableBlockModels = new();
 
         private IncrementingIndexGenerator _instanceIdGenerator = new();
 
@@ -71,7 +71,7 @@ namespace CanvasDragNDrop
             var GettingBlockModelsResult = API.GetBlockModels();
             if (GettingBlockModelsResult.isSuccess)
             {
-                AvailableBlockModels = new ObservableCollection<APIBlockModelClass>(GettingBlockModelsResult.blockModels);
+                AvailableBlockModels = new ObservableCollection<APIBlockModelVersionClass>(GettingBlockModelsResult.blockModels);
             }
             else
             {
@@ -208,11 +208,18 @@ namespace CanvasDragNDrop
             _canvasOverseer.BlockLeftMouseUp();
         }
 
-        private void CreateBlockInstanse(int BlockModelId)
+        private void CreateBlockInstanse(int BlockModelVersionId)
         {
-            var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == BlockModelId);
+            //var foundedBlock = _availableBlockModels.FirstOrDefault(block => block.ModelId == BlockModelId);
 
-            Scheme.BlockInstances.Add(new(foundedBlock, _instanceIdGenerator.IncrementedIndex));
+            var requestedModelVersion = API.GetModelVersion(BlockModelVersionId);
+            if (requestedModelVersion.isSuccess == false)
+            {
+                MessageBox.Show("Ошибка на сервере");
+                return;
+            }
+
+            Scheme.BlockInstances.Add(new(requestedModelVersion.response, _instanceIdGenerator.IncrementedIndex));
         }
 
         //private Point GetElemenyPositionOnCanvas(object sender)
@@ -474,7 +481,7 @@ namespace CanvasDragNDrop
         private void OpenModelsBrowser(object sender, RoutedEventArgs e)
         {
             ModelsExplorer ModelsExplorer = new();
-            ModelsExplorer.ModelSelectedHandler += CreateBlockInstanse;
+            ModelsExplorer.ModelVersionSelectedHandler += CreateBlockInstanse;
             ModelsExplorer.Owner = this;
             ModelsExplorer.Show();
         }

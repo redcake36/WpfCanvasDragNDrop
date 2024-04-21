@@ -68,14 +68,14 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public delegate void ModelSelected(int ModelId);
+        public delegate void ModelVersionSelected(int ModelId);
 
-        public ModelSelected ModelSelectedHandler;
+        public ModelVersionSelected ModelVersionSelectedHandler;
 
-        private void ModelDoubleClicked(object sender, MouseButtonEventArgs e)
+        private void ModelVersionDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             int ModelId = (int)((ContentControl)sender).Tag;
-            ModelSelectedHandler?.Invoke(ModelId);
+            ModelVersionSelectedHandler?.Invoke(ModelId);
         }
 
         private void Image_MouseLeftButtonDownDeleteModel(object sender, MouseButtonEventArgs e)
@@ -106,6 +106,8 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             startPoint = e.GetPosition(null);
         }
 
+
+        //FIX переписать нормально
         private void MyTreeView_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -128,6 +130,8 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             }
         }
 
+
+        //FIX переписать нормально
         private void MyTreeView_Drop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(typeof(TreeViewItem)))
@@ -169,6 +173,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             //}
         }
 
+        //FIX дропнуть
         private static T FindAncestor<T>(DependencyObject current)
             where T : DependencyObject
         {

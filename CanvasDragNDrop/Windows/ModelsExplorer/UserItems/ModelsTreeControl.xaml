@@ -8,43 +8,58 @@
              mc:Ignorable="d" 
              x:Name="ModelsTreeControlUI"
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid>
         <TreeView ItemsSource="{Binding ElementName=ModelsTreeControlUI, Path=AvailableCatalogModels}">
             <TreeView.Resources>
+                <Style TargetType="{x:Type Image}" x:Key="ImageStyle">
+                    <Style.Setters>
+                        <Setter Property="Margin" Value="5,0,0,0" />
+                        <Setter Property="Width" Value="20" />
+                    </Style.Setters>
+                </Style>
                 <HierarchicalDataTemplate DataType="{x:Type src:APIDirBlockModelClass}" ItemsSource="{Binding Items}">
                     <ContentControl MaxWidth="1000" MouseDoubleClick="FolderDoubleClicked" Tag="{Binding CatalogId}">
                         <Grid IsSharedSizeScope="True">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition SharedSizeGroup="ColWidth" />
+                                <ColumnDefinition Width="auto" />
                                 <ColumnDefinition MinWidth="50" Width="*"/>
-                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
-                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image  Grid.Column="0" Source="/Resources/folder.png" Width="15"/>
-                            <Label  Grid.Column="1" Content="{Binding CatalogName}" Padding="0" Margin="5,0,0,0"/>
-                            <Image Grid.Column="2" Source="/Resources/addfolder.png"
-                                   HorizontalAlignment="Right" Width="15"
-                                   Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDownAddCatalog"/>
-                            <Image Grid.Column="3" Source="/Resources/garbage.png"
-                                   HorizontalAlignment="Right" Width="15"
-                                   Margin="0,2,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteCatalog"/>
-                            
+                            <Image  Grid.Column="0" Source="/Resources/folder.png" Style="{StaticResource ImageStyle}"/>
+                            <Label  Grid.Column="1" Content="{Binding CatalogName}" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/add_folder.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownAddCatalog"/>
+                            <Image Grid.Column="3" Source="/Resources/delete.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteCatalog"/>
+
                         </Grid>
                     </ContentControl>
                 </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type src:APIBlockModelClass}">
-                    <ContentControl MouseDoubleClick="ModelDoubleClicked" Tag="{Binding ModelId}">
+                <HierarchicalDataTemplate DataType="{x:Type src:APIBlockModelClass}" ItemsSource="{Binding Versions}">
+                    <ContentControl Tag="{Binding ModelId}">
                         <Grid IsSharedSizeScope="True">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition SharedSizeGroup="ColWidth" />
+                                <ColumnDefinition Width="auto" />
                                 <ColumnDefinition MinWidth="50" Width="*"/>
-                                <ColumnDefinition SharedSizeGroup="ColWidth" Width="20"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" Source="/Resources/model.png" Width="15"/>
-                            <Label Grid.Column="1" Content="{Binding Title}" Padding="0" Margin="5,0,0,0"/>
-                            <Image Grid.Column="2" Source="/Resources/garbage.png" HorizontalAlignment="Right"
-                                   Width="15" Margin="0,2,0,0"
-                                   MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
+                            <Image Grid.Column="0" Source="/Resources/model.png" Style="{StaticResource ImageStyle}"/>
+                            <Label Grid.Column="1" Content="{Binding Title}" Padding="0" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/delete.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
+                        </Grid>
+                    </ContentControl>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type src:APIBlockModelVersionClass}">
+                    <ContentControl MouseDoubleClick="VersionDoubleClicked" Tag="{Binding VersionId}">
+                        <Grid IsSharedSizeScope="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition MinWidth="50" Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="/Resources/version.png" Style="{StaticResource ImageStyle}"/>
+                            <Label Grid.Column="1" Content="{Binding NoteText}" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,0"/>
+                            <Image Grid.Column="2" Source="/Resources/delete.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
                         </Grid>
                     </ContentControl>
                 </DataTemplate>
