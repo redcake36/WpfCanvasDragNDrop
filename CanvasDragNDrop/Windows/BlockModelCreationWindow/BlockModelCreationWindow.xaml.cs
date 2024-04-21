@@ -1,16 +1,8 @@
-﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static CanvasDragNDrop.UtilityClasses.GlobalTypes;
 
 namespace CanvasDragNDrop
 {

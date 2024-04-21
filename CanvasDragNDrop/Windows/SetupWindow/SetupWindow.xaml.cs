@@ -1,20 +1,6 @@
-﻿using CanvasDragNDrop.Windows.LoginWindow.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
-namespace CanvasDragNDrop.Windows.LoginWindow
+namespace CanvasDragNDrop.Windows
 {
     /// <summary>
     /// Логика взаимодействия для SetupWindow.xaml
@@ -29,7 +15,7 @@ namespace CanvasDragNDrop.Windows.LoginWindow
         private void Login(object sender, RoutedEventArgs e)
         {
             bool result = CheckData(false);
-            if(result)
+            if (result)
             {
                 Close();
             }
@@ -42,7 +28,7 @@ namespace CanvasDragNDrop.Windows.LoginWindow
             {
                 //if (isSilent == false)
                 //{
-                    MessageBox.Show("Неверные данные для подключения");
+                MessageBox.Show("Неверные данные для подключения");
                 //}
                 return false;
             }

@@ -1,21 +1,14 @@
 ﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace CanvasDragNDrop
 {
@@ -35,12 +28,12 @@ namespace CanvasDragNDrop
         public static string Username { get; set; } = string.Empty;
         public static string Password { get; set; } = string.Empty;
 
-        private static StoreDataFormat Settings = new StoreDataFormat() {};
+        //private static StoreDataFormat Settings = new StoreDataFormat() {};
 
         //public static string rootServer = "https://4805-79-111-219-20.ngrok-free.app";
         //public static string rootServer = "http://91.103.252.95:3101";
 
-        public static string rootServer { get => $"{Address}:{Port}"; } 
+        public static string rootServer { get => $"{Address}:{Port}"; }
 
         public static bool AutomotiveWork = false;
 
@@ -192,6 +185,18 @@ namespace CanvasDragNDrop
             return GenerateResponse<List<APISchemeClass>>(requestResult.data, requestResult.isSuccess);
         }
 
+        /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
+        public static (SchemaClass Schemas, bool isSuccess) GetSchema(int schemaId)
+        {
+            //if (AutomotiveWork)
+            //{
+            //    return GenerateResponse<List<APISchemeClass>>(File.ReadAllText(MockDataFolder + "show_all_schemes.json"), true);
+            //}
+
+            var requestResult = GetRequest($"/show_schema/{schemaId}");
+            return GenerateResponse<SchemaClass>(requestResult.data, requestResult.isSuccess);
+        }
+
         /// <summary> Запрос на создание модели блока </summary>
         public static (string response, bool isSuccess) CreateBlockModel(BlockModelCreationClass BlockModel)
         {
@@ -232,7 +237,7 @@ namespace CanvasDragNDrop
         }
 
         /// <summary> Запрос на получени еверсии модели по е id </summary>
-        public static (APIBlockModelVersionClass response, bool isSuccess) GetModelVersion(int VersionId)
+        public static (APIBlockModelVersionClass blockModelVersion, bool isSuccess) GetModelVersion(int VersionId)
         {
             var requestResult = GetRequest($"/get_model/{VersionId}");
             return GenerateResponse<APIBlockModelVersionClass>(requestResult.data, requestResult.isSuccess);

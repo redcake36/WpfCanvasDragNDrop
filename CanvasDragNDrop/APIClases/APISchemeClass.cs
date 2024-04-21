@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CanvasDragNDrop.APIClases
+﻿namespace CanvasDragNDrop.APIClases
 {
     public class APISchemeClass
     {
-		public int SchemaId
-		{
-			get { return _schemaId; }
-			set { _schemaId = value; }
-		}
-		private int _schemaId;
+        public int SchemaId
+        {
+            get { return _schemaId; }
+            set { _schemaId = value; }
+        }
+        private int _schemaId;
 
-		public string SchemaName
-		{
-			get { return _schemaName; }
-			set { _schemaName = value; }
-		}
-		private string _schemaName;
+        public string SchemaName
+        {
+            get { return _schemaName; }
+            set { _schemaName = value; }
+        }
+        private string _schemaName;
 
-		public APISchemeClass(int schemaId, string schemaName)
-		{
-			_schemaId = schemaId;
-			_schemaName = schemaName;
-		}
+        public APISchemeClass(int schemaId, string schemaName)
+        {
+            _schemaId = schemaId;
+            _schemaName = schemaName;
+        }
 
-	}
+    }
 }

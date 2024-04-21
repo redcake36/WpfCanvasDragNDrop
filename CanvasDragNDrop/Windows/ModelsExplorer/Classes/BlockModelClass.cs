@@ -1,16 +1,8 @@
-﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.UtilityClasses;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
+﻿using CanvasDragNDrop.UtilityClasses;
 
 namespace CanvasDragNDrop.Windows.ModelsExplorer.Classes
 {
-    public class BlockModelClass: NotifyPropertyChangedClass
+    public class BlockModelClass : NotifyPropertyChangedClass
     {
         /// <summary> ID модели блока </summary>
         public int ModelId

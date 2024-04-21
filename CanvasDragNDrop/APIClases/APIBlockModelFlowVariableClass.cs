@@ -1,9 +1,4 @@
-﻿using CanvasDragNDrop.UserItems;
-using Newtonsoft.Json.Linq;
-using org.mariuszgromada.math.mxparser.mathcollection;
-using System.Xml.Linq;
-
-namespace CanvasDragNDrop.APIClases
+﻿namespace CanvasDragNDrop.APIClases
 {
     /// <summary> Класс переменной потока модели блока </summary>
     public class APIBlockModelFlowVariableClass

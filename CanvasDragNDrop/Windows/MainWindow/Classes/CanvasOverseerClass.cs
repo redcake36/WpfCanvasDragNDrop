@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CanvasDragNDrop.UtilityClasses;
 using System.Windows;
 using System.Windows.Input;
-using CanvasDragNDrop.UtilityClasses;
 
 namespace CanvasDragNDrop.Windows.MainWindow.Classes
 {

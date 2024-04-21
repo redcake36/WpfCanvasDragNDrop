@@ -1,5 +1,4 @@
 ﻿using CanvasDragNDrop.Windows.MainWindow.Classes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -70,12 +69,6 @@ namespace CanvasDragNDrop.UtilityClasses
 
             string clearedString = CalcUtilitiesClass.RemoveWhitespaces(PropSIString);
 
-            // Проверяем, что синтаксиси совпадает с вызовом функции
-            //if (!CheckIsPropSICall(clearedString))
-            //{
-            //    throw new Exception("Invalid PropSI Call");
-            //}
-
             //Разделяем строку на параметры
             List<string> Params = clearedString.Split(")")[0].Split("(")[1].Split(";").ToList();
 
@@ -130,19 +123,11 @@ namespace CanvasDragNDrop.UtilityClasses
             return Regex.IsMatch(CalcUtilitiesClass.RemoveWhitespaces(call), PropSICheckPattern);
         }
 
-        /// <summary> Метод подготовки расчётного выражения для быстрого использования </summary>
-        //public static Expression ConstructMathExpression(string expression, Dictionary<string, BlockInstanceVariable> vars)
-        //{
-        //    List<BlockInstanceVariable> variables = vars.Select(x => x.Value).ToList();
-        //    return ConstructMathExpression(expression);
-        //}
-
         public static Expression ConstructMathExpression(string expression)
         {
             Expression ex = new(expression);
             ex.disableImpliedMultiplicationMode();
             string[] missedVars = ex.getMissingUserDefinedArguments();
-            //ex.defineArguments(vars.Select(x => x.VariableName).ToArray());
             ex.defineArguments(missedVars);
             if (ex.checkSyntax() == false)
             {
@@ -150,12 +135,6 @@ namespace CanvasDragNDrop.UtilityClasses
             }
             return ex;
         }
-
-        //public static double CalcMathExpression(Expression ex, List<BlockInstanceVariable> vars)
-        //{
-        //    Dictionary<string, BlockInstanceVariable> variables = vars.ToDictionary(x => x.VariableName);
-        //    return CalcMathExpression(ex, variables);
-        //}
 
         public static double CalcMathExpression(Expression ex, Dictionary<string, BlockInstanceVariable> vars)
         {

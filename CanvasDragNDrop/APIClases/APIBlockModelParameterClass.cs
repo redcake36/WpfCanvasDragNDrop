@@ -1,11 +1,4 @@
-﻿using org.mariuszgromada.math.mxparser.mathcollection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CanvasDragNDrop.APIClases
+﻿namespace CanvasDragNDrop.APIClases
 {
     /// <summary> Класс для дополнительных и дефолтных параметров модели блока </summary>
     public class APIBlockModelParameterClass

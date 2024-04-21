@@ -1,8 +1,6 @@
-﻿using CanvasDragNDrop;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CanvasDragNDrop
@@ -72,7 +70,7 @@ namespace CanvasDragNDrop
             set { SetValue(TitleProperty, value); }
         }
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register("Title", typeof(string), typeof(BlockInstanseControl));
+            DependencyProperty.Register(nameof(Title), typeof(string), typeof(BlockInstanseControl));
 
     }
 }

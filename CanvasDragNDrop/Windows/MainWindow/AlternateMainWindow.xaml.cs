@@ -1,14 +1,10 @@
 ﻿using CanvasDragNDrop.APIClases;
 using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows;
-using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.CalculationResultWindow;
 using CanvasDragNDrop.Windows.CycleCalcStartParamsEnterWindow;
-using CanvasDragNDrop.Windows.ErrorSavingSchemaWindow;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer;
-using CanvasDragNDrop.Windows.SchemeSelectionWindow;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +12,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -219,7 +214,7 @@ namespace CanvasDragNDrop
                 return;
             }
 
-            Scheme.BlockInstances.Add(new(requestedModelVersion.response, _instanceIdGenerator.IncrementedIndex));
+            Scheme.BlockInstances.Add(new(requestedModelVersion.blockModelVersion, _instanceIdGenerator.IncrementedIndex));
         }
 
         //private Point GetElemenyPositionOnCanvas(object sender)
@@ -496,9 +491,9 @@ namespace CanvasDragNDrop
         {
             if (_schema.SchemaId < 0)
             {
-                ErrorSaveSchema errorSaveSchema = new ErrorSaveSchema();
+                NewSchemaTitleEnteringWindow errorSaveSchema = new NewSchemaTitleEnteringWindow();
                 errorSaveSchema.ShowDialog();
-                _schema.Title = errorSaveSchema.Title1;
+                _schema.SchemaName = errorSaveSchema.SchemaName;
             }
             var Result = API.CreateSchema(_schema);
             if (Result.isSuccess)

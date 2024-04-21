@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using CanvasDragNDrop.UtilityClasses;
+﻿using CanvasDragNDrop.UtilityClasses;
+using System.Text.RegularExpressions;
 
 namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {

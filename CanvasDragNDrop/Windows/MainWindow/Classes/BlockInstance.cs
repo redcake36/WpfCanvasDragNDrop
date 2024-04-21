@@ -1,18 +1,10 @@
 ﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.UserItems;
 using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.OleDb;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Mail;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
@@ -248,7 +240,7 @@ namespace CanvasDragNDrop
             //AllVariables = AllVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
             //foreach (var variable in BlockModel.CustomParameters)
             //{
-            //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.Title, variable.Units));
+            //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.SchemaName, variable.Units));
             //}
 
 

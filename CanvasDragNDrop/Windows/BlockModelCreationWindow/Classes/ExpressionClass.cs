@@ -1,7 +1,6 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
 using Newtonsoft.Json;
 using org.mariuszgromada.math.mxparser;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -73,7 +72,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
             set { var old = _definedVariable; _definedVariable = Regex.Replace(value, @"[^a-zA-Z0-9]", ""); OnPropertyChanged(); regenerateCustomParameters(old, _definedVariable); }
         }
         private string _definedVariable;
-        
+
         /// <summary> Массив строк необходимых переменных </summary>
         public ObservableCollection<string> NeededVariables
         {

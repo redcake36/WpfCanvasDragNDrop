@@ -22,7 +22,7 @@ namespace CanvasDragNDrop.UserItems
 
         // Using a DependencyProperty as the backing store for Exp.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExpProperty =
-            DependencyProperty.Register("Exp", typeof(string), typeof(BaseExpressionViewer));
+            DependencyProperty.Register(nameof(Exp), typeof(string), typeof(BaseExpressionViewer));
 
         public string DefinedVariable
         {
@@ -32,7 +32,7 @@ namespace CanvasDragNDrop.UserItems
 
         // Using a DependencyProperty as the backing store for DefinedVariable.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DefinedVariableProperty =
-            DependencyProperty.Register("DefinedVariable", typeof(string), typeof(BaseExpressionViewer));
+            DependencyProperty.Register(nameof(DefinedVariable), typeof(string), typeof(BaseExpressionViewer));
 
         /// <summary> Используемые переменные </summary>
         public ObservableCollection<string> NeededVars
@@ -51,7 +51,7 @@ namespace CanvasDragNDrop.UserItems
 
         // Using a DependencyProperty as the backing store for ExpOrder.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ExpOrderProperty =
-            DependencyProperty.Register("ExpOrder", typeof(int), typeof(BaseExpressionViewer), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(ExpOrder), typeof(int), typeof(BaseExpressionViewer), new PropertyMetadata(0));
 
 
 

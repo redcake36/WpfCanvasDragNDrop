@@ -1,5 +1,4 @@
 ﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.Windows.LoginWindow;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -57,13 +56,14 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
 
         private void LeftButtonDownGoSetupWindow(object sender, RoutedEventArgs e)
         {
-            SetupWindow setupWindow = new SetupWindow();
+            SetupWindow setupWindow = new();
             setupWindow.ShowDialog();
         }
 
         private void OpenSchema(object sender, SelectionChangedEventArgs e)
         {
             MessageBox.Show(AvailableSchemas[SelectedSchemaIndex].SchemaName);
+            //var resp = API.GetSchema(AvailableSchemas[SelectedSchemaIndex].SchemaId);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

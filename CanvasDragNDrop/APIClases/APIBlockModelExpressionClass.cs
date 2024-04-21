@@ -1,11 +1,5 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
-using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
-using org.mariuszgromada.math.mxparser.mathcollection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CanvasDragNDrop.APIClases
 {
@@ -26,7 +20,7 @@ namespace CanvasDragNDrop.APIClases
 
         //FIX list to int
         /// <summary> ID определеяемой выражением переменной </summary>
-        public int DefinedVariable {  get; set; }
+        public int DefinedVariable { get; set; }
 
         /// <summary> Тип выражения (формула, обращение к CoolProp) </summary>
         public GlobalTypes.ExpressionTypes ExpressionType { get; set; }
