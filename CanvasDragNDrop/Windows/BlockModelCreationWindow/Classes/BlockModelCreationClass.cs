@@ -463,7 +463,7 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                         throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{Expression.PrecompiledExpression.getErrorMessage()}");
                     }
 
-                    if(Expression.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
+                    if (Expression.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
                     {
                         throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{e.Message}");
                     }

@@ -12,14 +12,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Label Content="Выберите существующую схему или создайте новую" Grid.Row="0" Grid.Column="0" FontWeight="Bold" FontSize="18" HorizontalContentAlignment="Center"/>
-        <Image Source="/Resources/setup.png" MouseLeftButtonDown="LeftButtonDownGoSetupWindow" Grid.Column="1" Width="25" HorizontalAlignment="Right"/>
+        <Image Source="/Resources/settings.png" MouseLeftButtonDown="LeftButtonDownGoSetupWindow" Grid.Column="1" Width="30" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ListView Grid.Row="1" Grid.ColumnSpan="2" 
                   ItemsSource="{Binding ElementName=StartWindowView, Path=AvailableSchemas}" 
                   DisplayMemberPath="SchemaName" 

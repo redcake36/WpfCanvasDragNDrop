@@ -239,7 +239,7 @@ namespace CanvasDragNDrop
         /// <summary> Запрос на получени еверсии модели по е id </summary>
         public static (APIBlockModelVersionClass blockModelVersion, bool isSuccess) GetModelVersion(int VersionId)
         {
-            var requestResult = GetRequest($"/get_model/{VersionId}");
+            var requestResult = GetRequest($"/get_version/{VersionId}");
             return GenerateResponse<APIBlockModelVersionClass>(requestResult.data, requestResult.isSuccess);
         }
 

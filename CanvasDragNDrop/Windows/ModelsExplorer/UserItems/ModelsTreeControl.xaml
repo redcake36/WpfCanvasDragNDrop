@@ -64,6 +64,13 @@
                     </ContentControl>
                 </DataTemplate>
             </TreeView.Resources>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Создать шаблон"></MenuItem>
+                    <MenuItem Header="Удалить"></MenuItem>
+                    <MenuItem Header="Добавить папку"></MenuItem>
+                </ContextMenu>
+            </TreeView.ContextMenu>
         </TreeView>
     </Grid>
 </UserControl>

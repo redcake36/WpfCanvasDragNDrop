@@ -8,7 +8,7 @@
         Name="BlockInstancePropertiesWindowUI"
         Title="Свойства блока"
         Height="200" Width="550">
-        <!--Title="Задайте начальные значения для циклического расчёта"--> 
+    <!--Title="Задайте начальные значения для циклического расчёта"-->
     <StackPanel>
         <Label Content="{Binding ElementName=BlockInstancePropertiesWindowUI,Path=BlockInstance.BlockModel.Title}" FontWeight="Bold" FontSize="16" HorizontalContentAlignment="Center"/>
         <Label Content="Параметры по умолчанию" FontWeight="Bold"/>

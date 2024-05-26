@@ -140,28 +140,6 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             var idProperty1 = targetItem.DataContext.GetType().GetProperty("CatalogId");
             dropAndTargetId.TargetId = (int)idProperty1.GetValue(targetItem.DataContext);
             API.MovingBlockModel(dropAndTargetId);
-            //if (droppedItem != null && targetItem != null && !ReferenceEquals(droppedItem, targetItem))
-            //{
-            //    if (droppedItem.Parent is TreeView)
-            //    {
-            //        ((TreeView)droppedItem.Parent).Items.Remove(droppedItem);
-            //    }
-            //    else if (droppedItem.Parent is TreeViewItem parentItem)
-            //    {
-            //        parentItem.Items.Remove(droppedItem);
-            //    }
-
-            //    if (targetItem.Items.Count == 0 || targetItem.IsExpanded)
-            //    {
-            //        targetItem.Items.Add(droppedItem);
-            //    }
-            //    else
-            //    {
-            //        targetItem.IsExpanded = true;
-            //        targetItem.Items.Add(droppedItem);
-            //        targetItem.IsExpanded = false;
-            //    }
-            //}
         }
 
         //FIX дропнуть

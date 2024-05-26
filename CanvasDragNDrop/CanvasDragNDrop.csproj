@@ -15,6 +15,7 @@
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\folder.png" />
     <None Remove="Resources\model.png" />
+    <None Remove="Resources\settings.png" />
     <None Remove="Resources\setup.png" />
     <None Remove="Resources\version.png" />
     <None Remove="Resources\светлая стрелка.png" />
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\model.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\settings.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\setup.png">

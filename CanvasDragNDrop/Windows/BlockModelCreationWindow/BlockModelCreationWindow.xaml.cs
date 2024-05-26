@@ -1,4 +1,5 @@
-﻿using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,15 +9,34 @@ namespace CanvasDragNDrop
 {
     public partial class BlockModelCreationWindow : Window
     {
+
+        //ToDo Создать обработчик, наполняющий объект редактирования модели на основе переданной модели:
+        //1) содать входные/выходне потоки
+        //2) добавить параметры по умолчанию
+        //3) добавить расчётные выражения (в качестве переменных используются строки, а не id)
+
+        private APIBlockModelVersionClass modelForLoad = null;
+
         public BlockModelCreationWindow()
         {
             InitializeComponent();
+        }
+
+        public BlockModelCreationWindow(APIBlockModelVersionClass modelForEdit)
+        {
+            InitializeComponent();
+            modelForLoad = modelForEdit;
         }
 
         /// <summary> Метод при загрузке данных с сервера </summary>
         private void WindowsLoaded(object sender, RoutedEventArgs e)
         {
             LoadDataFromServer();
+            if (!(modelForLoad != null))
+            {
+                ImportModelForEditing();
+            }
+
         }
 
         private void LoadDataFromServer()
@@ -51,6 +71,11 @@ namespace CanvasDragNDrop
                 this.Close();
                 return;
             }
+        }
+
+        private void ImportModelForEditing()
+        {
+
         }
 
         private void AddExpression(object sender, RoutedEventArgs e)

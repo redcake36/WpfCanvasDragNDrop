@@ -63,16 +63,16 @@ namespace CanvasDragNDrop
         /// <summary> Метод обновления списка моделей блоков с сервера </summary>
         void GetFromServerElemList(object sender, RoutedEventArgs e)
         {
-            var GettingBlockModelsResult = API.GetBlockModels();
-            if (GettingBlockModelsResult.isSuccess)
-            {
-                AvailableBlockModels = new ObservableCollection<APIBlockModelVersionClass>(GettingBlockModelsResult.blockModels);
-            }
-            else
-            {
-                MessageBox.Show("Не удалось получить данные с сервера");
-                return;
-            }
+            //var GettingBlockModelsResult = API.GetBlockModels();
+            //if (GettingBlockModelsResult.isSuccess)
+            //{
+            //    AvailableBlockModels = new ObservableCollection<APIBlockModelVersionClass>(GettingBlockModelsResult.blockModels);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Не удалось получить данные с сервера");
+            //    return;
+            //}
         }
 
         //ViewportHandlers
