@@ -480,9 +480,23 @@ namespace CanvasDragNDrop
             ModelsExplorer.Owner = this;
             ModelsExplorer.Show();
         }
+        
+        //public static APIBaseParameterClass baseparam = new APIBaseParameterClass(33, "basetestparam", "testSS", "testUnitss");
+        //public static List<APIBlockModelFlowVariableClass> testVarieble = new List<APIBlockModelFlowVariableClass> { new APIBlockModelFlowVariableClass(1, 2, "testC2", baseparam) };
+        //public static List<APIBlockModelFlowClass> testInputFlow = new List<APIBlockModelFlowClass> {new APIBlockModelFlowClass(1, 1, "1", testVarieble) };
+        //public static List<APIBlockModelFlowClass> testOutputFlow = new List<APIBlockModelFlowClass> { new APIBlockModelFlowClass(2, 1, "2", testVarieble) };
+        //public static List<APIBlockModelParameterClass> testCustomParam = new List<APIBlockModelParameterClass> {new APIBlockModelParameterClass(333, "testCustomVariebleName",
+        //    "теоретическое h", "-") };
+        //public static List<APIBlockModelParameterClass> testDefaultParam = new List<APIBlockModelParameterClass> { new APIBlockModelParameterClass(333, "testCustomVariebleName",
+        //    "КПД насоса", "-") };
+        //public static List<APIBlockModelExpressionClass> testExpressions = new List<APIBlockModelExpressionClass> { new APIBlockModelExpressionClass(44, "PEnd",
+        //    new List<int>{ 1, 2, 3}, 3, 1)};
+        //public APIBlockModelVersionClass neww = new APIBlockModelVersionClass(26, 1, "Насос3", "Комментарий к версии", "Тоже повышает давление",
+        //    testInputFlow, testOutputFlow, testCustomParam, testDefaultParam, testExpressions);
 
         private void OpenBlockModelCreationWindow(object sender, RoutedEventArgs e)
         {
+            //BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow(neww);
             BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow();
             CreationWindow.ShowDialog();
         }

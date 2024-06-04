@@ -44,6 +44,17 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 
         }
 
+        /// <summary> Новый конструктор принимающий индекс потока 
+        public FlowClass(int flowVariableIndex, List<APIBaseParameterClass> baseParameters, List<APIFlowTypeClass> flowTypes, int flowEnviroment, RegenerateCustomParametersHandler handler)
+        {
+            regenerateCustomParameters = handler;
+            _baseParameters = new List<APIBaseParameterClass>(baseParameters);
+            FlowTypes = new ObservableCollection<APIFlowTypeClass>(flowTypes);
+            _flowVariableIndex = flowVariableIndex;
+            FlowEnvironment = flowEnviroment;
+
+        }
+
         private void ChangeFlowType()
         {
             FlowParameters.Clear();
