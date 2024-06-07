@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Ввод имени для новой схемы" Width="350"
         Name="SaveNewSchemaTitleWindowUI"
-        WindowStartupLocation="CenterScreen" Height="115">
+        WindowStartupLocation="CenterScreen" Height="150">
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

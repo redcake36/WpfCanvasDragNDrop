@@ -132,6 +132,17 @@ namespace CanvasDragNDrop
             OffsetLeft = OffsetTop = 10;
         }
 
+        public BlockInstance(APIBlockInstance instance, APIBlockModelVersionClass BlockModel) : this(BlockModel, instance.BlockInstanceId)
+        {
+            OffsetLeft = instance.OffsetLeft;
+            OffsetTop = instance.OffsetTop;
+
+            foreach (var item in DefaultVariables)
+            {
+                item.Value = instance.DefaultVariables.Find(x => x.VariableId == item.VariableId).Value;
+            }
+        }
+
         /// <summary> Метод подготовки входных коннекторов потоков </summary>
         private void PrepareInputFlowConnectors()
         {

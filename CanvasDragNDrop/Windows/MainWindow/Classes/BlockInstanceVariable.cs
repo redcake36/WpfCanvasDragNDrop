@@ -1,4 +1,5 @@
 ﻿using CanvasDragNDrop.UtilityClasses;
+using Newtonsoft.Json;
 
 namespace CanvasDragNDrop.Windows.MainWindow.Classes
 {
@@ -80,7 +81,7 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             Units = units;
         }
 
-
+        [JsonConstructor]
         public BlockInstanceVariable(string variableName, double value)
         {
             VariableName = variableName;

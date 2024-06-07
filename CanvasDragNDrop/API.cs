@@ -3,6 +3,7 @@ using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using CanvasDragNDrop.Windows.MainWindow.Classes;
 using CanvasDragNDrop.Windows.ModelsExplorer.Classes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -148,18 +149,23 @@ namespace CanvasDragNDrop
             return GenerateResponse<APIDirBlockModelClass>(requestResult.data, requestResult.isSuccess);
         }
 
-        /// <summary> Запрос получения моделей блоков </summary>
-        public static (List<APIBlockModelVersionClass> blockModels, bool isSuccess) GetBlockModels()
+        /// <summary> Запрос на получение версии модели по её id </summary>
+        public static (APIBlockModelVersionClass blockModelVersion, bool isSuccess) GetModelVersion(int VersionId)
         {
-            if (AutomotiveWork)
-            {
-                return GenerateResponse<List<APIBlockModelVersionClass>>(File.ReadAllText(MockDataFolder + "get_models.json"), true);
-            }
-
-            var requestResult = GetRequest("/get_models");
-            return GenerateResponse<List<APIBlockModelVersionClass>>(requestResult.data, requestResult.isSuccess);
+            var requestResult = GetRequest($"/get_version/{VersionId}");
+            return GenerateResponse<APIBlockModelVersionClass>(requestResult.data, requestResult.isSuccess);
         }
 
+        /// <summary> Запрос на получение версий моделей по массиву их id </summary>
+        public static (List<APIBlockModelVersionClass> blockModelsVersions, bool isSuccess) GetModelsVersions(List<int> VersionsIds)
+        {
+            JObject pack = new();
+            JArray ids = new(VersionsIds);
+            pack.Add("Versions", ids);
+            string JSON = JsonConvert.SerializeObject(pack);
+            var requestResult = PostRequest($"/get_versions", JSON);
+            return GenerateResponse<List<APIBlockModelVersionClass>>(requestResult.data, requestResult.isSuccess);
+        }
 
         /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
         public static (APIGetEnvsResponseClass environments, bool isSuccess) GetEnvironments()
@@ -186,7 +192,7 @@ namespace CanvasDragNDrop
         }
 
         /// <summary> Запрос получения типов сред и списка базовых параметров </summary>
-        public static (SchemaClass Schemas, bool isSuccess) GetSchema(int schemaId)
+        public static (APISchemeClass Schemas, bool isSuccess) GetSchema(int schemaId)
         {
             //if (AutomotiveWork)
             //{
@@ -194,7 +200,7 @@ namespace CanvasDragNDrop
             //}
 
             var requestResult = GetRequest($"/show_schema/{schemaId}");
-            return GenerateResponse<SchemaClass>(requestResult.data, requestResult.isSuccess);
+            return GenerateResponse<APISchemeClass>(requestResult.data, requestResult.isSuccess);
         }
 
         /// <summary> Запрос на создание модели блока </summary>
@@ -236,12 +242,6 @@ namespace CanvasDragNDrop
             return PostRequest("/create_schema", JSON);
         }
 
-        /// <summary> Запрос на получени еверсии модели по е id </summary>
-        public static (APIBlockModelVersionClass blockModelVersion, bool isSuccess) GetModelVersion(int VersionId)
-        {
-            var requestResult = GetRequest($"/get_version/{VersionId}");
-            return GenerateResponse<APIBlockModelVersionClass>(requestResult.data, requestResult.isSuccess);
-        }
 
 
     }

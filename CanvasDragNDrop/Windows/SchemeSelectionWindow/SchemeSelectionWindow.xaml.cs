@@ -63,7 +63,14 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
         private void OpenSchema(object sender, SelectionChangedEventArgs e)
         {
             MessageBox.Show(AvailableSchemas[SelectedSchemaIndex].SchemaName);
-            //var resp = API.GetSchema(AvailableSchemas[SelectedSchemaIndex].SchemaId);
+            var resp = API.GetSchema(AvailableSchemas[SelectedSchemaIndex].SchemaId);
+            if (resp.isSuccess == false)
+            {
+                MessageBox.Show("Ошибка при загрузки схемы с сервера");
+                return;
+            }
+            AlternateMainWindow mainWindow = new(resp.Schemas);
+            mainWindow.Show();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

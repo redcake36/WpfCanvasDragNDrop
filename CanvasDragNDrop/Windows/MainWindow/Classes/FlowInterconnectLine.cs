@@ -63,6 +63,16 @@ namespace CanvasDragNDrop
         }
         private double _outputPointY = 0;
 
+        public FlowInterconnectLine()
+        {
+
+        }
+        public FlowInterconnectLine(FlowConnector inputFlow, FlowConnector outputFlow)
+        {
+            SetFlowConnector(inputFlow, true);
+            SetFlowConnector(outputFlow, false);
+        }
+
         public void SetFlowConnector(FlowConnector flowConnector, bool isInput)
         {
             if (isInput)

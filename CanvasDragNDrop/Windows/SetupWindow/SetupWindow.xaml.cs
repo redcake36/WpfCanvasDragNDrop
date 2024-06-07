@@ -14,44 +14,29 @@ namespace CanvasDragNDrop.Windows
 
         private void Login(object sender, RoutedEventArgs e)
         {
-            bool result = CheckData(false);
+            bool result = CheckData();
             if (result)
             {
                 Close();
             }
         }
 
-        bool CheckData(bool isSilent)
+        bool CheckData()
         {
             var tryResponce = API.GetEnvironments();
             if (tryResponce.isSuccess == false)
             {
-                //if (isSilent == false)
-                //{
                 MessageBox.Show("Неверные данные для подключения");
-                //}
                 return false;
             }
             API.StoreSettings();
-            if (isSilent == false)
-            {
-                MessageBox.Show("Данные успешно обновлены");
-            }
+            MessageBox.Show("Данные успешно обновлены");
             return true;
         }
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             API.Password = PasswordField.Password;
-        }
-
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            bool checkResults = CheckData(true);
-            if (checkResults == false)
-            {
-                Application.Current.Shutdown();
-            }
         }
     }
 }

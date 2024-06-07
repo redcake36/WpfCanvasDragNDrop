@@ -20,7 +20,7 @@
             <MenuItem Header="Проект" HorizontalAlignment="Left">
                 <MenuItem Header="Создать новый проект"/>
                 <MenuItem Header="Сохранить схему" Click="SaveScheme"/>
-                <MenuItem Header="Синхронизировать данные" Click="GetFromServerElemList"/>
+                <!--<MenuItem Header="Синхронизировать данные" Click="LoadSchema"/>-->
             </MenuItem>
             <MenuItem Header="Инструменты" >
                 <MenuItem Header="Создать модель блока" Click="OpenBlockModelCreationWindow"/>
@@ -65,7 +65,7 @@
                 <Canvas.RenderTransform>
                     <MatrixTransform x:Name="transform"/>
                 </Canvas.RenderTransform>
-                <ItemsControl ItemsSource="{Binding Scheme.BlockInstances}" AlternationCount="{Binding Scheme.BlockInstances.Count}">
+                <ItemsControl ItemsSource="{Binding Schema.BlockInstances}" AlternationCount="{Binding Schema.BlockInstances.Count}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -93,7 +93,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <ItemsControl ItemsSource="{Binding Scheme.BlockInterconnections}">
+                <ItemsControl ItemsSource="{Binding Schema.BlockInterconnections}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>

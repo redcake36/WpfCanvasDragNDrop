@@ -30,7 +30,7 @@ namespace CanvasDragNDrop
         }
         private CanvasOverseerClass _canvasOverseer = new();
 
-        public SchemaClass Scheme
+        public SchemaClass Schema
         {
             get => _schema;
             set { _schema = value; OnPropertyChanged(); }
@@ -54,25 +54,28 @@ namespace CanvasDragNDrop
 
         private IncrementingIndexGenerator _instanceIdGenerator = new();
 
-        public AlternateMainWindow()
+        public AlternateMainWindow(APISchemeClass schemaForLoading = null)
         {
             InitializeComponent();
-            GetFromServerElemList(this, new());
+            LoadSchema(schemaForLoading);
         }
 
         /// <summary> Метод обновления списка моделей блоков с сервера </summary>
-        void GetFromServerElemList(object sender, RoutedEventArgs e)
+        void LoadSchema(APISchemeClass schemaForLoading)
         {
-            //var GettingBlockModelsResult = API.GetBlockModels();
-            //if (GettingBlockModelsResult.isSuccess)
-            //{
-            //    AvailableBlockModels = new ObservableCollection<APIBlockModelVersionClass>(GettingBlockModelsResult.blockModels);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Не удалось получить данные с сервера");
-            //    return;
-            //}
+            if (schemaForLoading == null)
+            {
+                return;
+            }
+
+            var neededModels = API.GetModelsVersions(schemaForLoading.BlockInstanсes.Select(x => x.BlockModel.VersionId).ToList());
+            if (neededModels.isSuccess == false)
+            {
+                MessageBox.Show("Ошибка при загрузке схемы");
+                return;
+            }
+            Schema = new(schemaForLoading, neededModels.blockModelsVersions);
+
         }
 
         //ViewportHandlers
@@ -119,13 +122,13 @@ namespace CanvasDragNDrop
             if (_canvasOverseer.CanDragBlock)
             {
                 var matrix = transform.Matrix;
-                Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
-                Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
+                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetLeft += (_canvasOverseer.ViewportMousePositionDelta.X) / matrix.M11;
+                Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex].OffsetTop += (_canvasOverseer.ViewportMousePositionDelta.Y) / matrix.M11;
             }
             //Обновляем точку соединительного потока при его создании
             if (_canvasOverseer.CanUpdateLiveInterconnectionPoint)
             {
-                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
+                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].UpdateLiveInterconnectPoint(e.GetPosition(CanvasArea));
             }
         }
 
@@ -163,15 +166,15 @@ namespace CanvasDragNDrop
                         FlowInterconnectLine newInterconnectLine = new();
                         if (IsInputConnector)
                         {
-                            newInterconnectLine.SetFlowConnector(Scheme.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         else
                         {
-                            newInterconnectLine.SetFlowConnector(Scheme.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                            newInterconnectLine.SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                         }
                         newInterconnectLine.UpdateLiveInterconnectPoint(_canvasOverseer.AreaMousePosition);
-                        Scheme.BlockInterconnections.Add(newInterconnectLine);
-                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(Scheme.BlockInterconnections.Count - 1);
+                        Schema.BlockInterconnections.Add(newInterconnectLine);
+                        _canvasOverseer.ConnectFirstFlowInterconnectPoint(Schema.BlockInterconnections.Count - 1);
                     }
                     catch { }
                 }
@@ -183,11 +186,11 @@ namespace CanvasDragNDrop
                         {
                             if (IsInputConnector)
                             {
-                                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Scheme.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].InputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             else
                             {
-                                Scheme.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Scheme.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
+                                Schema.BlockInterconnections[_canvasOverseer.SelectedFlowInterconnectLineIndex].SetFlowConnector(Schema.BlockInstances[BlockIndex].OutputConnectors[FlowConnectorIndex], IsInputConnector);
                             }
                             _canvasOverseer.ConnectSecondFlowInterconnectPoint();
                         }
@@ -214,7 +217,7 @@ namespace CanvasDragNDrop
                 return;
             }
 
-            Scheme.BlockInstances.Add(new(requestedModelVersion.blockModelVersion, _instanceIdGenerator.IncrementedIndex));
+            Schema.BlockInstances.Add(new(requestedModelVersion.blockModelVersion, _instanceIdGenerator.IncrementedIndex));
         }
 
         //private Point GetElemenyPositionOnCanvas(object sender)
@@ -243,13 +246,13 @@ namespace CanvasDragNDrop
                 return;
             }
 
-            if (Scheme.BlockInstances.Count == 0)
+            if (Schema.BlockInstances.Count == 0)
             {
                 MessageBox.Show("На схеме нет ни одного блока", "Ошибка при расчёте");
                 return;
             }
 
-            foreach (var block in Scheme.BlockInstances)
+            foreach (var block in Schema.BlockInstances)
             {
                 foreach (var item in block.InputConnectors)
                 {
@@ -269,11 +272,11 @@ namespace CanvasDragNDrop
             }
 
             //Сброс статусов схемы
-            foreach (var instance in Scheme.BlockInstances)
+            foreach (var instance in Schema.BlockInstances)
             {
                 instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnSeen;
             }
-            foreach (var interconnect in Scheme.BlockInterconnections)
+            foreach (var interconnect in Schema.BlockInterconnections)
             {
                 interconnect.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen;
             }
@@ -284,22 +287,22 @@ namespace CanvasDragNDrop
             List<List<int>> foundedCycles = new List<List<int>>();
 
             //Выполняем обход пока не кончатся блоки, до которых не добрался алгоритм
-            while (Scheme.BlockInstances.Any(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen))
+            while (Schema.BlockInstances.Any(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen))
             {
                 visitedInstances.Clear();
-                visitedInstances.Add(Scheme.BlockInstances.First(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen).BlockInstanceId);
+                visitedInstances.Add(Schema.BlockInstances.First(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen).BlockInstanceId);
                 //Пока обход не вернётся в точку своего начала обрабатываем блоки
                 while (visitedInstances.Count > 0)
                 {
                     //Подкладываем новый текущий блок когда вышли из какого-то блока
-                    currentBlockInstance = Scheme.BlockInstances.First(x => x.BlockInstanceId == visitedInstances.Last());
+                    currentBlockInstance = Schema.BlockInstances.First(x => x.BlockInstanceId == visitedInstances.Last());
                     //Пока у текущего блока есть выходные потоки, которые не были обойдены, то обрабатываем его
                     while (currentBlockInstance.OutputConnectors.Any(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen))
                     {
                         //Выбираем новый поток, по которому ещё не ходили
                         FlowInterconnectLine nextInterconnection = currentBlockInstance.OutputConnectors.First(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen).InterconnectLine;
                         //Выбираем следующий блок
-                        BlockInstance nextBlock = Scheme.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
+                        BlockInstance nextBlock = Schema.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
                         //Если блок уже встречался нам, то это цикл - надо промаркировать потоки и блоки в цепи
                         var foundedIndex = visitedInstances.FindIndex(x => x == nextBlock.BlockInstanceId);
                         if (foundedIndex >= 0)
@@ -314,9 +317,9 @@ namespace CanvasDragNDrop
                                 int sourceInstanceId = foundedCycle[i];
                                 int destinationInstanceId = foundedCycle[(i + 1) % foundedCycle.Count];
                                 //Меняяем статус блока
-                                Scheme.BlockInstances.First(x => x.BlockInstanceId == sourceInstanceId).BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.InCycle;
+                                Schema.BlockInstances.First(x => x.BlockInstanceId == sourceInstanceId).BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.InCycle;
                                 //Меняем статус всех соединяющих потоков
-                                Scheme.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == sourceInstanceId && x.InputFlowConnector.BlockInstanceID == destinationInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.InCycle);
+                                Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == sourceInstanceId && x.InputFlowConnector.BlockInstanceID == destinationInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.InCycle);
                             }
                             //Завершаем обработку этого потока
                             continue;
@@ -352,9 +355,9 @@ namespace CanvasDragNDrop
             List<BlockInstance> cycledInstances = new();
             if (foundedCycles.Count > 0)
             {
-                foundedCycles[0].ForEach(x => cycledInstances.Add(Scheme.BlockInstances.First(y => y.BlockInstanceId == x)));
+                foundedCycles[0].ForEach(x => cycledInstances.Add(Schema.BlockInstances.First(y => y.BlockInstanceId == x)));
                 //Обозначаем все выходные потоки этих блоков, не участвующие в цикле как ожидающие результатов цикла
-                List<FlowInterconnectLine> waitingCyclesInterconnects = Scheme.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
+                List<FlowInterconnectLine> waitingCyclesInterconnects = Schema.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
                 foreach (var item in waitingCyclesInterconnects)
                 {
                     item.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.WaitingCycle;
@@ -362,9 +365,9 @@ namespace CanvasDragNDrop
             }
 
             //Расчёт блоков, у которых на входе все потоки готовы к расчёту
-            while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
+            while (Schema.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
             {
-                BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
+                BlockInstance instanceForCalculation = Schema.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
                 try
                 {
                     instanceForCalculation.CalculateBlockInstance();
@@ -434,9 +437,9 @@ namespace CanvasDragNDrop
                 }
 
                 //Дорасчитываем все блоки, которые не посчитали раньше из за цикла
-                while (Scheme.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
+                while (Schema.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
                 {
-                    BlockInstance instanceForCalculation = Scheme.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
+                    BlockInstance instanceForCalculation = Schema.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
                     try
                     {
                         instanceForCalculation.CalculateBlockInstance();
@@ -457,7 +460,7 @@ namespace CanvasDragNDrop
                 }
             }
 
-            CalculationResultWindow resultWindow = new(Scheme.BlockInstances);
+            CalculationResultWindow resultWindow = new(Schema.BlockInstances);
             resultWindow.Owner = this;
             resultWindow.Show();
         }
@@ -466,7 +469,7 @@ namespace CanvasDragNDrop
         {
             if (_canvasOverseer.CanOpenBlockProperties)
             {
-                BlockInstancePropertiesWindow PropertiesWindow = new(Scheme.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
+                BlockInstancePropertiesWindow PropertiesWindow = new(Schema.BlockInstances[_canvasOverseer.SelectedBlockIndex]);
                 PropertiesWindow.Owner = this;
                 PropertiesWindow.Show();
                 _canvasOverseer.BlockPropertiesOpened();
