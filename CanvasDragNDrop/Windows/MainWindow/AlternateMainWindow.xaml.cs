@@ -302,8 +302,7 @@ namespace CanvasDragNDrop
                         //Выбираем новый поток, по которому ещё не ходили
                         FlowInterconnectLine nextInterconnection = currentBlockInstance.OutputConnectors.First(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen).InterconnectLine;
 
-                        //Выбираем следующий блок FIX
-                        //BlockInstance nextBlock = Schema.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
+                        //Выбираем следующий блок
                         BlockInstance nextBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == nextInterconnection.InputFlowConnector.BlockInstanceID);
 
                         //Если блок уже встречался нам, то это цикл - надо промаркировать потоки и блоки в цепи

@@ -52,9 +52,8 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             }
             foreach (var interconnect in schema.BlockInterconnections)
             {
-                //FIX исправить подгрузку потоков
-                FlowConnector inputConnector = BlockInstances.Single(x => x.BlockInstanceId == interconnect.InputFlowConnector.BlockInstanceID).OutputConnectors.Single(y => y.FlowID == interconnect.InputFlowConnector.FlowID);
-                FlowConnector outputConnector = BlockInstances.Single(x => x.BlockInstanceId == interconnect.OutputFlowConnector.BlockInstanceID).InputConnectors.Single(y => y.FlowID == interconnect.OutputFlowConnector.FlowID);
+                FlowConnector inputConnector = BlockInstances.Single(x => x.BlockInstanceId == interconnect.InputFlowConnector.BlockInstanceID).InputConnectors.Single(y => y.FlowID == interconnect.InputFlowConnector.FlowID);
+                FlowConnector outputConnector = BlockInstances.Single(x => x.BlockInstanceId == interconnect.OutputFlowConnector.BlockInstanceID).OutputConnectors.Single(y => y.FlowID == interconnect.OutputFlowConnector.FlowID);
                 BlockInterconnections.Add(new(inputConnector, outputConnector));
             }
         }
