@@ -69,8 +69,10 @@ namespace CanvasDragNDrop
         }
         public FlowInterconnectLine(FlowConnector inputFlow, FlowConnector outputFlow)
         {
-            SetFlowConnector(inputFlow, true);
-            SetFlowConnector(outputFlow, false);
+
+            //FIX реверсировать направления потоков
+            SetFlowConnector(inputFlow, false);
+            SetFlowConnector(outputFlow, true);
         }
 
         public void SetFlowConnector(FlowConnector flowConnector, bool isInput)

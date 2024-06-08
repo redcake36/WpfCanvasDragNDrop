@@ -301,8 +301,11 @@ namespace CanvasDragNDrop
                     {
                         //Выбираем новый поток, по которому ещё не ходили
                         FlowInterconnectLine nextInterconnection = currentBlockInstance.OutputConnectors.First(x => x.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.UnSeen).InterconnectLine;
-                        //Выбираем следующий блок
-                        BlockInstance nextBlock = Schema.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
+
+                        //Выбираем следующий блок FIX
+                        //BlockInstance nextBlock = Schema.BlockInstances[nextInterconnection.InputFlowConnector.BlockInstanceID];
+                        BlockInstance nextBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == nextInterconnection.InputFlowConnector.BlockInstanceID);
+
                         //Если блок уже встречался нам, то это цикл - надо промаркировать потоки и блоки в цепи
                         var foundedIndex = visitedInstances.FindIndex(x => x == nextBlock.BlockInstanceId);
                         if (foundedIndex >= 0)
@@ -393,6 +396,11 @@ namespace CanvasDragNDrop
                 CycleCalcStartParamsEnterWindow cycleParamsWindow = new(cycledInstances);
                 cycleParamsWindow.ShowDialog();
                 int startInstanseIndex = cycleParamsWindow.SelectedInstanceIndex;
+                if (cycleParamsWindow.SelectedInstanceIndex < 0)
+                {
+                    MessageBox.Show("Вы не выбрали начальный блок", "Расчёт остановлен");
+                    return;
+                }
                 //Перекладываем значения на выходы потоков для начального блока цикла
                 foreach (var inputConnector in cycledInstances[startInstanseIndex].InputConnectors)
                 {
