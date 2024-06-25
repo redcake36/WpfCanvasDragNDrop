@@ -31,6 +31,7 @@ namespace CanvasDragNDrop.Windows
                 MessageBox.Show("Неверные данные для подключения");
                 return false;
             }
+            API.UserId = tryResponce.response;
             API.StoreSettings();
             MessageBox.Show("Данные успешно обновлены");
             return true;

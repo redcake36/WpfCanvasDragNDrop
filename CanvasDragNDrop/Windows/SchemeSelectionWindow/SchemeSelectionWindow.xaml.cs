@@ -34,12 +34,14 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
 
         private void GetSchemasList(object sender, RoutedEventArgs e)
         {
+            var checkAuth = API.GetUserId(API.Username);
             var response = API.GetAllSchemas();
-            if (response.isSuccess == false)
+            if (response.isSuccess == false || checkAuth.isSuccess == false || checkAuth.response == -1)
             {
                 MessageBox.Show("Ошибка при загрузки схем с сервера. Проверьте настройки подключения.");
                 SetupWindow loginWindow = new();
                 loginWindow.ShowDialog();
+                GetSchemasList(null, null);
                 return;
             }
             AvailableSchemas = new(response.Schemas);
@@ -58,6 +60,7 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
         {
             SetupWindow setupWindow = new();
             setupWindow.ShowDialog();
+            GetSchemasList(null, null);
         }
 
         private void OpenSchema(object sender, SelectionChangedEventArgs e)
