@@ -15,6 +15,7 @@
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\folder.png" />
     <None Remove="Resources\model.png" />
+    <None Remove="Resources\ReadOnly.png" />
     <None Remove="Resources\settings.png" />
     <None Remove="Resources\setup.png" />
     <None Remove="Resources\version.png" />
@@ -41,6 +42,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\model.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\readOnly.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\settings.png">

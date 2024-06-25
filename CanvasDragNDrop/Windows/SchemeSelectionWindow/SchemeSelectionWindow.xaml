@@ -22,12 +22,21 @@
         <Image Source="/Resources/settings.png" MouseLeftButtonDown="LeftButtonDownGoSetupWindow" Grid.Column="1" Width="30" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ListView Grid.Row="1" Grid.ColumnSpan="2" 
                   ItemsSource="{Binding ElementName=StartWindowView, Path=AvailableSchemas}" 
-                  DisplayMemberPath="SchemaName" 
                   SelectedIndex="{Binding ElementName=StartWindowView,Path=SelectedSchemaIndex}" 
                   Margin="0,10,0,10" 
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  SelectionChanged="OpenSchema"/>
+                  SelectionChanged="OpenSchema">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel VerticalAlignment="Center">
+                        <Label VerticalContentAlignment="Center" FontWeight="Bold" Padding="0" Content="{Binding SchemaName}"/>
+                        <Image Opacity="{Binding isBlocked}" Width="20" Margin="5,0,0,0" Source="/Resources/readOnly.png"/>
+                        <Label Opacity="{Binding isBlocked}" VerticalContentAlignment="Center" Margin="5,0,0,0"  Padding="0" Content="{Binding SchemaBlockerName}"/>
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <Button Content="Создать новую схему" Grid.Row="2" Grid.ColumnSpan="2" FontSize="16" Click="CreateNewSchema"/>
     </Grid>
 </Window>

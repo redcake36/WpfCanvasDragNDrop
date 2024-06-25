@@ -10,6 +10,7 @@ namespace CanvasDragNDrop.Windows
         public SetupWindow()
         {
             InitializeComponent();
+            PasswordField.Password = API.Password;
         }
 
         private void Login(object sender, RoutedEventArgs e)
@@ -23,8 +24,9 @@ namespace CanvasDragNDrop.Windows
 
         bool CheckData()
         {
-            var tryResponce = API.GetEnvironments();
-            if (tryResponce.isSuccess == false)
+            OnPasswordChanged(null, null);
+            var tryResponce = API.GetUserId(API.Username);
+            if (tryResponce.isSuccess == false || tryResponce.response == -1)
             {
                 MessageBox.Show("Неверные данные для подключения");
                 return false;
@@ -37,6 +39,11 @@ namespace CanvasDragNDrop.Windows
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             API.Password = PasswordField.Password;
+        }
+
+        private void WindowClosed(object sender, System.EventArgs e)
+        {
+            API.LoadSettings();
         }
     }
 }

@@ -21,6 +21,23 @@ namespace CanvasDragNDrop.APIClases
         }
         private string _schemaName;
 
+        /// <summary> Заблокированан ли схема </summary>
+        public bool isBlocked
+        {
+            get { return _isBlocked; }
+            set { _isBlocked = value; OnPropertyChanged(); }
+        }
+        private bool _isBlocked;
+
+        /// <summary> Имя того, кто заблокировал схему </summary>
+        public string SchemaBlockerName
+        {
+            get { return _schemaBlockerName; }
+            set { _schemaBlockerName = value; OnPropertyChanged(); }
+        }
+        private string _schemaBlockerName;
+
+
         /// <summary> Массив экземпляров блоков </summary>
         public List<APIBlockInstance> BlockInstanсes
         {

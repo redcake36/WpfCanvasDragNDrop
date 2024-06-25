@@ -22,12 +22,14 @@ namespace CanvasDragNDrop
             public int Port;
             public string UserName;
             public string Password;
+            public int UserId;
         }
 
         public static string Address { get; set; } = "http://91.103.252.95";
         public static int Port { get; set; } = 3101;
         public static string Username { get; set; } = string.Empty;
         public static string Password { get; set; } = string.Empty;
+        public static int UserId { get; set; } = -1;
 
         //private static StoreDataFormat Settings = new StoreDataFormat() {};
 
@@ -49,7 +51,7 @@ namespace CanvasDragNDrop
             LoadSettings();
         }
 
-        static void LoadSettings()
+        public static void LoadSettings()
         {
             if (File.Exists(SettingsFile))
             {
@@ -59,6 +61,7 @@ namespace CanvasDragNDrop
                 Port = Parsed.Port;
                 Username = Parsed.UserName;
                 Password = Parsed.Password;
+                UserId = Parsed.UserId;
                 return;
             }
             StoreSettings();
@@ -71,6 +74,7 @@ namespace CanvasDragNDrop
             defaultData.Port = Port;
             defaultData.UserName = Username;
             defaultData.Password = Password;
+            defaultData.UserId = UserId;
             File.WriteAllText(SettingsFile, JsonConvert.SerializeObject(defaultData));
         }
 
@@ -208,7 +212,7 @@ namespace CanvasDragNDrop
         {
             string JSON = JsonConvert.SerializeObject(BlockModel);
             //MessageBox.Show(JSON);
-            return PostRequest("/create_model", JSON);
+            return PostRequest($"/create_model/{UserId}", JSON);
         }
         /// <summary> Запрос на перемещение модели между папками </summary>
         public static (string response, bool isSuccess) MovingBlockModel(DropAndTargetId macId)
@@ -239,10 +243,17 @@ namespace CanvasDragNDrop
         {
             string JSON = JsonConvert.SerializeObject(schemaClass);
             MessageBox.Show(JSON);
-            return PostRequest("/create_schema", JSON);
+            return PostRequest($"/create_schema/{UserId}", JSON);
         }
 
-
-
+        public static (int response, bool isSuccess) GetUserId(string login)
+        {
+            var resp = GetRequest($"/get_user_id/{login}");
+            if (int.TryParse(resp.data, out int userId) == true)
+            {
+                return (userId, true);
+            }
+            return (-1, false);
+        }
     }
 }

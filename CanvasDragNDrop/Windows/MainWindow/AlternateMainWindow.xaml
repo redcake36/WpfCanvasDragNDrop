@@ -46,7 +46,7 @@
              <!--Test meny items--> 
             <!--<MenuItem Name="TestMenu" Header="{Binding _state}"/>-->
 
-            <MenuItem Header="User" HorizontalAlignment="Right"/>
+            <MenuItem Header="{Binding Path=(local:API.Username), UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right"/>
 
         </Menu>
 

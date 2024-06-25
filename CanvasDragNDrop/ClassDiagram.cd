@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CanvasDragNDrop.BlockInstanseControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAIAARCAAAAAAEAAAACBAAAAAAQQAAQAAAAAAAAABgg=</HashCode>
+      <FileName>Windows\MainWindow\UserItems\BlockInstanseControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.BlockInstance" Collapsed="true">
+    <Position X="25.75" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="25.636" Y="1.648" />
+        <Point X="25.636" Y="4.614" />
+        <Point X="26.5" Y="4.614" />
+        <Point X="26.5" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CQYiQBAACACgAApAkAAhAAARiAQQAAEBABgAAABkCEQ=</HashCode>
+      <FileName>Windows\MainWindow\Classes\BlockInstance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.FlowConnector" Collapsed="true">
+    <Position X="27.5" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="29.081" Y="1.648" />
+        <Point X="29.081" Y="3.596" />
+        <Point X="28.25" Y="3.596" />
+        <Point X="28.25" Y="3.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAABAAAowAAAAAIEAQAAAAAAQRAUAAAAAJgAAABAAA=</HashCode>
+      <FileName>Windows\MainWindow\Classes\FlowConnector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.FlowInterconnectLine" Collapsed="true">
+    <Position X="29.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAhIAhAMIFEAAAAAAoAAAAAABAAAAQQAAAABABAAA=</HashCode>
+      <FileName>Windows\MainWindow\Classes\FlowInterconnectLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.AlternateMainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACAAABAAADgIAAwpAAACQFEgQAAgAAAAICAUQQAAAA=</HashCode>
+      <FileName>Windows\MainWindow\AlternateMainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.BlockModelCreationWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAQACAAAAQAAIATAAAAIkACAACAAAADEQACAAAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\BlockModelCreationWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.API" Collapsed="true">
+    <Position X="35.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAEgAAAAAAAAIAIAQABAACADARAAAISgGAEAgAAATA=</HashCode>
+      <FileName>API.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.App" Collapsed="true">
+    <Position X="39" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.MainWindow.Classes.BlockInstanceVariable" Collapsed="true">
+    <Position X="27.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CBAAAABAAIAAAEQAAAEgAAAAEAAAAAACEQAgAAAAAAI=</HashCode>
+      <FileName>Windows\MainWindow\Classes\BlockInstanceVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.MainWindow.Classes.CanvasOverseerClass" Collapsed="true">
+    <Position X="27.5" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="29.083" Y="1.648" />
+        <Point X="29.083" Y="2.596" />
+        <Point X="28.25" Y="2.596" />
+        <Point X="28.25" Y="2.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>SHEAQAgAAIAQIAAAAAYCBAACAIAIAQAAAAAAEBQIQAA=</HashCode>
+      <FileName>Windows\MainWindow\Classes\CanvasOverseerClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.MainWindow.Classes.SchemaClass" Collapsed="true">
+    <Position X="29.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAIAAgACAAAAgAAAAAAAAAEAAAAgAAAAAQAA=</HashCode>
+      <FileName>Windows\MainWindow\Classes\SchemaClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.CalculationResultWindow.CalculationResultWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="39" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAACAAAgAAAAAAAQAAAAEAAAAA=</HashCode>
+      <FileName>Windows\CalculationResultWindow\CalculationResultWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.BlockModelCreationClass" Collapsed="true">
+    <Position X="29.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEBAAhAQAMShAEAMAAQACADBiIAAEAAAAAiAhjKECAE=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\BlockModelCreationClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.CalcVariableClass" Collapsed="true">
+    <Position X="31" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="32.552" Y="1.648" />
+        <Point X="32.552" Y="4.619" />
+        <Point X="31.75" Y="4.619" />
+        <Point X="31.75" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAQgAAAAAAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\CalcVariableClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.CustomParametreClass" Collapsed="true">
+    <Position X="27.5" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="25.601" Y="1.648" />
+        <Point X="25.601" Y="5.537" />
+        <Point X="28.25" Y="5.537" />
+        <Point X="28.25" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAABAAAEAAAAAAAAAAAAAAAAAAEAAAAAAACAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\CustomParametreClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.ExpressionClass" Collapsed="true">
+    <Position X="25.75" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="27.418" Y="1.648" />
+        <Point X="27.418" Y="3.596" />
+        <Point X="26.5" Y="3.596" />
+        <Point X="26.5" Y="3.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AEGAABACABEAJAAAAAAAFAgAAAAAAACQAAAAgAAAAIA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\ExpressionClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.FlowClass" Collapsed="true">
+    <Position X="37.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAgBAAABAAAAAAAAEAAAAAAAAAAAAQAAAAABgAAAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\FlowClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes.FlowParametersClass" Collapsed="true">
+    <Position X="39" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\Classes\FlowParametersClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.UserItems.BaseExpression" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAEAAIAgAgAAAAAQAAEAACAAAAABEQAAAAJA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\UserItems\BaseExpression.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.UserItems.BaseExpressionViewer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAEAAIAgAgAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\UserItems\BaseExpressionViewer.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.UserItems.Flow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\BlockModelCreationWindow\UserItems\Flow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.NewSchemaTitleEnteringWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAIABAAAAAgAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Windows\NewSchemaTitleEnteringWindow\NewSchemaTitleEnteringWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.SetupWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Windows\SetupWindow\SetupWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.BlockInstancePropertiesWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAIACAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\BlockInstancePropertiesWindow\BlockInstancePropertiesWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.SchemeSelectionWindow.SchemeSelectionWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAAAAAAAAIAAAAAAAgAAAAAAAFAAAAAEAAFI=</HashCode>
+      <FileName>Windows\SchemeSelectionWindow\SchemeSelectionWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.ModelsExplorer.Classes.BlockModelClass" Collapsed="true">
+    <Position X="31" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAEAAAAAAAJAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\ModelsExplorer\Classes\BlockModelClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.ModelsExplorer.Classes.DropAndTargetId" Collapsed="true">
+    <Position X="33.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAACAAAAAAAAAAAAAQAAAAAABAAA=</HashCode>
+      <FileName>Windows\ModelsExplorer\Classes\DropAndTargetId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.ModelsExplorer.UserItems.ModelsTreeControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACiAAAAAAAAAAAAAAAAAgAABAAABAAAAAAgOAAARAA=</HashCode>
+      <FileName>Windows\ModelsExplorer\UserItems\ModelsTreeControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.ModelsExplorer.ModelsExplorer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACQAAAAIAAAAAIIAIAAAAhAAJAIFAAAAwIAAABAA=</HashCode>
+      <FileName>Windows\ModelsExplorer\ModelsExplorer.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.Windows.CycleCalcStartParamsEnterWindow.CycleCalcStartParamsEnterWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEAAAAAAAABAIAAACAAAgACAAQAAQAAAAAAAAAA=</HashCode>
+      <FileName>Windows\CycleCalcStartParamsEnterWindow\CycleCalcStartParamsEnterWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvasDragNDrop.UtilityClasses.CalcUtilitiesClass" Collapsed="true">
+    <Position X="39" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAg=</HashCode>
+      <FileName>UtilityClasses\CalcUtilitiesClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.UtilityClasses.GlobalTypes" Collapsed="true">
+    <Position X="35.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UtilityClasses\GlobalTypes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.UtilityClasses.IncrementingIndexGenerator" Collapsed="true">
+    <Position X="39" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UtilityClasses\IncrementingIndexGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" Collapsed="true">
+    <Position X="28.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UtilityClasses\NotifyPropertyChangedClass.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CanvasDragNDrop.UtilityClasses.PrecompiledCalcExpressionClass" Collapsed="true">
+    <Position X="39" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgCAAkAAAQAABgAAIAAiCAAAABQiABAEAAiAAAAAAIA=</HashCode>
+      <FileName>UtilityClasses\PrecompiledCalcExpressionClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBaseParameterClass" Collapsed="true">
+    <Position X="37.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAEAAAAAAACAA=</HashCode>
+      <FileName>APIClases\APIBaseParameterClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockInstance" Collapsed="true">
+    <Position X="25.75" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="27.379" Y="1.648" />
+        <Point X="27.379" Y="2.596" />
+        <Point X="26.5" Y="2.596" />
+        <Point X="26.5" Y="2.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AQAAAAAACACgAAAAEAAgAAAAAAQAAAEBAAgAAAAAAAA=</HashCode>
+      <FileName>APIClases\APIBlockInstance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockInterconnection" Collapsed="true">
+    <Position X="27.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABEAAAAAAgAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>APIClases\APIBlockInterconnection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelClass" Collapsed="true">
+    <Position X="31" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAIEAAAAAAAJAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>APIClases\APIBlockModelClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelExpressionClass" Collapsed="true">
+    <Position X="39" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAIAAAAAAAEAAAAAAAAAAQAAAAAIAAAIA=</HashCode>
+      <FileName>APIClases\APIBlockModelExpressionClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelFlowClass" Collapsed="true">
+    <Position X="35.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIBAAAAAAAAAAAAAAAAAAAAAAAEAABAAAAAAAEAIA=</HashCode>
+      <FileName>APIClases\APIBlockModelFlowClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelFlowVariableClass" Collapsed="true">
+    <Position X="33.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAIAAAAAAAAAAAAAAAAAAAQAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>APIClases\APIBlockModelFlowVariableClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelParameterClass" Collapsed="true">
+    <Position X="33.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAEAAAAEAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>APIClases\APIBlockModelParameterClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIBlockModelVersionClass" Collapsed="true">
+    <Position X="25.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAIAhAEAAAAGAAJAAAAAAQAAAAEAAAgAECAA=</HashCode>
+      <FileName>APIClases\APIBlockModelVersionClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIDirBlockModelClass" Collapsed="true">
+    <Position X="29.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAACAQAEAAEAAAAAAQAAAAAAggAABBAAAg=</HashCode>
+      <FileName>APIClases\APIDirBlockModelClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIFlowConnector" Collapsed="true">
+    <Position X="31" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="30.932" Y="1.648" />
+        <Point X="30.932" Y="2.596" />
+        <Point X="31.75" Y="2.596" />
+        <Point X="31.75" Y="2.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAEAAAAAAAAAAAEAAAAAAgAAAAAAA=</HashCode>
+      <FileName>APIClases\APIFlowConnector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIFlowTypeClass" Collapsed="true">
+    <Position X="35.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>APIClases\APIFlowTypeClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APIGetEnvsResponseClass" Collapsed="true">
+    <Position X="37.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>APIClases\APIGetEnvsResponseClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CanvasDragNDrop.APIClases.APISchemeClass" Collapsed="true">
+    <Position X="29.25" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="CanvasDragNDrop.UtilityClasses.NotifyPropertyChangedClass" ManuallyRouted="true">
+      <Path>
+        <Point X="29.25" Y="1.312" />
+        <Point X="29.25" Y="1.648" />
+        <Point X="32.592" Y="1.648" />
+        <Point X="32.592" Y="5.595" />
+        <Point X="30" Y="5.595" />
+        <Point X="30" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAACAAABiAAAAAAAAAEAAAAgAAAAAQAA=</HashCode>
+      <FileName>APIClases\APISchemeClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
