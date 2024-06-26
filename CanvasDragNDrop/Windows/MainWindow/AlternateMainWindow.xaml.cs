@@ -480,24 +480,45 @@ namespace CanvasDragNDrop
             ModelsExplorer.Owner = this;
             ModelsExplorer.Show();
         }
-        
-        //public static APIBaseParameterClass baseparam = new APIBaseParameterClass(33, "basetestparam", "testSS", "testUnitss");
-        //public static List<APIBlockModelFlowVariableClass> testVarieble = new List<APIBlockModelFlowVariableClass> { new APIBlockModelFlowVariableClass(1, 2, "testC2", baseparam) };
-        //public static List<APIBlockModelFlowClass> testInputFlow = new List<APIBlockModelFlowClass> {new APIBlockModelFlowClass(1, 1, "1", testVarieble) };
-        //public static List<APIBlockModelFlowClass> testOutputFlow = new List<APIBlockModelFlowClass> { new APIBlockModelFlowClass(2, 1, "2", testVarieble) };
-        //public static List<APIBlockModelParameterClass> testCustomParam = new List<APIBlockModelParameterClass> {new APIBlockModelParameterClass(333, "testCustomVariebleName",
-        //    "теоретическое h", "-") };
-        //public static List<APIBlockModelParameterClass> testDefaultParam = new List<APIBlockModelParameterClass> { new APIBlockModelParameterClass(333, "testCustomVariebleName",
-        //    "КПД насоса", "-") };
-        //public static List<APIBlockModelExpressionClass> testExpressions = new List<APIBlockModelExpressionClass> { new APIBlockModelExpressionClass(44, "PEnd",
-        //    new List<int>{ 1, 2, 3}, 3, 1)};
-        //public APIBlockModelVersionClass neww = new APIBlockModelVersionClass(26, 1, "Насос3", "Комментарий к версии", "Тоже повышает давление",
-        //    testInputFlow, testOutputFlow, testCustomParam, testDefaultParam, testExpressions);
+
+        public static APIBaseParameterClass baseparamP = new APIBaseParameterClass(1, "Давление", "P", "Па");
+        public static APIBaseParameterClass baseparamT = new APIBaseParameterClass(2, "Температура", "T", "K");
+        public static APIBaseParameterClass baseparamH = new APIBaseParameterClass(3, "Энтальпия", "h", "Дж/кг");
+        public static APIBaseParameterClass baseparamS = new APIBaseParameterClass(5, "Энтропия", "s", "Дж/кг*К");
+        public static APIBaseParameterClass baseparamG = new APIBaseParameterClass(6, "Расход", "G", "кг/c");
+        public static List<APIBlockModelFlowVariableClass> testVariebleIn = new List<APIBlockModelFlowVariableClass> { new APIBlockModelFlowVariableClass(5, 29, "p1", baseparamP),
+                                                                                                                     new APIBlockModelFlowVariableClass(5, 30, "T1", baseparamT),
+                                                                                                                     new APIBlockModelFlowVariableClass(5, 31, "h1", baseparamH),
+                                                                                                                     new APIBlockModelFlowVariableClass(5, 32, "s1", baseparamS),
+                                                                                                                     new APIBlockModelFlowVariableClass(5, 33, "G1", baseparamG)};
+        public static APIBaseParameterClass variblePrototypeP = new APIBaseParameterClass(1, "Давление", "p", "Па");
+        public static APIBaseParameterClass variblePrototypeT = new APIBaseParameterClass(2, "Температура", "T", "К");
+        public static APIBaseParameterClass variblePrototypeH = new APIBaseParameterClass(3, "Энтальпия", "h", "Дж/кг");
+        public static APIBaseParameterClass variblePrototypeS = new APIBaseParameterClass(5, "Энтропия", "s", "Дж/кг*К");
+        public static APIBaseParameterClass variblePrototypeG = new APIBaseParameterClass(6, "Энтропия", "G", "Расход");
+        public static List<APIBlockModelFlowVariableClass> testVariebleOut = new List<APIBlockModelFlowVariableClass> { new APIBlockModelFlowVariableClass(6, 34, "p2", variblePrototypeP),
+                                                                                                                        new APIBlockModelFlowVariableClass(6, 35, "T2", variblePrototypeT),
+                                                                                                                        new APIBlockModelFlowVariableClass(6, 36, "h2", variblePrototypeH),
+                                                                                                                        new APIBlockModelFlowVariableClass(6, 37, "s2", variblePrototypeS),
+                                                                                                                        new APIBlockModelFlowVariableClass(6, 38, "G2", variblePrototypeG)};
+        public static List<APIBlockModelFlowClass> testInputFlow = new List<APIBlockModelFlowClass> { new APIBlockModelFlowClass(5, 1, "1", testVariebleIn) };
+        public static List<APIBlockModelFlowClass> testOutputFlow = new List<APIBlockModelFlowClass> { new APIBlockModelFlowClass(6, 1, "2", testVariebleOut) };
+        public static List<APIBlockModelParameterClass> testCustomParam = new List<APIBlockModelParameterClass> {new APIBlockModelParameterClass(333, "testCustomVariebleName",
+            "теоретическое h", "-") };
+        public static List<APIBlockModelParameterClass> testDefaultParam = new List<APIBlockModelParameterClass> { new APIBlockModelParameterClass(27, "TEnd",
+            "Температура на выходе", "Deg C"), new APIBlockModelParameterClass(28, "dpKotel", "Падение давления в котле", "-") };
+        public static List<APIBlockModelExpressionClass> testExpressions = new List<APIBlockModelExpressionClass> { new APIBlockModelExpressionClass(14, "TEnd + 273.15",
+            new List<int>{27}, 1, 35), new APIBlockModelExpressionClass(15, "p1 * dpKotel", new List<int>{29, 28}, 2, 34),
+            new APIBlockModelExpressionClass(16, "PropSI(H ; P; p2; T; T2; Water)", new List<int>{ 34, 35}, 3, 36),
+            new APIBlockModelExpressionClass(17, "PropSI(S ; P; p2; T; T2; Water)", new List<int>{ 34, 35}, 4, 37),
+            new APIBlockModelExpressionClass(18, "G1", new List<int>{ 33}, 5, 38)};
+        public APIBlockModelVersionClass neww = new APIBlockModelVersionClass(3, 8, "Котел", null, "Нагревает воду",
+            testInputFlow, testOutputFlow, null, testDefaultParam, testExpressions);
 
         private void OpenBlockModelCreationWindow(object sender, RoutedEventArgs e)
         {
-            //BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow(neww);
-            BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow();
+            BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow(neww);
+            //BlockModelCreationWindow CreationWindow = new BlockModelCreationWindow();
             CreationWindow.ShowDialog();
         }
 

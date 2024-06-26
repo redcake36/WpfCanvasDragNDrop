@@ -92,15 +92,34 @@ namespace CanvasDragNDrop
             {
                 context.DefaultParameters.Add(new CustomParametreClass(item.Title, item.VariableName, item.Units, context.RegenerateCustomParameters));
             }
-            foreach (var item in modelForLoad.Expressions)
-            {
-                foreach (var item2 in modelForLoad.DefaultParameters)
+            foreach(var itemDP in modelForLoad.DefaultParameters)
                 {
-                    if(item2.ParameterId == item.DefinedVariable)
+                foreach (var itemE in modelForLoad.Expressions)
+                {
+                    foreach (var itemNV in itemE.NeededVariables)
                     {
-                        context.Expressions.Add(new ExpressionClass(item.Order, item.Expression, item2.VariableName, context.RegenerateCustomParameters));
+                        if (itemDP.ParameterId == itemNV)
+                        {
+                            context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemDP.VariableName, context.RegenerateCustomParameters));
+                        }
                     }
-                } 
+                }
+            }
+            foreach (var itemE in modelForLoad.Expressions)
+            {
+                foreach(var itemOut in modelForLoad.OutputFlows)
+                {
+                    foreach (var itemFVI in itemOut.RequiredVariables)
+                    {
+                        foreach (var itemNV in itemE.NeededVariables)
+                        {
+                            if (itemNV == itemFVI.FlowVariableId)
+                            {
+                                context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemFVI.FlowVariableName, context.RegenerateCustomParameters));
+                            }
+                        }
+                    }
+                }
             }
             context.Title = modelForLoad.Title;
             context.Description = modelForLoad.Description;
