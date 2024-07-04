@@ -15,6 +15,12 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     public class BlockModelCreationClass : NotifyPropertyChangedClass
     {
+        private bool _isReadOnly;
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { _isReadOnly = value; OnPropertyChanged(nameof(IsReadOnly)); }
+        }
         /// <summary>Массив базовых параметров</summary>
         [JsonIgnore]
         public List<APIBaseParameterClass> BaseParameters { get; set; } = new List<APIBaseParameterClass>();

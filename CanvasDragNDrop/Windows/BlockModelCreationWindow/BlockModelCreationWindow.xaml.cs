@@ -1,6 +1,9 @@
 ﻿using CanvasDragNDrop.APIClases;
+using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,13 +29,14 @@ namespace CanvasDragNDrop
         {
             InitializeComponent();
             modelForLoad = modelForEdit;
+
         }
 
         /// <summary> Метод при загрузке данных с сервера </summary>
         private void WindowsLoaded(object sender, RoutedEventArgs e)
         {
             LoadDataFromServer();
-            if (!(modelForLoad != null))
+            if (modelForLoad != null)
             {
                 ImportModelForEditing();
             }
@@ -75,7 +79,51 @@ namespace CanvasDragNDrop
 
         private void ImportModelForEditing()
         {
-
+            BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
+            foreach (var item in modelForLoad.InputFlows)
+            {
+                context.InputFlows.Add(new FlowClass(Int32.Parse(item.FlowVariablesIndex), context.BaseParameters, context.FlowTypes, item.EnvironmentId, context.RegenerateCustomParameters));
+            }
+            foreach (var item in modelForLoad.OutputFlows)
+            {
+                context.OutputFlows.Add(new FlowClass(Int32.Parse(item.FlowVariablesIndex), context.BaseParameters, context.FlowTypes, item.EnvironmentId, context.RegenerateCustomParameters));
+            }
+            foreach (var item in modelForLoad.DefaultParameters)
+            {
+                context.DefaultParameters.Add(new CustomParametreClass(item.Title, item.VariableName, item.Units, context.RegenerateCustomParameters));
+            }
+            foreach(var itemDP in modelForLoad.DefaultParameters)
+                {
+                foreach (var itemE in modelForLoad.Expressions)
+                {
+                    foreach (var itemNV in itemE.NeededVariables)
+                    {
+                        if (itemDP.ParameterId == itemNV)
+                        {
+                            context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemDP.VariableName, context.RegenerateCustomParameters));
+                        }
+                    }
+                }
+            }
+            foreach (var itemE in modelForLoad.Expressions)
+            {
+                foreach(var itemOut in modelForLoad.OutputFlows)
+                {
+                    foreach (var itemFVI in itemOut.RequiredVariables)
+                    {
+                        foreach (var itemNV in itemE.NeededVariables)
+                        {
+                            if (itemNV == itemFVI.FlowVariableId)
+                            {
+                                context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemFVI.FlowVariableName, context.RegenerateCustomParameters));
+                            }
+                        }
+                    }
+                }
+            }
+            context.Title = modelForLoad.Title;
+            context.Description = modelForLoad.Description;
+            context.IsReadOnly = true;
         }
 
         private void AddExpression(object sender, RoutedEventArgs e)
