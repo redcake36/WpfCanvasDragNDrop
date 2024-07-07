@@ -1,14 +1,12 @@
 ﻿using CanvasDragNDrop.APIClases;
-using CanvasDragNDrop.UtilityClasses;
 using CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes;
+using CanvasDragNDrop.Windows.StringEnteringWindowNS;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace CanvasDragNDrop
+namespace CanvasDragNDrop.Windows.BlockModelCreationWindow
 {
     public partial class BlockModelCreationWindow : Window
     {
@@ -25,11 +23,9 @@ namespace CanvasDragNDrop
             InitializeComponent();
         }
 
-        public BlockModelCreationWindow(APIBlockModelVersionClass modelForEdit)
+        public BlockModelCreationWindow(APIBlockModelVersionClass modelForEdit) : this()
         {
-            InitializeComponent();
             modelForLoad = modelForEdit;
-
         }
 
         /// <summary> Метод при загрузке данных с сервера </summary>
@@ -38,6 +34,7 @@ namespace CanvasDragNDrop
             LoadDataFromServer();
             if (modelForLoad != null)
             {
+                Title = $"Редактирование модели: {modelForLoad.Title} ({modelForLoad.NoteText})";
                 ImportModelForEditing();
             }
 
@@ -80,50 +77,69 @@ namespace CanvasDragNDrop
         private void ImportModelForEditing()
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
+            //Добавление входных потоков
             foreach (var item in modelForLoad.InputFlows)
             {
                 context.InputFlows.Add(new FlowClass(Int32.Parse(item.FlowVariablesIndex), context.BaseParameters, context.FlowTypes, item.EnvironmentId, context.RegenerateCustomParameters));
             }
+
+            //Добавление выходных потоков
             foreach (var item in modelForLoad.OutputFlows)
             {
                 context.OutputFlows.Add(new FlowClass(Int32.Parse(item.FlowVariablesIndex), context.BaseParameters, context.FlowTypes, item.EnvironmentId, context.RegenerateCustomParameters));
             }
+
+            //Добавляем параметры по умолчанию
             foreach (var item in modelForLoad.DefaultParameters)
             {
                 context.DefaultParameters.Add(new CustomParametreClass(item.Title, item.VariableName, item.Units, context.RegenerateCustomParameters));
             }
-            foreach(var itemDP in modelForLoad.DefaultParameters)
-                {
-                foreach (var itemE in modelForLoad.Expressions)
-                {
-                    foreach (var itemNV in itemE.NeededVariables)
-                    {
-                        if (itemDP.ParameterId == itemNV)
-                        {
-                            context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemDP.VariableName, context.RegenerateCustomParameters));
-                        }
-                    }
-                }
-            }
-            foreach (var itemE in modelForLoad.Expressions)
+
+            //Добавляем расчётные выражения
+            foreach (var Expression in modelForLoad.Expressions)
             {
-                foreach(var itemOut in modelForLoad.OutputFlows)
+                bool variableFound = false;
+                foreach (var OutputFlow in modelForLoad.OutputFlows)
                 {
-                    foreach (var itemFVI in itemOut.RequiredVariables)
+                    foreach (var OutFlowVariable in OutputFlow.RequiredVariables)
                     {
-                        foreach (var itemNV in itemE.NeededVariables)
+                        if (OutFlowVariable.FlowVariableId == Expression.DefinedVariable)
                         {
-                            if (itemNV == itemFVI.FlowVariableId)
-                            {
-                                context.Expressions.Add(new ExpressionClass(itemE.Order, itemE.Expression, itemFVI.FlowVariableName, context.RegenerateCustomParameters));
-                            }
+                            context.Expressions.Add(new ExpressionClass(Expression.Order, Expression.Expression, OutFlowVariable.FlowVariableName, context.RegenerateCustomParameters));
+                            variableFound = true;
                         }
                     }
                 }
+
+                if (variableFound)
+                {
+                    continue;
+                }
+
+                foreach (var CustomVar in modelForLoad.CustomParameters)
+                {
+                    if (CustomVar.ParameterId == Expression.DefinedVariable)
+                    {
+                        context.Expressions.Add(new ExpressionClass(Expression.Order, Expression.Expression, CustomVar.VariableName, context.RegenerateCustomParameters));
+                        variableFound = true;
+                    }
+                }
+
+                if (variableFound)
+                {
+                    continue;
+                }
+
+                MessageBox.Show("Ошибка при загрузки модели на редактирование");
+                this.Close();
+                return;
             }
             context.Title = modelForLoad.Title;
             context.Description = modelForLoad.Description;
-            context.IsReadOnly = true;
+            context.ModelId = modelForLoad.ModelId;
+
+            context.RegenerateCustomParameters();
+            context.RegenerateCalcVariables();
         }
 
         private void AddExpression(object sender, RoutedEventArgs e)
@@ -158,6 +174,27 @@ namespace CanvasDragNDrop
         {
             BlockModelCreationClass context = (BlockModelCreationClass)this.DataContext;
             if (context.CheckBlock() == false) { return; }
+
+            //Если блок редактировался
+            if (context.ModelId >= 0)
+            {
+                StringEnteringWindow window = new("Введите комментарий к версии", false);
+                window.ShowDialog();
+                context.Note = window.EnteredString;
+
+                var updateVersionResult = API.CreateBlockModelVersion(context);
+                if (updateVersionResult.isSuccess)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(updateVersionResult.response, "Не удалось выполнить запрос");
+                }
+                return;
+            }
+
+
             if (context.SaveDirId < 0)
             {
                 MessageBox.Show("Вы не указали папку для сохранения новой модели (выбор по двойному клику)");

@@ -214,6 +214,15 @@ namespace CanvasDragNDrop
             //MessageBox.Show(JSON);
             return PostRequest($"/create_model/{UserId}", JSON);
         }
+
+        /// <summary> Запрос на создание модели блока </summary>
+        public static (string response, bool isSuccess) CreateBlockModelVersion(BlockModelCreationClass BlockModel)
+        {
+            string JSON = JsonConvert.SerializeObject(BlockModel);
+            //MessageBox.Show(JSON);
+            return PostRequest($"/create_version_model/{UserId}", JSON);
+        }
+
         /// <summary> Запрос на перемещение модели между папками </summary>
         public static (string response, bool isSuccess) MovingBlockModel(DropAndTargetId macId)
         {

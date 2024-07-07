@@ -27,7 +27,12 @@ namespace CanvasDragNDrop.APIClases
         public string NoteText
         {
             get { return _noteText; }
-            set { _noteText = value; OnPropertyChanged(); }
+            set { _noteText = value; OnPropertyChanged(); OnPropertyChanged(nameof(Note)); }
+        }
+        public string Note
+        {
+            get { return _noteText; }
+            set { _noteText = value; OnPropertyChanged(); OnPropertyChanged(nameof(NoteText)); }
         }
         private string _noteText;
 
@@ -68,6 +73,7 @@ namespace CanvasDragNDrop.APIClases
             ModelId = modelID;
             VersionId = versionID;
             NoteText = noteText;
+            Note = noteText;
             Title = title;
             Description = description;
             InputFlows = inputFlows;

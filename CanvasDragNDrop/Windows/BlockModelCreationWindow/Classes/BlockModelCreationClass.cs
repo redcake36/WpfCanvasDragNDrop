@@ -15,12 +15,37 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
 {
     public class BlockModelCreationClass : NotifyPropertyChangedClass
     {
-        private bool _isReadOnly;
-        public bool IsReadOnly
+
+        public int ModelId
         {
-            get { return _isReadOnly; }
-            set { _isReadOnly = value; OnPropertyChanged(nameof(IsReadOnly)); }
+            get { return _modelId; }
+            set { _modelId = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsEditing)); OnPropertyChanged(nameof(CreationElementsVisibility)); }
         }
+        private int _modelId = -1;
+
+        /// <summary> Комментарий к нвоойц версии при редактироваании </summary>
+        public string Note
+        {
+            get { return _note; }
+            set { _note = value; OnPropertyChanged(); }
+        }
+        private string _note;
+
+        /// <summary> Находится ли схема в режиме редактирования </summary>
+        [JsonIgnore]
+        public bool IsEditing
+        {
+            get { return ModelId >= 0; }
+            set { }
+        }
+
+        [JsonIgnore]
+        public Visibility CreationElementsVisibility
+        {
+            get { return (ModelId >= 0) ? Visibility.Collapsed : Visibility.Visible; }
+            set { }
+        }
+
         /// <summary>Массив базовых параметров</summary>
         [JsonIgnore]
         public List<APIBaseParameterClass> BaseParameters { get; set; } = new List<APIBaseParameterClass>();
@@ -474,34 +499,6 @@ namespace CanvasDragNDrop.Windows.BlockModelCreationWindow.Classes
                         throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{e.Message}");
                     }
                 }
-
-                //if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.Expression)
-                //{
-                //    Expression e = new Expression(expBlock.Expression);
-                //    e.disableImpliedMultiplicationMode();
-                //    PreparedNeededVars.ForEach(x => e.defineArgument(x.VariableName, x.Value));
-                //    if (e.checkSyntax() == false)
-                //    {
-                //        var error = e.getErrorMessage();
-                //        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт работы математического ядра:\n{error}");
-                //    }
-                //    else
-                //    {
-                //        result = e.calculate();
-                //    }
-                //}
-
-                //if (expBlock.ExpressionType == GlobalTypes.ExpressionTypes.PropSI)
-                //{
-                //    try
-                //    {
-                //        result = CalcUtilitiesClass.CallPropSIFromString(expBlock.Expression, PreparedNeededVars);
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        throw new Exception($"Ошибка при обработке выражения №{expBlock.Order}: {expBlock.Expression}\nОтчёт функции PropSI:\n{ex.Message}");
-                //    }
-                //}
                 CalcedCalcVariables[CalcedCalcVariables.IndexOf(CalcedCalcVariables.FirstOrDefault(x => x.Variable == expBlock.DefinedVariable))].Value = result;
             }
         }

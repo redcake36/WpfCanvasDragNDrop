@@ -251,7 +251,7 @@ namespace CanvasDragNDrop
             //AllVariables = AllVariables.Concat(DefaultVariables.ToDictionary(x => x.VariableId)).ToDictionary(x => x.Key, x => x.Value);
             //foreach (var variable in BlockModel.CustomParameters)
             //{
-            //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.SchemaName, variable.Units));
+            //    AllVariables.Add(variable.ParameterId,new(BlockInstanceVariable.Types.Custom, variable.ParameterId, -1, variable.VariableName, 0, variable.GottenString, variable.Units));
             //}
 
 

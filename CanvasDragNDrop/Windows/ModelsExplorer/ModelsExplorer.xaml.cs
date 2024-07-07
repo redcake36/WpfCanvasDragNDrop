@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+
+
 namespace CanvasDragNDrop.Windows.ModelsExplorer
 {
     /// <summary>
@@ -158,6 +160,21 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer
             while (current != null);
 
             return null;
+        }
+
+        private void MyTreeView_EditModelVersion(object sender, MouseButtonEventArgs e)
+        {
+            int VersionId = (int)(sender as Image).Tag;
+            MessageBox.Show(VersionId.ToString());
+            var requestedModelVersion = API.GetModelVersion(VersionId);
+            if (requestedModelVersion.isSuccess == false)
+            {
+                MessageBox.Show("Ошибка на сервере");
+                return;
+            }
+            BlockModelCreationWindow.BlockModelCreationWindow editigWindow = new(requestedModelVersion.blockModelVersion);
+            editigWindow.ShowDialog();
+            GetFromServerCatalogList();
         }
     }
 }

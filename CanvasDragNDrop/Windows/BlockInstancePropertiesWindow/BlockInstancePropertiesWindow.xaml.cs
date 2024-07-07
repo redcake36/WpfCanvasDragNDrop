@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace CanvasDragNDrop.Windows
+namespace CanvasDragNDrop.Windows.BlockInstancePropertiesWindow
 {
     /// <summary>
     /// Interaction logic for BlockInstancePropertiesWindow.xaml

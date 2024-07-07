@@ -30,6 +30,7 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer.UserItems
         public event MouseButtonEventHandler ModelDelete;
         public event MouseButtonEventHandler CatalogDelete;
         public event MouseButtonEventHandler CatalogAdd;
+        public event MouseButtonEventHandler EditModelVersion;
 
         private void FolderDoubleClicked(object sender, MouseButtonEventArgs e)
         {
@@ -58,6 +59,12 @@ namespace CanvasDragNDrop.Windows.ModelsExplorer.UserItems
         private void Image_MouseLeftButtonDownAddCatalog(object sender, MouseButtonEventArgs e)
         {
             CatalogAdd?.Invoke(sender, e);
+            e.Handled = true;
+        }
+
+        private void EditVersion(object sender, MouseButtonEventArgs e)
+        {
+            EditModelVersion?.Invoke(sender, e);
             e.Handled = true;
         }
     }

@@ -56,10 +56,12 @@
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition MinWidth="50" Width="*"/>
                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="0" Source="/Resources/version.png" Style="{StaticResource ImageStyle}"/>
                             <Label Grid.Column="1" Content="{Binding NoteText}" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,0"/>
-                            <Image Grid.Column="2" Source="/Resources/delete.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
+                            <Image Grid.Column="2" Source="/Resources/edit.png" Tag="{Binding VersionId}" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="EditVersion"/>
+                            <Image Grid.Column="3" Source="/Resources/delete.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="Image_MouseLeftButtonDownDeleteModel"/>
                         </Grid>
                     </ContentControl>
                 </DataTemplate>

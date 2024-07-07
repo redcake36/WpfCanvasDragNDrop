@@ -17,6 +17,7 @@
             CatalogAdd="Image_MouseLeftButtonDownAddCatalog"
             PreviewMouseLeftButtonDown="MyTreeView_PreviewMouseLeftButtonDown"
             PreviewMouseMove="MyTreeView_PreviewMouseMove"
+            EditModelVersion="MyTreeView_EditModelVersion"
             Drop="MyTreeView_Drop"/>
     </Grid>
 </Window>

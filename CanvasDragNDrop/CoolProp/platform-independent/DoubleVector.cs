@@ -151,7 +151,7 @@ public class DoubleVector : global::System.IDisposable, global::System.Collectio
   }
 
   // Type-safe enumerator
-  /// Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+  /// NoteText that the IEnumerator documentation requires an InvalidOperationException to be thrown
   /// whenever the collection is modified. This has been done for changes in the size of the
   /// collection but not when one of the elements of the collection is modified as it is a bit
   /// tricky to detect unmanaged code that modifies the collection under our feet.
