@@ -29,6 +29,11 @@ namespace CanvasDragNDrop.Windows.StringEnteringWindowNS
             WindowTitle = windowTitle;
         }
 
+        public StringEnteringWindow(string requestString, string windowTitle, bool isAllowEmpty, string defaultEnter) : this(requestString, windowTitle, isAllowEmpty)
+        {
+            EnteredString = defaultEnter;
+        }
+
         public string EnteredString
         {
             get => _enteredString;

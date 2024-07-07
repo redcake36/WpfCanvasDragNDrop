@@ -86,5 +86,10 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

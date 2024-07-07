@@ -20,7 +20,7 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Проект" HorizontalAlignment="Left">
                 <MenuItem Header="Создать новый проект"/>
-                <MenuItem Header="Сохранить схему" Click="SaveScheme"/>
+                <MenuItem Header="Сохранить схему как новую" Click="SaveScheme"/>
                 <!--<MenuItem Header="Синхронизировать данные" Click="LoadSchema"/>-->
             </MenuItem>
             <MenuItem Header="Инструменты" >

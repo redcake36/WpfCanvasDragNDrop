@@ -70,6 +70,14 @@ namespace CanvasDragNDrop
                 return;
             }
 
+            var neededModels = API.GetModelsVersions(schemaForLoading.BlockInstanсes.Select(x => x.BlockModel.VersionId).ToList());
+            if (neededModels.isSuccess == false)
+            {
+                MessageBox.Show("Ошибка при загрузке схемы");
+                return;
+            }
+            Schema = new(schemaForLoading, neededModels.blockModelsVersions);
+
             var blockingResults = API.BlockSchema(schemaForLoading.SchemaId);
             //FIX исправить привязку
             if (blockingResults.isSuccess == false)
@@ -82,13 +90,6 @@ namespace CanvasDragNDrop
                 Title = $"ThermalUp Редактор: {schemaForLoading.SchemaName}";
             }
 
-            var neededModels = API.GetModelsVersions(schemaForLoading.BlockInstanсes.Select(x => x.BlockModel.VersionId).ToList());
-            if (neededModels.isSuccess == false)
-            {
-                MessageBox.Show("Ошибка при загрузке схемы");
-                return;
-            }
-            Schema = new(schemaForLoading, neededModels.blockModelsVersions);
 
 
         }
@@ -523,6 +524,12 @@ namespace CanvasDragNDrop
             if (_schema.SchemaId < 0)
             {
                 StringEnteringWindow errorSaveSchema = new StringEnteringWindow("Введите название для новой схемы", "Ввод имени для новой схемы", false);
+                errorSaveSchema.ShowDialog();
+                _schema.SchemaName = errorSaveSchema.EnteredString;
+            }
+            else
+            {
+                StringEnteringWindow errorSaveSchema = new StringEnteringWindow("Введите новое название схемы или оставьте старое", "Ввод имени для изменённой схемы", false, Schema.SchemaName);
                 errorSaveSchema.ShowDialog();
                 _schema.SchemaName = errorSaveSchema.EnteredString;
             }
