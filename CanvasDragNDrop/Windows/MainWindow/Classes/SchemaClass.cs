@@ -22,7 +22,6 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
         }
         private int _schemaId = -1;
 
-
         public ObservableCollection<BlockInstance> BlockInstances
         {
             get { return _blockInstances; }
@@ -36,6 +35,13 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             set { _blockInterconnections = value; OnPropertyChanged(); }
         }
         private ObservableCollection<FlowInterconnectLine> _blockInterconnections = new();
+
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { _isReadOnly = value; OnPropertyChanged(); }
+        }
+        private bool _isReadOnly = false;
 
         public SchemaClass()
         {

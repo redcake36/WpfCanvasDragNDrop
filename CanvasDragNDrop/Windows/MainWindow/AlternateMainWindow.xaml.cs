@@ -70,6 +70,18 @@ namespace CanvasDragNDrop
                 return;
             }
 
+            var blockingResults = API.BlockSchema(schemaForLoading.SchemaId);
+            //FIX исправить привязку
+            if (blockingResults.isSuccess == false)
+            {
+                Title = $"ThermalUp Редактор: {schemaForLoading.SchemaName} (Режим чтения)";
+                Schema.IsReadOnly = true;
+            }
+            else
+            {
+                Title = $"ThermalUp Редактор: {schemaForLoading.SchemaName}";
+            }
+
             var neededModels = API.GetModelsVersions(schemaForLoading.BlockInstanсes.Select(x => x.BlockModel.VersionId).ToList());
             if (neededModels.isSuccess == false)
             {
@@ -77,6 +89,7 @@ namespace CanvasDragNDrop
                 return;
             }
             Schema = new(schemaForLoading, neededModels.blockModelsVersions);
+
 
         }
 
@@ -501,6 +514,12 @@ namespace CanvasDragNDrop
 
         private void SaveScheme(object sender, RoutedEventArgs e)
         {
+            if (Schema.IsReadOnly == true)
+            {
+                MessageBox.Show("Схема доступна только для чтения", "Ошибка при сохранении схемы");
+                return;
+            }
+
             if (_schema.SchemaId < 0)
             {
                 StringEnteringWindow errorSaveSchema = new StringEnteringWindow("Введите название для новой схемы", "Ввод имени для новой схемы", false);
@@ -516,8 +535,11 @@ namespace CanvasDragNDrop
             {
                 MessageBox.Show(Result.response, "Не удалось выполнить запрос");
             }
-            //var parsed = JsonConvert.SerializeObject(_schema);
-            //MessageBox.Show(parsed);
+        }
+
+        private void SchemaClosing(object sender, CancelEventArgs e)
+        {
+            API.UnblockSchema(Schema.SchemaId);
         }
     }
 }

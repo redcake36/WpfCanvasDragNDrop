@@ -264,5 +264,15 @@ namespace CanvasDragNDrop
             }
             return (-1, false);
         }
+
+        public static (string response, bool isSuccess) BlockSchema(int schemaId)
+        {
+            return GetRequest($"/block_schema/{UserId}/{schemaId}");
+        }
+
+        public static (string response, bool isSuccess) UnblockSchema(int schemaId)
+        {
+            return GetRequest($"/unblock_schema/{UserId}/{schemaId}");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CanvasDragNDrop.APIClases;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,9 +45,7 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
                 GetSchemasList(null, null);
                 return;
             }
-            AvailableSchemas = new(response.Schemas);
-            //AvailableSchemas.Add(new(1, "Цикл ренкина"));
-            //AvailableSchemas.Add(new(2, "Цикл ренкина 2"));
+            AvailableSchemas = new(response.Schemas.OrderBy(x => x.SchemaId));
         }
 
         private void CreateNewSchema(object sender, RoutedEventArgs e)
@@ -65,6 +64,10 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
 
         private void OpenSchema(object sender, SelectionChangedEventArgs e)
         {
+            if (SelectedSchemaIndex < 0)
+            {
+                return;
+            }
             MessageBox.Show(AvailableSchemas[SelectedSchemaIndex].SchemaName);
             var resp = API.GetSchema(AvailableSchemas[SelectedSchemaIndex].SchemaId);
             if (resp.isSuccess == false)
@@ -74,6 +77,7 @@ namespace CanvasDragNDrop.Windows.SchemeSelectionWindow
             }
             AlternateMainWindow mainWindow = new(resp.Schemas);
             mainWindow.Show();
+            GetSchemasList(null, null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

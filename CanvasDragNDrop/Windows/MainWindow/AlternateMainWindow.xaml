@@ -4,6 +4,7 @@
         Title="ThermalUp Редактор" Height="450" Width="800"
         xmlns:local="clr-namespace:CanvasDragNDrop"
                          KeyDown="ViewportKeyDown"
+        Closing="SchemaClosing"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
