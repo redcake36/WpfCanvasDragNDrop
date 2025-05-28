@@ -368,7 +368,7 @@ namespace CanvasDragNDrop
                         currentBlockInstance = nextBlock;
                         visitedInstances.Add(nextBlock.BlockInstanceId);
                         //Очищаем статусы выходных потоков на случай, если мы уже были в этом блоке
-                        nextBlock.OutputConnectors.Where(x => x.InterconnectLine.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.Ready).ToList().ForEach(x => x.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen);
+                        nextBlock.OutputConnectors.Where(x => x.InterconnectLine?.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.Ready && x.InterconnectLine != null).ToList().ForEach(y => y.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen);
                     }
 
                     //Когда в текущем блоке не осталось необработанных выходных потоков, то уходим из него и помечаем как обработанный
@@ -386,7 +386,7 @@ namespace CanvasDragNDrop
             }
 
             //Если досрочно не вышли - можем строить план расчёта схемы
-            List<List<int>> CalcPlan = new();
+            List<List<BlockInstance>> CalcPlan = new();
 
             //Сбрасываем все состояния потоков и блоков
             foreach (var instance in Schema.BlockInstances)
@@ -426,12 +426,15 @@ namespace CanvasDragNDrop
                 var readyForCalcBlock = Schema.BlockInstances.FirstOrDefault(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc);
                 if (readyForCalcBlock != null)
                 {
-                    CalcPlan.Add(new List<int>() { readyForCalcBlock.BlockInstanceId });
+                    CalcPlan.Add(new List<BlockInstance>() { readyForCalcBlock });
                     //Помечаем блок как рассчитанный и все его выходные потоки
                     readyForCalcBlock.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
                     foreach (var connector in readyForCalcBlock.OutputConnectors)
                     {
-                        connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                        if (connector.InterconnectLine != null)
+                        {
+                            connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                        }
                     }
                 }
                 else
@@ -442,16 +445,22 @@ namespace CanvasDragNDrop
                         //Если все блоки в цикле имеют статус готовых к рассчёту, то добавлем цикл в план
                         if (foundedCycles[i].All(x => Schema.BlockInstances.First(y => y.BlockInstanceId == x).BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.InCycleReady))
                         {
-                            CalcPlan.Add(foundedCycles[i]);
+                            var cycledBlocks = new List<BlockInstance>();
+                            //Помечаем все блоки цикла и выходные потоки, которые не были в цикле как рассчитанные
                             foreach (var blockId in foundedCycles[i])
                             {
                                 var calcedCycleBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == blockId);
+                                cycledBlocks.Add(calcedCycleBlock);
                                 calcedCycleBlock.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
                                 foreach (var connector in calcedCycleBlock.OutputConnectors)
                                 {
-                                    connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                                    if (connector.InterconnectLine != null && connector.InterconnectLine.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle)
+                                    {
+                                        connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                                    }
                                 }
                             }
+                            CalcPlan.Add(cycledBlocks);
                             //Убираем цикл из списка циклов, чтобы не проверять ещё раз
                             foundedCycles.RemoveAt(i);
                             break;
@@ -462,102 +471,12 @@ namespace CanvasDragNDrop
 
 
             //Расчёт по плану
-
-
-            //Подготовка всех остальных блоков, не находящихся в циклах к расчёту
-            List<BlockInstance> cycledInstances = new();
-            if (foundedCycles.Count > 0)
+            foreach (var planItem in CalcPlan)
             {
-                foundedCycles[0].ForEach(x => cycledInstances.Add(Schema.BlockInstances.First(y => y.BlockInstanceId == x)));
-                //Обозначаем все выходные потоки этих блоков, не участвующие в цикле как ожидающие результатов цикла
-                List<FlowInterconnectLine> waitingCyclesInterconnects = Schema.BlockInterconnections.Where(x => foundedCycles[0].Contains(x.OutputFlowConnector.BlockInstanceID) && x.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.InCycle).ToList();
-                foreach (var item in waitingCyclesInterconnects)
+                //Если рассчитываем один блок
+                if (planItem.Count == 1)
                 {
-                    item.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.WaitingCycle;
-                }
-            }
-
-            //Расчёт блоков, у которых на входе все потоки готовы к расчёту
-            while (Schema.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
-            {
-                BlockInstance instanceForCalculation = Schema.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
-                try
-                {
-                    instanceForCalculation.CalculateBlockInstance();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {instanceForCalculation.BlockInstanceId}: {instanceForCalculation.BlockModel.Title}");
-                    return;
-                }
-                instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
-                foreach (var outputConnector in instanceForCalculation.OutputConnectors)
-                {
-                    if (outputConnector.InterconnectLine != null)
-                    {
-                        outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
-                    }
-                }
-            }
-
-            if (foundedCycles.Count > 0)
-            {
-                //MessageBox.Show($"Найден цикл {foundedCycles[0].Aggregate("",(string accum, int id) => $"{accum} {id}")}");
-                CycleCalcStartParamsEnterWindow cycleParamsWindow = new(cycledInstances);
-                cycleParamsWindow.ShowDialog();
-                int startInstanseIndex = cycleParamsWindow.SelectedInstanceIndex;
-                if (cycleParamsWindow.SelectedInstanceIndex < 0)
-                {
-                    MessageBox.Show("Вы не выбрали начальный блок", "Расчёт остановлен");
-                    return;
-                }
-                //Перекладываем значения на выходы потоков для начального блока цикла
-                foreach (var inputConnector in cycledInstances[startInstanseIndex].InputConnectors)
-                {
-                    if (inputConnector.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.InCycle)
-                    {
-                        inputConnector.InterconnectLine.TransferValuesToOutputConnector();
-                    }
-                }
-                //Начинаем расчёт цикла
-                bool neededPresisionFounded = false;
-                for (int i = 0; i < 10000 && !neededPresisionFounded; i++)
-                {
-                    neededPresisionFounded = true;
-                    for (int j = 0; j < cycledInstances.Count; j++)
-                    {
-                        try
-                        {
-                            neededPresisionFounded &= cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].CalculateBlockInstance();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockInstanceId}: {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockModel.Title}");
-                            return;
-                        }
-                    }
-                    if (neededPresisionFounded)
-                    {
-                        MessageBox.Show($"Estimated {i}");
-                    }
-                }
-                //Обновляем все блоки цикла как расчитанные
-                foreach (var instance in cycledInstances)
-                {
-                    instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
-                    foreach (var outputConnector in instance.OutputConnectors)
-                    {
-                        if (outputConnector.InterconnectLine != null)
-                        {
-                            outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
-                        }
-                    }
-                }
-
-                //Дорасчитываем все блоки, которые не посчитали раньше из за цикла
-                while (Schema.BlockInstances.Any(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready) && x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc))
-                {
-                    BlockInstance instanceForCalculation = Schema.BlockInstances.First(x => x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready));
+                    BlockInstance instanceForCalculation = planItem[0];
                     try
                     {
                         instanceForCalculation.CalculateBlockInstance();
@@ -567,17 +486,53 @@ namespace CanvasDragNDrop
                         MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {instanceForCalculation.BlockInstanceId}: {instanceForCalculation.BlockModel.Title}");
                         return;
                     }
-                    instanceForCalculation.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
-                    foreach (var outputConnector in instanceForCalculation.OutputConnectors)
+                }
+                else
+                {
+                    //Считаем цикл
+                    var cycledInstances = planItem;
+                    CycleCalcStartParamsEnterWindow cycleParamsWindow = new(cycledInstances);
+                    cycleParamsWindow.ShowDialog();
+                    int startInstanseIndex = cycleParamsWindow.SelectedInstanceIndex;
+                    if (cycleParamsWindow.SelectedInstanceIndex < 0)
                     {
-                        if (outputConnector.InterconnectLine != null)
+                        MessageBox.Show("Вы не выбрали начальный блок", "Расчёт остановлен");
+                        return;
+                    }
+                    //Перекладываем значения на выходы потоков для начального блока цикла
+                    foreach (var inputConnector in cycledInstances[startInstanseIndex].InputConnectors)
+                    {
+                        if (inputConnector.InterconnectLine?.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.InCycle)
                         {
-                            outputConnector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                            inputConnector.InterconnectLine.TransferValuesToOutputConnector();
+                        }
+                    }
+                    //Начинаем расчёт цикла
+                    bool neededPresisionFounded = false;
+                    for (int i = 0; i < 10000 && !neededPresisionFounded; i++)
+                    {
+                        neededPresisionFounded = true;
+                        for (int j = 0; j < cycledInstances.Count; j++)
+                        {
+                            try
+                            {
+                                neededPresisionFounded &= cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].CalculateBlockInstance();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, $"Ошибка при расчёте блока {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockInstanceId}: {cycledInstances[(j + startInstanseIndex) % cycledInstances.Count].BlockModel.Title}");
+                                return;
+                            }
+                        }
+                        if (neededPresisionFounded)
+                        {
+                            MessageBox.Show($"Estimated {i}");
                         }
                     }
                 }
             }
 
+            //Выводим результаты
             CalculationResultWindow resultWindow = new(Schema.BlockInstances);
             resultWindow.Owner = this;
             resultWindow.Show();
