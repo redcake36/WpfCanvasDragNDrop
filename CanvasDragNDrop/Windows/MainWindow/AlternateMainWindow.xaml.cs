@@ -301,11 +301,26 @@ namespace CanvasDragNDrop
             BlockInstance currentBlockInstance;
             List<int> visitedInstances = new List<int>();
             List<List<int>> foundedCycles = new List<List<int>>();
+            HashSet<int> instancesInCycles = new HashSet<int>();
 
             //Выполняем обход пока не кончатся блоки, до которых не добрался алгоритм
             while (Schema.BlockInstances.Any(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen))
             {
+                //Сбрасываем стек
                 visitedInstances.Clear();
+                //Помечаем все блоки, которые были посещены как исключённые из обработки, а все входящие потоки - как обработанные
+                foreach (var instance in Schema.BlockInstances)
+                {
+                    if (instance.BlockInstanceStatus != BlockInstance.BlockInstanceStatuses.UnSeen)
+                    {
+                        instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                        foreach (var inputInterconnect in instance.InputConnectors)
+                        {
+                            inputInterconnect.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                        }
+                    }
+                }
+                //Добавляем затравочный блок в стек
                 visitedInstances.Add(Schema.BlockInstances.First(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen).BlockInstanceId);
                 //Пока обход не вернётся в точку своего начала обрабатываем блоки
                 while (visitedInstances.Count > 0)
@@ -321,53 +336,133 @@ namespace CanvasDragNDrop
                         //Выбираем следующий блок
                         BlockInstance nextBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == nextInterconnection.InputFlowConnector.BlockInstanceID);
 
-                        //Если блок уже встречался нам, то это цикл - надо промаркировать потоки и блоки в цепи
+                        //Если блок уже встречался нам, то это цикл - надо его обработать
                         var foundedIndex = visitedInstances.FindIndex(x => x == nextBlock.BlockInstanceId);
                         if (foundedIndex >= 0)
                         {
-                            //Цикл найден, помещаем его последовательность в массив циклов
+                            //Цикл найден, вычленяем и нормализуем
                             List<int> foundedCycle = visitedInstances.Skip(foundedIndex).ToList();
-                            foundedCycles.Add(foundedCycle);
-                            //Помечаем все блоки и потоки, связывающие их как цикличные
-                            for (int i = 0; i < foundedCycle.Count; i++)
+                            CalcUtilitiesClass.NormalizeCycle(foundedCycle);
+
+                            //Проверяем, не было ли этого цикла ранее, если не было, то проверяем, не пересекается ли он с существующими
+                            if (CalcUtilitiesClass.IsCycleNew(foundedCycles, foundedCycle))
                             {
-                                //Выбираем индексы источников потоков и их приёмников
-                                int sourceInstanceId = foundedCycle[i];
-                                int destinationInstanceId = foundedCycle[(i + 1) % foundedCycle.Count];
-                                //Меняяем статус блока
-                                Schema.BlockInstances.First(x => x.BlockInstanceId == sourceInstanceId).BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.InCycle;
-                                //Меняем статус всех соединяющих потоков
-                                Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == sourceInstanceId && x.InputFlowConnector.BlockInstanceID == destinationInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.InCycle);
+                                //Если пересекается - досрочный выход
+                                if (instancesInCycles.Overlaps(foundedCycle))
+                                {
+                                    MessageBox.Show($"Обнаружен пересекающийся цикл ${String.Join("->", foundedCycle)}", "Ошибка при расчёте");
+                                    return;
+                                }
+                                foundedCycles.Add(foundedCycle);
+                                instancesInCycles.UnionWith(foundedCycle);
                             }
+
+                            //Помечаем все потоки к блоку как просмотренные
+                            Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == currentBlockInstance.BlockInstanceId && x.InputFlowConnector.BlockInstanceID == nextBlock.BlockInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnCalc);
+
                             //Завершаем обработку этого потока
                             continue;
                         }
-                        //Если блок уже посещён и все его потоки обработаны или он ведёт к блоку цикла и не входит в него, то цикла быть не может - маркируем ведущий к нему поток как просмотернный
-                        if (nextBlock.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc || nextBlock.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.InCycle)
-                        {
-                            nextInterconnection.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnCalc;
-                            continue;
-                        }
+
                         //Если блок ещё не посещался или находится в цикле, то надо пойти в него для обработки
                         currentBlockInstance = nextBlock;
                         visitedInstances.Add(nextBlock.BlockInstanceId);
+                        //Очищаем статусы выходных потоков на случай, если мы уже были в этом блоке
+                        nextBlock.OutputConnectors.Where(x => x.InterconnectLine.FlowInterconnectStatus != FlowInterconnectLine.FlowInterconnectStatuses.Ready).ToList().ForEach(x => x.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen);
                     }
-                    //Когда в текущем блоке не осталось необработанных выходных потоков, то уходим из него и помечаем как обработанный, если он не в цикле
-                    if (currentBlockInstance.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen)
-                    {
-                        currentBlockInstance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnCalc;
-                    }
+
+                    //Когда в текущем блоке не осталось необработанных выходных потоков, то уходим из него и помечаем как обработанный
+                    currentBlockInstance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnCalc;
                     //Убираем из списка Id блока, из которого вышли
                     visitedInstances.RemoveAt(visitedInstances.Count - 1);
+                    //также помечаем все потоки, которые ведут из предыдущего блока в этот, если он не последний
+                    if (visitedInstances.Count > 1)
+                    {
+                        int prevInstanceId = visitedInstances.Last();
+                        int exitedInstanceId = currentBlockInstance.BlockInstanceId;
+                        Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == prevInstanceId && x.InputFlowConnector.BlockInstanceID == exitedInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnCalc);
+                    }
                 }
             }
 
-            //Если циклов больше двух, то приплыли - пока не можем
-            if (foundedCycles.Count > 1)
+            //Если досрочно не вышли - можем строить план расчёта схемы
+            List<List<int>> CalcPlan = new();
+
+            //Сбрасываем все состояния потоков и блоков
+            foreach (var instance in Schema.BlockInstances)
             {
-                MessageBox.Show("Данная схема содержит более одного цикла - расчёт не возможен", "Ошибка при расчёте");
-                return;
+                instance.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.UnSeen;
             }
+            foreach (var interconnect in Schema.BlockInterconnections)
+            {
+                interconnect.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnSeen;
+            }
+            //Помечаем все блоки и потоки, связывающие их как цикличные
+            foreach (var cycle in foundedCycles)
+            {
+                for (int i = 0; i < cycle.Count; i++)
+                {
+                    //Выбираем индексы источников потоков и их приёмников
+                    int sourceInstanceId = cycle[i];
+                    int destinationInstanceId = cycle[(i + 1) % cycle.Count];
+                    //Меняяем статус блока
+                    Schema.BlockInstances.First(x => x.BlockInstanceId == sourceInstanceId).BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.InCyclePreparing;
+                    //Меняем статус всех соединяющих потоков
+                    Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == sourceInstanceId && x.InputFlowConnector.BlockInstanceID == destinationInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.InCycle);
+                }
+            }
+
+            //Запускаем цикл анализа, пока не посчитваем все блоки
+            while (Schema.BlockInstances.Any(x => x.BlockInstanceStatus != BlockInstance.BlockInstanceStatuses.Ready))
+            {
+                //Если есть хоть один блок, у котрого все потоки на входе рассчитаны или находятся в цикле, то помечаем ег окак готового к расчёту
+                var blockForPreparing = Schema.BlockInstances.FirstOrDefault(x => (x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen || x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.InCyclePreparing) && x.InputConnectors.All(y => y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.Ready || y.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.InCycle));
+                if (blockForPreparing != null)
+                {
+                    blockForPreparing.BlockInstanceStatus = blockForPreparing.InputConnectors.Any(x => x.InterconnectLine.FlowInterconnectStatus == FlowInterconnectLine.FlowInterconnectStatuses.InCycle) ? BlockInstance.BlockInstanceStatuses.InCycleReady : BlockInstance.BlockInstanceStatuses.UnCalc;
+                }
+
+                //Если есть блок, готовый к расчёту, то добавляем в палн расчёта
+                var readyForCalcBlock = Schema.BlockInstances.FirstOrDefault(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnCalc);
+                if (readyForCalcBlock != null)
+                {
+                    CalcPlan.Add(new List<int>() { readyForCalcBlock.BlockInstanceId });
+                    //Помечаем блок как рассчитанный и все его выходные потоки
+                    readyForCalcBlock.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                    foreach (var connector in readyForCalcBlock.OutputConnectors)
+                    {
+                        connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                    }
+                }
+                else
+                {
+                    //Иначе, проверяем, нет ли готового к расчёту цикла
+                    for (var i = 0; i < foundedCycles.Count; i++)
+                    {
+                        //Если все блоки в цикле имеют статус готовых к рассчёту, то добавлем цикл в план
+                        if (foundedCycles[i].All(x => Schema.BlockInstances.First(y => y.BlockInstanceId == x).BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.InCycleReady))
+                        {
+                            CalcPlan.Add(foundedCycles[i]);
+                            foreach (var blockId in foundedCycles[i])
+                            {
+                                var calcedCycleBlock = Schema.BlockInstances.First(x => x.BlockInstanceId == blockId);
+                                calcedCycleBlock.BlockInstanceStatus = BlockInstance.BlockInstanceStatuses.Ready;
+                                foreach (var connector in calcedCycleBlock.OutputConnectors)
+                                {
+                                    connector.InterconnectLine.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.Ready;
+                                }
+                            }
+                            //Убираем цикл из списка циклов, чтобы не проверять ещё раз
+                            foundedCycles.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            //Расчёт по плану
+
 
             //Подготовка всех остальных блоков, не находящихся в циклах к расчёту
             List<BlockInstance> cycledInstances = new();

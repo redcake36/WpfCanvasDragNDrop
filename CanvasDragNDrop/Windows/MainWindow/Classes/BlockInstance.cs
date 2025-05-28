@@ -16,8 +16,8 @@ namespace CanvasDragNDrop
         {
             UnSeen,
             UnCalc,
-            InCycle,
-            WaitingCycle,
+            InCyclePreparing,
+            InCycleReady,
             Ready
         }
 
