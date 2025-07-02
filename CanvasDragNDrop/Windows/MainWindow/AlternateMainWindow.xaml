@@ -89,7 +89,7 @@
                                 InputConnectors="{Binding InputConnectors}"
                                 OutputConnectors="{Binding OutputConnectors}"
                                 ConnectorSize="{Binding ConnectorSize}"
-                                Title="{Binding BlockModel.Title}"
+                                Title="{Binding BlockUITitle}"
                                 MouseLeftButtonUp="BlockLeftButtonUp"
                                 MouseLeftButtonDown="BlockLeftButtonDown"/>
                         </DataTemplate>

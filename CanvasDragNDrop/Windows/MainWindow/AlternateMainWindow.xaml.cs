@@ -163,6 +163,16 @@ namespace CanvasDragNDrop
             {
                 _canvasOverseer.ExitFlowInterconnectionMode();
             }
+            if (e.Key == Key.Delete)
+            {
+                if (_canvasOverseer.CanDeleteBlock)
+                {
+                    int deleteBlockInstanceId = Schema.BlockInstances[(CanvasOverseer.SelectedBlockIndex)].BlockInstanceId;
+                    Schema.BlockInterconnections = new ObservableCollection<FlowInterconnectLine>(Schema.BlockInterconnections.Where(x => x.InputFlowConnector?.BlockInstanceID != deleteBlockInstanceId && x.OutputFlowConnector?.BlockInstanceID != deleteBlockInstanceId));
+                    Schema.BlockInstances.RemoveAt(CanvasOverseer.SelectedBlockIndex);
+
+                }
+            }
         }
 
         /// <summary> Выбор блока для операции </summary>
@@ -234,6 +244,7 @@ namespace CanvasDragNDrop
             }
 
             Schema.BlockInstances.Add(new(requestedModelVersion.blockModelVersion, _instanceIdGenerator.IncrementedIndex));
+            //Schema.BlockInstances.Add(new(requestedModelVersion.blockModelVersion, _instanceIdGenerator.IncrementedIndex, _canvasOverseer.ViewportMousePosition.X / transform.Matrix., _canvasOverseer.ViewportMousePosition.Y / transform.Matrix.M11));
         }
 
         //private Point GetElemenyPositionOnCanvas(object sender)
@@ -255,6 +266,8 @@ namespace CanvasDragNDrop
 
         private void CalculateScheme(object sender, RoutedEventArgs e)
         {
+            bool isMakeFulAnalisys = true;
+
             // Проверка схемы на корректность
 
             if (!_canvasOverseer.CanCalcScheme)
@@ -302,6 +315,7 @@ namespace CanvasDragNDrop
             List<int> visitedInstances = new List<int>();
             List<List<int>> foundedCycles = new List<List<int>>();
             HashSet<int> instancesInCycles = new HashSet<int>();
+            bool isFoundedOverlaps = false;
 
             //Выполняем обход пока не кончатся блоки, до которых не добрался алгоритм
             while (Schema.BlockInstances.Any(x => x.BlockInstanceStatus == BlockInstance.BlockInstanceStatuses.UnSeen))
@@ -350,8 +364,12 @@ namespace CanvasDragNDrop
                                 //Если пересекается - досрочный выход
                                 if (instancesInCycles.Overlaps(foundedCycle))
                                 {
-                                    MessageBox.Show($"Обнаружен пересекающийся цикл ${String.Join("->", foundedCycle)}", "Ошибка при расчёте");
-                                    return;
+                                    isFoundedOverlaps = true;
+                                    if (!isMakeFulAnalisys)
+                                    {
+                                        MessageBox.Show($"Обнаружен пересекающийся цикл ${String.Join("->", foundedCycle)}", "Ошибка при расчёте");
+                                        return;
+                                    }
                                 }
                                 foundedCycles.Add(foundedCycle);
                                 instancesInCycles.UnionWith(foundedCycle);
@@ -376,12 +394,23 @@ namespace CanvasDragNDrop
                     //Убираем из списка Id блока, из которого вышли
                     visitedInstances.RemoveAt(visitedInstances.Count - 1);
                     //также помечаем все потоки, которые ведут из предыдущего блока в этот, если он не последний
-                    if (visitedInstances.Count > 1)
+                    if (visitedInstances.Count > 0)
                     {
                         int prevInstanceId = visitedInstances.Last();
                         int exitedInstanceId = currentBlockInstance.BlockInstanceId;
                         Schema.BlockInterconnections.Where(x => x.OutputFlowConnector.BlockInstanceID == prevInstanceId && x.InputFlowConnector.BlockInstanceID == exitedInstanceId).ToList().ForEach(x => x.FlowInterconnectStatus = FlowInterconnectLine.FlowInterconnectStatuses.UnCalc);
                     }
+                }
+            }
+
+            if (foundedCycles.Count > 0)
+            {
+                string cycles = "";
+                foundedCycles.ForEach(x => cycles += String.Join("->", x) + "\n");
+                MessageBox.Show($"Обнаруженые циклы:\n {String.Join("->", cycles)}", "Справка");
+                if (isFoundedOverlaps)
+                {
+                    return;
                 }
             }
 
