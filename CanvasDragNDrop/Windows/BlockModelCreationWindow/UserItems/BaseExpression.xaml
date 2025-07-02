@@ -18,6 +18,17 @@
                 <Label Content="Тип расчётного выражения:"/>
                 <Label Content="{Binding ElementName=BaseExpressionUserItem, Path=ExpressionType}" FontWeight="Bold"/>
                 <ComboBox >
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <!-- Скрываем ComboBox, если ExpressionType равно определённому значению -->
+                                <DataTrigger Binding="{Binding ElementName=BaseExpressionUserItem, Path=ExpressionType}" Value="Формула">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
                     <Label Content="HEOS::R32+R125"/>
                 </ComboBox>
             </WrapPanel>

@@ -20,6 +20,7 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Проект" HorizontalAlignment="Left">
                 <MenuItem Header="Создать новый проект"/>
+                <MenuItem Header="Сохранить схему"/>
                 <MenuItem Header="Сохранить схему как новую" Click="SaveScheme"/>
                 <!--<MenuItem Header="Синхронизировать данные" Click="LoadSchema"/>-->
             </MenuItem>
@@ -39,9 +40,9 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>-->
-            <MenuItem Header="Меню пользователя" HorizontalAlignment="Left">
+            <MenuItem Header="Пользователь" HorizontalAlignment="Left">
                 <MenuItem Header="Изменить логин/пароль"/>
-                <MenuItem Header="Посмотреть доступный проекты"/>
+                <!--<MenuItem Header="Посмотреть доступный проекты"/>-->
                 <MenuItem Header="Выйти"/>
             </MenuItem>
              <!--Test meny items--> 
@@ -88,7 +89,7 @@
                                 InputConnectors="{Binding InputConnectors}"
                                 OutputConnectors="{Binding OutputConnectors}"
                                 ConnectorSize="{Binding ConnectorSize}"
-                                Title="{Binding BlockModel.Title}"
+                                Title="{Binding BlockUITitle}"
                                 MouseLeftButtonUp="BlockLeftButtonUp"
                                 MouseLeftButtonDown="BlockLeftButtonDown"/>
                         </DataTemplate>

@@ -13,7 +13,6 @@ namespace CanvasDragNDrop
             UnSeen,
             UnCalc,
             InCycle,
-            WaitingCycle,
             Ready
         }
 
@@ -25,9 +24,11 @@ namespace CanvasDragNDrop
         }
         private FlowInterconnectStatuses _flowInterconnectStatus = FlowInterconnectStatuses.UnSeen;
 
+        //Входной коннектор блока (конец линии)
         public FlowConnector InputFlowConnector => _inputFlowConnector;
         private FlowConnector _inputFlowConnector = null;
 
+        //Выходно коннектор блока (начало линии)
         public FlowConnector OutputFlowConnector => _outputFlowConnector;
         private FlowConnector _outputFlowConnector = null;
 

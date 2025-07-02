@@ -4,6 +4,7 @@ using CanvasDragNDrop.Windows.MainWindow.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
@@ -16,9 +17,15 @@ namespace CanvasDragNDrop
         {
             UnSeen,
             UnCalc,
-            InCycle,
-            WaitingCycle,
+            InCyclePreparing,
+            InCycleReady,
             Ready
+        }
+
+        public enum CalcFinishingStategy : int
+        {
+            Absolute,
+            Relative
         }
 
         [JsonIgnore]
@@ -59,6 +66,14 @@ namespace CanvasDragNDrop
             set { _blockWidth = value; OnPropertyChanged(); }
         }
         private int _blockWidth = 100;
+
+        [JsonIgnore]
+        public string BlockUITitle
+        {
+            get { return _blockUITitle; }
+            set { _blockUITitle = value; OnPropertyChanged(); }
+        }
+        private string _blockUITitle = "";
 
         public double OffsetTop
         {
@@ -121,6 +136,7 @@ namespace CanvasDragNDrop
         {
             _blockModel = BlockModel;
             BlockInstanceId = blockInstanceId;
+            _blockUITitle = BlockModel.Title + "\n" + blockInstanceId;
             PrepareInputFlowConnectors();
             PrepareOutputFlowConnectors();
 
@@ -131,17 +147,20 @@ namespace CanvasDragNDrop
             BlockHeight = Math.Max(_blockModel.InputFlows.Count, _blockModel.OutputFlows.Count) * (ConnectorSize + _flowConnectorsStep) + _flowConnectorsStep;
             OffsetLeft = OffsetTop = 10;
         }
-
-        public BlockInstance(APIBlockInstance instance, APIBlockModelVersionClass BlockModel) : this(BlockModel, instance.BlockInstanceId)
+        public BlockInstance(APIBlockModelVersionClass BlockModel, int blockInstanceId, double offsetLeft, double offsetTop) : this(BlockModel, blockInstanceId)
         {
-            OffsetLeft = instance.OffsetLeft;
-            OffsetTop = instance.OffsetTop;
+            OffsetLeft = offsetLeft;
+            OffsetTop = offsetTop;
+        }
 
+        public BlockInstance(APIBlockInstance instance, APIBlockModelVersionClass BlockModel) : this(BlockModel, instance.BlockInstanceId, instance.OffsetLeft, instance.OffsetTop)
+        {
             foreach (var item in DefaultVariables)
             {
                 item.Value = instance.DefaultVariables.Find(x => x.VariableId == item.VariableId).Value;
             }
         }
+
 
         /// <summary> Метод подготовки входных коннекторов потоков </summary>
         private void PrepareInputFlowConnectors()
@@ -236,7 +255,7 @@ namespace CanvasDragNDrop
             }
         }
 
-        public bool CalculateBlockInstance()
+        public bool CalculateBlockInstance(CalcFinishingStategy strategy = CalcFinishingStategy.Absolute, double threshold = 0.00005)
         {
             ////Наполнение списка всех переменных с ключём по Id переменной
             //Dictionary<int,BlockInstanceVariable> AllVariables = new();
@@ -274,20 +293,28 @@ namespace CanvasDragNDrop
             }
 
             //расчёт максимального отклонения значения после расчёта
-            double maxRelativeDdifference = 0;
+            double maxDdifference = 0;
             foreach (var oldVariable in _allChangingVaraibles)
             {
-                double relativeDdifference = oldVariable.Value;
+                double oldValue = oldVariable.Value;
                 double newValue = _allCalcVariables[oldVariable.Key].Value;
-                relativeDdifference = Math.Abs((relativeDdifference - newValue) / newValue);
+                double relativeDdifference = Math.Abs((oldValue - newValue) / newValue);
+                double absoluteDifference = Math.Abs(oldValue - newValue);
+                Debug.WriteLine($"Block: {BlockInstanceId}, Prev: {oldValue}, New: {newValue}, Dif: {relativeDdifference}");
                 _allChangingVaraibles[oldVariable.Key] = newValue;
 
-                if (maxRelativeDdifference < relativeDdifference)
+                if (maxDdifference < relativeDdifference && strategy == CalcFinishingStategy.Relative)
                 {
-                    maxRelativeDdifference = relativeDdifference;
+                    maxDdifference = relativeDdifference;
+                }
+
+                if (maxDdifference < absoluteDifference && strategy == CalcFinishingStategy.Absolute)
+                {
+                    maxDdifference = absoluteDifference;
                 }
             }
-            if (maxRelativeDdifference <= 0.05)
+
+            if (maxDdifference <= threshold)
             {
                 return true;
             }

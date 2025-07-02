@@ -69,6 +69,10 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
         {
             get => OperationState == OperationStates.Idle && ViewportState == ViewportStates.Idle;
         }
+        public bool CanDeleteBlock
+        {
+            get => OperationState == OperationStates.Idle && ViewportState == ViewportStates.Idle && SelectedBlockIndex != -1;
+        }
 
         public void ViewportMouseMoved(Point newMouseViewportPosition, Point newAreaMouseposition)
         {
@@ -108,7 +112,6 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             if (OperationState == OperationStates.BlockDragging)
             {
                 OperationState = OperationStates.Idle;
-                SelectedBlockIndex = -1;
             }
         }
 
@@ -150,6 +153,14 @@ namespace CanvasDragNDrop.Windows.MainWindow.Classes
             }
         }
 
+        public void BlockDeleted()
+        {
+            if (CanDeleteBlock)
+            {
+                SelectedBlockIndex = -1;
+                SelectedFlowInterconnectLineIndex = -1;
+            }
+        }
         //public void BlockLeftMouseDouble(int blockIndex)
         //{
         //    if ((OperationState == OperationStates.Idle || OperationState == OperationStates.BlockDragging) && ViewportState == ViewportStates.Idle)
